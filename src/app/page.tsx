@@ -1,6 +1,8 @@
+"use client";
+
 import { FadeIn } from "@/components/FadeIn";
 
-const brandFont = { fontFamily: 'var(--font-instrument-serif)' };
+const brandFont = { fontFamily: "var(--font-instrument-serif)" };
 
 function BrandName({ children }: { children: React.ReactNode }) {
   return <span style={brandFont}>{children}</span>;
@@ -8,29 +10,44 @@ function BrandName({ children }: { children: React.ReactNode }) {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div
+      className="min-h-screen"
+      style={{ background: "#FAF8F4", color: "#1a1a1a" }}
+    >
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-divider">
-        <div className="max-w-5xl mx-auto px-6 md:px-12 h-14 flex items-center justify-between">
-          <a href="/" className="text-xl tracking-tight" style={brandFont}>
-            clarity
-          </a>
+      <nav
+        className="fixed top-0 left-0 right-0 z-50"
+        style={{
+          background: "rgba(250, 248, 244, 0.85)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(0,0,0,0.06)",
+        }}
+      >
+        <div className="max-w-3xl mx-auto px-6 md:px-10 h-14 flex items-center">
           <a
-            href="mailto:hello@claritylabs.inc"
-            className="text-xs uppercase tracking-[0.15em] text-muted hover:text-foreground transition-colors"
+            href="/"
+            className="text-lg tracking-tight"
+            style={brandFont}
           >
-            Get in touch
+            clarity
           </a>
         </div>
       </nav>
 
-      <main className="max-w-2xl mx-auto px-6 md:px-12 pt-36 md:pt-44 pb-32 md:pb-44">
+      <main className="max-w-[540px] mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
         <FadeIn>
-          <h1 className="text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20 max-w-xl" style={{ fontFamily: 'var(--font-playfair)' }}>
+          <h1
+            className="text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
             Insurance is broken for the people who need it most.
           </h1>
         </FadeIn>
-        <article className="space-y-8 text-lg md:text-xl leading-relaxed">
+
+        <div
+          className="space-y-7 text-[15px] md:text-base leading-[1.75]"
+          style={{ color: "#3d3d3d" }}
+        >
           <FadeIn>
             <p>
               Most businesses don&apos;t go out of their way to buy insurance.
@@ -66,21 +83,31 @@ export default function Home() {
               inquisition, soaking up weeks of valuable time. Insurance policies
               are filled with language nobody understands. There&apos;s no single
               source of truth internally. The information isn&apos;t just
-              disorganized, it&apos;s incomprehensible to the people who depend
-              on it most.
+              disorganized&mdash;it&apos;s incomprehensible to the people who
+              depend on it most.
+            </p>
+          </FadeIn>
+
+          <FadeIn>
+            <div className="py-6">
+              <div
+                className="w-8 h-px"
+                style={{ background: "rgba(0,0,0,0.15)" }}
+              />
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <p>
+              This doesn&apos;t have to be the case anymore.
             </p>
           </FadeIn>
 
           <FadeIn>
             <p>
-              This doesn&apos;t have to be the case anymore. Our belief is that
-              AI can make insurance simple and autonomous for businesses.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              To be the trust layer for society that it&apos;s supposed to be.
+              Our belief is that AI can make insurance simple and autonomous for
+              businesses. To be the trust layer for society that it&apos;s
+              supposed to be.
             </p>
           </FadeIn>
 
@@ -94,14 +121,22 @@ export default function Home() {
           </FadeIn>
 
           <FadeIn>
-            <p className="text-muted text-base md:text-lg pt-4">
-              What we&apos;re building
+            <div className="py-6">
+              <div
+                className="w-8 h-px"
+                style={{ background: "rgba(0,0,0,0.15)" }}
+              />
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <p>
+              Our first product is called <BrandName>Clair</BrandName>.
             </p>
           </FadeIn>
 
           <FadeIn>
             <p>
-              Our first product is called <BrandName>Clair</BrandName>.{" "}
               <BrandName>Clair</BrandName> is a system of record for your
               insurance that understands not just where your policies are, but
               what they mean. What you&apos;re covered for, where you have gaps,
@@ -112,10 +147,10 @@ export default function Home() {
 
           <FadeIn>
             <p>
-              <BrandName>Clair</BrandName> lives in your email inbox and SMS,
-              answering your customers&apos; due diligence questions, sending
-              COIs to your landlord when you sign a new lease, and helping you
-              file claims when things go wrong.
+              <BrandName>Clair</BrandName> lives in your email inbox and
+              SMS&mdash;answering your customers&apos; due diligence questions,
+              sending COIs to your landlord when you sign a new lease, and
+              helping you file claims when things go wrong.
             </p>
           </FadeIn>
 
@@ -129,32 +164,61 @@ export default function Home() {
           </FadeIn>
 
           <FadeIn>
+            <div className="py-6">
+              <div
+                className="w-8 h-px"
+                style={{ background: "rgba(0,0,0,0.15)" }}
+              />
+            </div>
+          </FadeIn>
+
+          <FadeIn>
             <p>
               We&apos;re partnering with brokers to bring{" "}
               <BrandName>Clair</BrandName> to businesses. Brokers are giving
               their clients a dedicated intelligence layer that understands their
               coverage, answers their questions, and acts on their
-              behalf&mdash;all without any added work. Every client on{" "}
-              <BrandName>Clair</BrandName> is a client they can retain without
-              adding headcount.
+              behalf&mdash;all without any added work.
             </p>
           </FadeIn>
 
           <FadeIn>
-            <p>This is just the start.</p>
+            <p>
+              Every client on <BrandName>Clair</BrandName> is a client they can
+              retain without adding headcount.
+            </p>
           </FadeIn>
-        </article>
+
+          <FadeIn>
+            <p
+              className="pt-8 text-[1.1rem] md:text-lg"
+              style={{ color: "#1a1a1a", fontFamily: "var(--font-playfair)" }}
+            >
+              This is just the start.
+            </p>
+          </FadeIn>
+
+          <FadeIn>
+            <p
+              className="pt-4"
+              style={{ color: "#8a8578", fontFamily: "var(--font-instrument-serif)" }}
+            >
+              &mdash; Adyan &amp; Terry
+            </p>
+          </FadeIn>
+        </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-divider">
-        <div className="max-w-5xl mx-auto px-6 md:px-12 py-8 flex items-center justify-between">
-          <span className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Clarity
-          </span>
+      <footer style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+        <div
+          className="max-w-3xl mx-auto px-6 md:px-10 py-8 flex items-center justify-between text-[11px]"
+          style={{ color: "#8a8578" }}
+        >
+          <span>&copy; {new Date().getFullYear()} Clarity</span>
           <a
             href="mailto:hello@claritylabs.inc"
-            className="text-xs text-muted hover:text-foreground transition-colors"
+            className="hover:opacity-60 transition-opacity"
           >
             hello@claritylabs.inc
           </a>

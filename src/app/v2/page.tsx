@@ -23,20 +23,13 @@ export default function V2() {
           borderBottom: "1px solid rgba(0,0,0,0.06)",
         }}
       >
-        <div className="max-w-3xl mx-auto px-6 md:px-10 h-14 flex items-center justify-between">
+        <div className="max-w-3xl mx-auto px-6 md:px-10 h-14 flex items-center">
           <a
-            href="/v2"
+            href="/"
             className="text-lg tracking-tight"
             style={brandFont}
           >
             clarity
-          </a>
-          <a
-            href="mailto:hello@claritylabs.inc"
-            className="text-[11px] uppercase tracking-[0.18em] hover:opacity-60 transition-opacity"
-            style={{ color: "#8a8578" }}
-          >
-            Get in touch
           </a>
         </div>
       </nav>
@@ -204,6 +197,15 @@ export default function V2() {
               style={{ color: "#1a1a1a", fontFamily: "var(--font-playfair)" }}
             >
               This is just the start.
+            </p>
+          </FadeIn>
+
+          <FadeIn>
+            <p
+              className="pt-4"
+              style={{ color: "#8a8578", fontFamily: "var(--font-instrument-serif)" }}
+            >
+              &mdash; Adyan &amp; Terry
             </p>
           </FadeIn>
         </div>
