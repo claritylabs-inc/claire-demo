@@ -26,8 +26,8 @@ export default function Home() {
 
       <main className="max-w-2xl mx-auto px-6 md:px-12 pt-36 md:pt-44 pb-32 md:pb-44">
         <FadeIn>
-          <h1 className="serif text-5xl md:text-6xl font-medium leading-[1.3] tracking-tight mb-16 max-w-md">
-            Insurance is broken for the people who need it most.
+          <h1 className="serif text-3xl md:text-4xl font-medium leading-[1.25] tracking-tight mb-16 max-w-xl">
+            Insurance is broken for the people who need it most. We&apos;re fixing it.
           </h1>
         </FadeIn>
         <article className="space-y-8 text-lg md:text-xl leading-relaxed">
