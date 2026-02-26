@@ -16,7 +16,7 @@ export default function Home() {
             clarity
           </a>
           <a
-            href="mailto:hello@clarity.so"
+            href="mailto:hello@claritylabs.inc"
             className="text-xs uppercase tracking-[0.15em] text-muted hover:text-foreground transition-colors"
           >
             Get in touch
@@ -153,10 +153,10 @@ export default function Home() {
             &copy; {new Date().getFullYear()} Clarity
           </span>
           <a
-            href="mailto:hello@clarity.so"
+            href="mailto:hello@claritylabs.inc"
             className="text-xs text-muted hover:text-foreground transition-colors"
           >
-            hello@clarity.so
+            hello@claritylabs.inc
           </a>
         </div>
       </footer>
