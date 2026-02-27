@@ -10,31 +10,44 @@ interface FadeInProps {
   direction?: "up" | "none";
 }
 
+let globalIndex = 0;
+const getStaggerDelay = () => {
+  const d = globalIndex * 0.08;
+  globalIndex++;
+  return d;
+};
+
+if (typeof window !== "undefined") {
+  globalIndex = 0;
+}
+
 export function FadeIn({
   children,
   className = "",
-  delay = 0,
+  delay,
   direction = "up",
 }: FadeInProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const stagger = useRef(delay ?? getStaggerDelay());
 
   return (
     <motion.div
       ref={ref}
       initial={{
         opacity: 0,
-        y: direction === "up" ? 30 : 0,
+        y: direction === "up" ? 18 : 0,
+        filter: "blur(4px)",
       }}
       animate={
         isInView
-          ? { opacity: 1, y: 0 }
-          : { opacity: 0, y: direction === "up" ? 30 : 0 }
+          ? { opacity: 1, y: 0, filter: "blur(0px)" }
+          : { opacity: 0, y: direction === "up" ? 18 : 0, filter: "blur(4px)" }
       }
       transition={{
-        duration: 0.8,
-        delay,
-        ease: [0.21, 0.47, 0.32, 0.98],
+        duration: 1.1,
+        delay: stagger.current,
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >
