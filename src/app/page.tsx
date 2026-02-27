@@ -1,171 +1,139 @@
 "use client";
 
-import { BrandName } from "@/components/BrandName";
-import { FadeIn } from "@/components/FadeIn";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { SignOff } from "@/components/SignOff";
+import { useState, useCallback, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { DemoAppBar, type DemoStep } from "@/components/demo/DemoAppBar";
+import { PolicyUploadStep } from "@/components/demo/PolicyUploadStep";
+import { CoverageStep } from "@/components/demo/CoverageStep";
+import { ChatStep } from "@/components/demo/ChatStep";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const stepVariants = {
+  initial: { opacity: 0, y: 30, filter: "blur(6px)" },
+  animate: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.45, ease: EASE },
+  },
+  exit: {
+    opacity: 0,
+    y: -30,
+    filter: "blur(6px)",
+    transition: { duration: 0.35, ease: EASE },
+  },
+};
 
 export default function Home() {
+  const [step, setStep] = useState<DemoStep>("upload");
+  const [showChat, setShowChat] = useState(false);
+
+  const goToCoverage = useCallback(() => setStep("coverage"), []);
+  const openChat = useCallback(() => setShowChat(true), []);
+  const closeChat = useCallback(() => setShowChat(false), []);
+
+  // Close chat overlay on Escape
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape" && showChat) {
+        setShowChat(false);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showChat]);
+
   return (
-    <div className="min-h-screen text-foreground">
-      <Header logoSize="lg" />
+    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+      <DemoAppBar currentStep={showChat ? "chat" : step} />
 
-      <main className="max-w-3xl border-x border-foreground/6 mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
-        <div className="max-w-xl mx-auto">
-        <FadeIn staggerIndex={0}>
-          <h1 className="max-w-md">
-            Insurance is broken for the people who need it most.
-          </h1>
-        </FadeIn>
+      <AnimatePresence mode="wait">
+        {step === "upload" && (
+          <motion.div
+            key="upload"
+            className="flex-1 flex flex-col min-h-0"
+            variants={stepVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <PolicyUploadStep onComplete={goToCoverage} />
+          </motion.div>
+        )}
 
-        <div className="space-y-7 text-[15px] md:text-base leading-[1.75] text-foreground">
-          <FadeIn staggerIndex={1}>
-            <p>
-              Most businesses don&apos;t go out of their way to buy insurance.
-              Instead, it&apos;s something they have to do to win contracts with
-              customers, sign leases with a landlord, or even to just do
-              business in a state.
-            </p>
-          </FadeIn>
+        {step === "coverage" && (
+          <motion.div
+            key="coverage"
+            className="flex-1 flex flex-col min-h-0"
+            variants={stepVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <CoverageStep onComplete={openChat} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <FadeIn staggerIndex={2}>
-            <p>
-              This makes insurance both critically important, and a
-              pain in the ass for businesses.
-            </p>
-          </FadeIn>
+      {/* Chat overlay — frosted backdrop on top of coverage */}
+      <AnimatePresence>
+        {showChat && (
+          <motion.div
+            key="chat-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 flex flex-col"
+          >
+            {/* Frosted backdrop — click to close */}
+            <motion.div
+              initial={{ backdropFilter: "blur(0px)" }}
+              animate={{ backdropFilter: "blur(12px)" }}
+              exit={{ backdropFilter: "blur(0px)" }}
+              transition={{ duration: 0.4 }}
+              className="absolute inset-0 bg-background/60"
+              onClick={closeChat}
+            />
 
-          <FadeIn staggerIndex={3}>
-            <p>
-              What&apos;s worse is that the process of buying insurance and
-              managing it is terrible. Few, if any companies have an in-house
-              insurance expert. Instead, the critical job of buying, managing,
-              renewing, and handling claims falls on someone who never signed up
-              for it: the contractor who&apos;s trying to win a city bid, the
-              restaurant owner renewing a lease, the startup closing their first
-              enterprise deal.
-            </p>
-          </FadeIn>
+            {/* Close button */}
+            <motion.button
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.15, duration: 0.3 }}
+              type="button"
+              onClick={closeChat}
+              className="absolute top-5 right-4 sm:right-6 z-50 w-8 h-8 rounded-full bg-foreground/8 hover:bg-foreground/15 flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </motion.button>
 
-          <FadeIn staggerIndex={4}>
-            <p>
-              These people aren&apos;t insurance experts, and they&apos;re not
-              supposed to be. Buying an insurance policy feels like an
-              inquisition, soaking up weeks of valuable time. Insurance policies
-              are filled with language nobody understands. There&apos;s no single
-              source of truth internally. The information isn&apos;t just
-              disorganized&mdash;it&apos;s incomprehensible to the people who
-              depend on it most.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <div className="py-6">
-              <div className="w-8 h-px bg-foreground/15" />
-            </div>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              This doesn&apos;t have to be the case anymore.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              Our belief is that AI can make insurance simple and autonomous for
-              businesses. To be the trust layer for society that it&apos;s
-              supposed to be.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              Our mission is to build tools that make it easy for businesses to
-              manage their insurance, trust each other when completing
-              transactions, and for insurance companies to better understand the
-              businesses they serve.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <div className="py-6">
-              <div className="w-8 h-px bg-foreground/15" />
-            </div>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              Our first product is called <BrandName>Claire</BrandName>.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              <BrandName>Claire</BrandName> is a system of record for your
-              insurance that understands not just where your policies are, but
-              what they mean. What you&apos;re covered for, where you have gaps,
-              when you need to act, and what it&apos;ll cost you if you
-              don&apos;t.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              <BrandName>Claire</BrandName> lives in your email inbox and
-              SMS&mdash;answering your customers&apos; due diligence questions,
-              sending certificates of insurance to your landlord when you sign a new lease, and
-              helping you file claims when things go wrong.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              Since <BrandName>Claire</BrandName> has the full context of your
-              business, your coverage, and your insurance needs, it can also
-              proactively recommend changes, flag coverage gaps, and help you buy
-              or renew policies completely autonomously.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <div className="py-6">
-              <div className="w-8 h-px bg-foreground/15" />
-            </div>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              We&apos;re partnering with brokers to bring{" "}
-              <BrandName>Claire</BrandName> to businesses. Brokers are giving
-              their clients a dedicated intelligence layer that understands their
-              coverage, answers their questions, and acts on their
-              behalf&mdash;all without any added work.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p>
-              Every client on <BrandName>Claire</BrandName> is a client they can
-              retain without adding headcount.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <p className="pt-8 text-[1.1rem] md:text-lg text-foreground-highlight font-serif">
-              This is just the start.
-            </p>
-          </FadeIn>
-
-          <FadeIn>
-            <SignOff />
-          </FadeIn>
-        </div>
-        </div>
-      </main>
-
-      <Footer />
+            {/* Chat content */}
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 40, scale: 0.97 }}
+              transition={{ duration: 0.4, ease: EASE }}
+              className="relative flex-1 flex flex-col min-h-0 pt-14"
+            >
+              <ChatStep />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
