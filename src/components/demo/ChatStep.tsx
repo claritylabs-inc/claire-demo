@@ -418,13 +418,13 @@ export function ChatStep() {
           </p>
           <p className="text-sm text-muted max-w-xs">
             Scan to text Claire directly. Ask about your policies,
-            file a claim, or get a certificate — all over iMessage.
+            file a claim, or get a certificate — all over SMS.
           </p>
 
           {/* QR Code — hidden on mobile, visible on tablet+ */}
           <div className="hidden sm:block p-4 rounded-2xl border border-foreground/6 bg-white/50">
             <QRCodeSVG
-              value="sms:+15125550199"
+              value="sms:+16722036730"
               size={140}
               level="M"
               bgColor="transparent"
