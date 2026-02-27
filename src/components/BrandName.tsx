@@ -10,7 +10,7 @@ export function BrandName({ children, className = "" }: BrandNameProps) {
   return (
     <span
       style={brandFont}
-      className={`text-lg font-semibold tracking-wide text-foreground-highlight ${className}`.trim()}
+      className={`text-lg font-medium text-foreground-highlight ${className}`.trim()}
     >
       {children}
     </span>

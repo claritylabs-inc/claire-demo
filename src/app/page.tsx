@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { DemoAppBar, type DemoStep } from "@/components/demo/DemoAppBar";
+type DemoStep = "upload" | "coverage" | "chat";
 import { PolicyUploadStep } from "@/components/demo/PolicyUploadStep";
 import { CoverageStep } from "@/components/demo/CoverageStep";
 import { ChatStep } from "@/components/demo/ChatStep";
@@ -46,8 +46,6 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
-      <DemoAppBar currentStep={showChat ? "chat" : step} />
-
       <AnimatePresence mode="wait">
         {step === "upload" && (
           <motion.div

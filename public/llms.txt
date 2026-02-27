@@ -7,12 +7,12 @@ Clarity Labs is building AI-powered insurance management for businesses. We make
 Most businesses don't go out of their way to buy insurance — it's something they have to do to win contracts, sign leases, or operate in a state. The process of buying and managing insurance is terrible. Few companies have an in-house insurance expert. The critical job of buying, managing, renewing, and handling claims falls on someone who never signed up for it.
 
 ## Product
-Our first product is called Clair. Clair is an AI system of record for your insurance that understands not just where your policies are, but what they mean — what you're covered for, where you have gaps, when you need to act, and what it'll cost you if you don't.
+Our first product is called Claire. Claire is an AI system of record for your insurance that understands not just where your policies are, but what they mean — what you're covered for, where you have gaps, when you need to act, and what it'll cost you if you don't.
 
-Clair lives in your email inbox and SMS — answering your customers' due diligence questions, sending COIs to your landlord when you sign a new lease, and helping you file claims when things go wrong. Clair can proactively recommend changes, flag coverage gaps, and help you buy or renew policies completely autonomously.
+Claire lives in your email inbox and SMS — answering your customers' due diligence questions, sending COIs to your landlord when you sign a new lease, and helping you file claims when things go wrong. Claire can proactively recommend changes, flag coverage gaps, and help you buy or renew policies completely autonomously.
 
 ## Distribution
-We partner with insurance brokers to bring Clair to businesses. Brokers give their clients a dedicated intelligence layer that understands their coverage, answers their questions, and acts on their behalf — all without any added work.
+We partner with insurance brokers to bring Claire to businesses. Brokers give their clients a dedicated intelligence layer that understands their coverage, answers their questions, and acts on their behalf — all without any added work.
 
 ## Founders
 - Adyan Tanver
