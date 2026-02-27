@@ -425,8 +425,8 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
               className="text-foreground-highlight"
               style={{ fontFamily: "var(--font-playfair)" }}
             >
-              <BrandName className="inline-flex items-center gap-1.5 text-4xl md:text-5xl">
-                Meet <LogoIcon size={isMobile ? 32 : 40} className="shrink-0" /> Claire
+              <BrandName className="inline-flex items-center gap-2 text-4xl md:text-5xl">
+                Meet <LogoIcon size={isMobile ? 32 : 40} className="shrink-0 ml-2" /> Claire
               </BrandName>
             </h1>
           </FadeIn>
