@@ -8,26 +8,20 @@ import { SignOff } from "@/components/SignOff";
 
 export default function Home() {
   return (
-    <div
-      className="min-h-screen text-[#1a1a1a]"
-    >
+    <div className="min-h-screen text-foreground">
       <Header logoSize="lg" />
 
       <main className="max-w-3xl border-x border-gray-200 mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
         <div className="max-w-xl mx-auto">
         <FadeIn>
           <h1
-            className="max-w-md text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20"
-            style={{ fontFamily: "var(--font-playfair)" }}
+            className="max-w-md text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20 text-foreground-highlight font-serif"
           >
             Insurance is broken for the people who need it most.
           </h1>
         </FadeIn>
 
-        <div
-          className="space-y-7 text-[15px] md:text-base leading-[1.75]"
-          style={{ color: "#3d3d3d" }}
-        >
+        <div className="space-y-7 text-[15px] md:text-base leading-[1.75] text-foreground">
           <FadeIn>
             <p>
               Most businesses don&apos;t go out of their way to buy insurance.
@@ -70,10 +64,7 @@ export default function Home() {
 
           <FadeIn>
             <div className="py-6">
-              <div
-                className="w-8 h-px"
-                style={{ background: "rgba(0,0,0,0.15)" }}
-              />
+              <div className="w-8 h-px bg-foreground/15" />
             </div>
           </FadeIn>
 
@@ -102,10 +93,7 @@ export default function Home() {
 
           <FadeIn>
             <div className="py-6">
-              <div
-                className="w-8 h-px"
-                style={{ background: "rgba(0,0,0,0.15)" }}
-              />
+              <div className="w-8 h-px bg-foreground/15" />
             </div>
           </FadeIn>
 
@@ -145,10 +133,7 @@ export default function Home() {
 
           <FadeIn>
             <div className="py-6">
-              <div
-                className="w-8 h-px"
-                style={{ background: "rgba(0,0,0,0.15)" }}
-              />
+              <div className="w-8 h-px bg-foreground/15" />
             </div>
           </FadeIn>
 
@@ -170,10 +155,7 @@ export default function Home() {
           </FadeIn>
 
           <FadeIn>
-            <p
-              className="pt-8 text-[1.1rem] md:text-lg"
-              style={{ color: "#1a1a1a", fontFamily: "var(--font-playfair)" }}
-            >
+            <p className="pt-8 text-[1.1rem] md:text-lg text-foreground-highlight font-serif">
               This is just the start.
             </p>
           </FadeIn>
