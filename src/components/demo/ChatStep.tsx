@@ -29,7 +29,7 @@ function TapbackReaction({ emoji, side }: { emoji: string; side: "left" | "right
   );
 }
 
-/** Incoming (gray) bubble — Clair's messages, left-aligned */
+/** Incoming (gray) bubble — Claire's messages, left-aligned */
 function IncomingBubble({ children, reaction }: { children: React.ReactNode; reaction?: string }) {
   return (
     <motion.div
@@ -134,7 +134,7 @@ type Message =
 
 const DEMO_PROMPTS = CHAT_PROMPTS.slice(0, 2);
 
-// Reactions to add to Clair's responses (by message index after typing is removed)
+// Reactions to add to Claire's responses (by message index after typing is removed)
 const REACTIONS: { targetIndex: number; emoji: string; delay: number }[] = [];
 
 interface ScriptStep {
@@ -150,7 +150,7 @@ function buildScript(): ScriptStep[] {
   let t = 0;
   let msgCount = 0;
 
-  // Opening Clair greeting
+  // Opening Claire greeting
   steps.push({
     action: "add",
     message: {
@@ -189,7 +189,7 @@ function buildScript(): ScriptStep[] {
     });
     msgCount++;
 
-    // Add a reaction to Clair's response after a short pause
+    // Add a reaction to Claire's response after a short pause
     t += 800;
     const emoji = pi === 0 ? "\u2764\uFE0F" : "\uD83D\uDC4D"; // heart, then thumbs up
     steps.push({
@@ -418,7 +418,7 @@ export function ChatStep() {
           </p>
           <p className="text-sm text-muted max-w-xs">
             Scan to text Claire directly. Ask about your policies,
-            file a claim, or get a certificate — all over SMS.
+            file a claim, or get a certificate — all over iMessage.
           </p>
 
           {/* QR Code — hidden on mobile, visible on tablet+ */}
