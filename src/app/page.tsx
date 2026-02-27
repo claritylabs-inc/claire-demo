@@ -115,7 +115,7 @@ export default function Home() {
             <p>
               <BrandName>Clair</BrandName> lives in your email inbox and
               SMS&mdash;answering your customers&apos; due diligence questions,
-              sending COIs to your landlord when you sign a new lease, and
+              sending certificates of insurance to your landlord when you sign a new lease, and
               helping you file claims when things go wrong.
             </p>
           </FadeIn>
