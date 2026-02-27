@@ -36,37 +36,24 @@ function FlowArrow({ active }: { active: boolean }) {
         fill="none"
         className="overflow-visible"
       >
-        <path
+        <motion.path
           d="M2 10h24M22 5l6 5-6 5"
-          stroke={active ? "#A0D2FA" : "#d1d5db"}
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="transition-colors duration-500"
+          animate={{
+            stroke: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db",
+          }}
+          transition={
+            active
+              ? {
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.6, 1],
+                }
+              : { duration: 0.5 }
+          }
         />
-        {active && (
-          <>
-            <motion.circle
-              r="2"
-              cy="10"
-              fill="#A0D2FA"
-              animate={{ cx: [2, 28], opacity: [0, 1, 1, 0] }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            />
-            <motion.circle
-              r="2"
-              cy="10"
-              fill="#A0D2FA"
-              animate={{ cx: [2, 28], opacity: [0, 1, 1, 0] }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                ease: "linear",
-                delay: 0.35,
-              }}
-            />
-          </>
-        )}
       </svg>
     </div>
   );
@@ -76,23 +63,24 @@ function FlowArrowVertical({ active }: { active: boolean }) {
   return (
     <div className="md:hidden flex justify-center h-8">
       <svg width="20" height="28" viewBox="0 0 20 28" fill="none">
-        <path
+        <motion.path
           d="M10 2v20M6 18l4 5 4-5"
-          stroke={active ? "#A0D2FA" : "#d1d5db"}
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="transition-colors duration-500"
+          animate={{
+            stroke: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db",
+          }}
+          transition={
+            active
+              ? {
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: [0.4, 0, 0.6, 1],
+                }
+              : { duration: 0.5 }
+          }
         />
-        {active && (
-          <motion.circle
-            r="2"
-            cx="10"
-            fill="#A0D2FA"
-            animate={{ cy: [2, 24], opacity: [0, 1, 1, 0] }}
-            transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          />
-        )}
       </svg>
     </div>
   );
@@ -219,15 +207,11 @@ function EmailBucketContent({
   return (
     <div className="space-y-0.5 flex-1 min-h-0">
       <AnimatePresence>
-        {scannedEmails.map((idx) => (
-          <motion.div
+        {scannedEmails.map((idx, i) => (
+          <FadeIn
             key={idx}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.5,
-              ease: [0.22, 1, 0.36, 1] as const,
-            }}
+            when={true}
+            staggerIndex={i}
             className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
           >
             {phase === "scanning" &&
@@ -248,7 +232,7 @@ function EmailBucketContent({
                 {EMAILS[idx].from}
               </p>
             </div>
-          </motion.div>
+          </FadeIn>
         ))}
       </AnimatePresence>
     </div>
@@ -276,15 +260,11 @@ function PolicyBucketContent({
   return (
     <div className="space-y-0.5 flex-1">
       <AnimatePresence>
-        {extractedPolicies.map((idx) => (
-          <motion.div
+        {extractedPolicies.map((idx, i) => (
+          <FadeIn
             key={idx}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.5,
-              ease: [0.22, 1, 0.36, 1] as const,
-            }}
+            when={true}
+            staggerIndex={i}
             className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA]/60 shrink-0" />
@@ -299,7 +279,7 @@ function PolicyBucketContent({
                 </span>
               </p>
             </div>
-          </motion.div>
+          </FadeIn>
         ))}
       </AnimatePresence>
     </div>
@@ -326,12 +306,11 @@ function ClaireBucketContent({
 
           <div className="flex flex-col items-center gap-1">
             <AnimatePresence>
-              {claireStatus.map((text) => (
-                <motion.p
+              {claireStatus.map((text, i) => (
+                <FadeIn
                   key={text}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as const }}
+                  when={true}
+                  staggerIndex={i}
                   className={`flex items-center gap-1.5 text-[12px] ${
                     text === "Ready"
                       ? "text-emerald-600 font-medium"
@@ -344,7 +323,7 @@ function ClaireBucketContent({
                     }`}
                   />
                   {text}
-                </motion.p>
+                </FadeIn>
               ))}
             </AnimatePresence>
           </div>
@@ -373,11 +352,8 @@ function getActiveBucket(phase: Phase): number {
 /* ---------- Main component ---------- */
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined"
-      ? !window.matchMedia("(min-width: 768px)").matches
-      : true,
-  );
+  // Use consistent initial state for SSR hydration - avoid typeof window check
+  const [isMobile, setIsMobile] = useState(true);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     setIsMobile(!mq.matches);
@@ -479,7 +455,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
           </FadeIn>
           <FadeIn staggerIndex={1}>
             <p className="text-muted max-w-xs md:max-w-md mx-auto -mt-12">
-              Claire scans your email, finds your policies, and gets to work.
+              Claire is a system of record for your businesses' insurance. It scans your email, finds your policies, and gets to work.
             </p>
           </FadeIn>
         </div>

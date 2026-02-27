@@ -265,15 +265,17 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
       <div className="flex-1 overflow-y-auto scrollbar-hide">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 pb-20">
           {/* Summary stats row */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6"
-          >
-            {SUMMARY_STATS.map((stat) => (
-              <div
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6">
+            {SUMMARY_STATS.map((stat, i) => (
+              <motion.div
                 key={stat.label}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.1 + i * 0.05,
+                  ease: [0.16, 1, 0.3, 1] as const,
+                }}
                 className="rounded-lg border border-foreground/6 bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3"
               >
                 <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
@@ -282,9 +284,9 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                 <p className="text-lg sm:text-xl font-semibold text-foreground-highlight mt-1 font-mono">
                   {stat.value}
                 </p>
-              </div>
+              </motion.div>
             ))}
-          </motion.div>
+          </div>
 
           {/* Tabs */}
           <motion.div
@@ -440,38 +442,26 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                   transition={{ duration: 0.3 }}
                   className="mt-4 rounded-lg border border-foreground/6 bg-white/60 px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-2"
                 >
-                  <div>
-                    <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
-                      Carrier
-                    </p>
-                    <p className="text-[13px] text-foreground font-medium">
-                      {group.carrier}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
-                      Policy #
-                    </p>
-                    <p className="text-[13px] text-foreground font-mono">
-                      {group.policyNumber}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
-                      Effective
-                    </p>
-                    <p className="text-[13px] text-foreground">
-                      {group.effective}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
-                      Expires
-                    </p>
-                    <p className="text-[13px] text-foreground">
-                      {group.expires}
-                    </p>
-                  </div>
+                  {[
+                    { label: "Carrier", value: group.carrier, className: "font-medium" },
+                    { label: "Policy #", value: group.policyNumber, className: "font-mono" },
+                    { label: "Effective", value: group.effective, className: "" },
+                    { label: "Expires", value: group.expires, className: "" },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={item.label}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3, delay: 0.15 + i * 0.05 }}
+                    >
+                      <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
+                        {item.label}
+                      </p>
+                      <p className={`text-[13px] text-foreground ${item.className}`}>
+                        {item.value}
+                      </p>
+                    </motion.div>
+                  ))}
                 </motion.div>
               ))}
           </AnimatePresence>
