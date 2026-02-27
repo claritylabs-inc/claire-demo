@@ -67,7 +67,7 @@ export function CommandPalette({
       label: "View source",
       hint: "GitHub",
       action: () => {
-        window.open("https://github.com/claritylabs/clarity-landing", "_blank");
+        window.open("https://www.youtube.com/watch?v=q-Y0bnx6Ndw&list=RDq-Y0bnx6Ndw&start_radio=1", "_blank");
       },
     },
   ];
