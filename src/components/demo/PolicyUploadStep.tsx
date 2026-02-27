@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaEnvelope, FaFile, FaArrowRight, FaChevronDown, FaCheck } from "react-icons/fa";
 import { MOCK_POLICIES } from "@/data/demoData";
 import { BrandName } from "@/components/BrandName";
 import { FadeIn } from "@/components/FadeIn";
@@ -18,43 +19,28 @@ type Phase = "scanning" | "extracting" | "analyzing" | "ready";
 /* ---------- Email data ---------- */
 
 const EMAILS = [
-  { subject: "Policy Renewal – GL", from: "agent@hartford.com" },
-  { subject: "Your Auto Policy", from: "noreply@progressive.com" },
-  { subject: "Workers Comp Certificate", from: "certs@employers.com" },
-  { subject: "Commercial Property Update", from: "service@travelers.com" },
+  { subject: "Policy Renewal – GL", from: "agent@hartford.com", date: "Today, 2:34 PM" },
+  { subject: "Your Auto Policy", from: "noreply@progressive.com", date: "Today, 11:02 AM" },
+  { subject: "Workers Comp Certificate", from: "certs@employers.com", date: "Yesterday" },
+  { subject: "Commercial Property Update", from: "service@travelers.com", date: "Yesterday" },
 ];
 
-/* ---------- Flow arrows ---------- */
+/* ---------- Flow arrows (FontAwesome) ---------- */
 
 function FlowArrow({ active }: { active: boolean }) {
   return (
     <div className="hidden md:flex items-center justify-center w-12 shrink-0">
-      <svg
-        width="32"
-        height="20"
-        viewBox="0 0 32 20"
-        fill="none"
-        className="overflow-visible"
+      <motion.span
+        className="flex items-center justify-center"
+        animate={{ color: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db" }}
+        transition={
+          active
+            ? { duration: 1.5, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }
+            : { duration: 0.5 }
+        }
       >
-        <motion.path
-          d="M2 10h24M22 5l6 5-6 5"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          animate={{
-            stroke: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db",
-          }}
-          transition={
-            active
-              ? {
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: [0.4, 0, 0.6, 1],
-                }
-              : { duration: 0.5 }
-          }
-        />
-      </svg>
+        <FaArrowRight className="w-5 h-4" />
+      </motion.span>
     </div>
   );
 }
@@ -62,26 +48,17 @@ function FlowArrow({ active }: { active: boolean }) {
 function FlowArrowVertical({ active }: { active: boolean }) {
   return (
     <div className="md:hidden flex justify-center h-8">
-      <svg width="20" height="28" viewBox="0 0 20 28" fill="none">
-        <motion.path
-          d="M10 2v20M6 18l4 5 4-5"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          animate={{
-            stroke: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db",
-          }}
-          transition={
-            active
-              ? {
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: [0.4, 0, 0.6, 1],
-                }
-              : { duration: 0.5 }
-          }
-        />
-      </svg>
+      <motion.span
+        className="flex items-center justify-center"
+        animate={{ color: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db" }}
+        transition={
+          active
+            ? { duration: 1.5, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }
+            : { duration: 0.5 }
+        }
+      >
+        <FaChevronDown className="w-4 h-5" />
+      </motion.span>
     </div>
   );
 }
@@ -151,19 +128,7 @@ function CollapsedBucket({
           {label}
         </span>
         <span className="text-[11px] text-muted/50 ml-auto">{summary}</span>
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#A0D2FA"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="shrink-0"
-        >
-          <path d="M20 6 9 17l-5-5" />
-        </svg>
+        <FaCheck className="w-3 h-3 shrink-0 text-[#A0D2FA]" />
       </div>
     </motion.div>
   );
@@ -205,31 +170,39 @@ function EmailBucketContent({
   scannedEmails: number[];
 }) {
   return (
-    <div className="space-y-0.5 flex-1 min-h-0">
+    <div className="flex flex-col flex-1 min-h-0 overflow-y-auto divide-y divide-foreground/6">
       <AnimatePresence>
         {scannedEmails.map((idx, i) => (
           <FadeIn
             key={idx}
             when={true}
             staggerIndex={i}
-            className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
+            className="flex items-start gap-2.5 px-2 py-3"
           >
             {phase === "scanning" &&
             idx === scannedEmails[scannedEmails.length - 1] ? (
               <motion.span
-                className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA] shrink-0"
+                className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]"
                 animate={{ opacity: [1, 0.3, 1] }}
                 transition={{ duration: 0.6, repeat: Infinity }}
-              />
+              >
+                <FaEnvelope className="w-4 h-3" />
+              </motion.span>
             ) : (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA]/60 shrink-0" />
+              <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]/60">
+                <FaEnvelope className="w-4 h-3" />
+              </span>
             )}
-            <div className="min-w-0">
-              <p className="text-[13px] text-foreground truncate">
-                {EMAILS[idx].subject}
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] mb-0.5">
+                <span className="font-medium text-muted/70">Subject:</span>{" "}
+                <span className="text-foreground">{EMAILS[idx].subject}</span>
               </p>
-              <p className="text-[11px] text-muted/50 truncate">
-                {EMAILS[idx].from}
+              <p className="text-[10px] text-muted/50">
+                <span className="font-medium text-muted/60">From:</span>{" "}
+                <span className="font-mono">{EMAILS[idx].from}</span>
+                <span className="text-muted/40 mx-1.5">·</span>
+                <span className="text-muted/40">{EMAILS[idx].date}</span>
               </p>
             </div>
           </FadeIn>
@@ -258,25 +231,29 @@ function PolicyBucketContent({
     );
   }
   return (
-    <div className="space-y-0.5 flex-1">
+    <div className="flex flex-col flex-1 overflow-y-auto divide-y divide-foreground/6">
       <AnimatePresence>
         {extractedPolicies.map((idx, i) => (
           <FadeIn
             key={idx}
             when={true}
             staggerIndex={i}
-            className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
+            className="flex items-start gap-2.5 px-2 py-3"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA]/60 shrink-0" />
-            <div className="min-w-0">
-              <p className="text-[13px] text-foreground truncate">
-                {MOCK_POLICIES[idx].type}
-              </p>
-              <p className="text-[11px] text-muted/50">
-                {MOCK_POLICIES[idx].carrier} &middot;{" "}
-                <span className="font-mono">
-                  {MOCK_POLICIES[idx].policyNumber}
+            <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]/70">
+              <FaFile className="w-3.5 h-3.5" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] flex flex-wrap items-center gap-1.5 w-full justify-between">
+                <span className="text-foreground">{MOCK_POLICIES[idx].type}</span>
+                <span className="rounded-md bg-foreground/4 px-2 py-0.5 font-mono text-[10px] text-muted/70">
+                  documents/pdf
                 </span>
+              </p>
+              <p className="text-[10px] text-muted/50">
+                {MOCK_POLICIES[idx].carrier}
+                <span className="text-muted/40 mx-1.5">·</span>
+                <span className="font-mono">{MOCK_POLICIES[idx].policyNumber}</span>
               </p>
             </div>
           </FadeIn>
@@ -467,7 +444,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }}
           className="flex items-start md:items-center justify-center min-h-0 shrink-0"
         >
-          <div className="w-full max-w-4xl">
+          <div className="w-full max-w-6xl">
           {/* ═══════════════════════════════════════════
               DESKTOP: Original 3-column horizontal layout
               ═══════════════════════════════════════════ */}
@@ -476,16 +453,19 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
             <FadeIn
               when={showSteps}
               delay={0}
-              className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[320px] shrink-0 ${
+              className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[340px] shrink-0 ${
                 phase === "scanning"
                   ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
-              <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3 shrink-0">
-                Your Email
-              </p>
-              <div className="h-[240px] flex flex-col overflow-hidden">
+              <div className="shrink-0 mb-3">
+                <p className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+                  Your Email
+                </p>
+                <p className="text-[10px] text-muted/50 mt-0.5">Inbox · emails scanned</p>
+              </div>
+              <div className="h-[260px] flex flex-col overflow-hidden">
                 <EmailBucketContent phase={phase} scannedEmails={scannedEmails} />
               </div>
             </FadeIn>
@@ -497,16 +477,19 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
             <FadeIn
               when={showSteps}
               delay={0.4}
-              className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[320px] shrink-0 ${
+              className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[340px] shrink-0 ${
                 phase === "extracting"
                   ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
-              <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3 shrink-0">
-                Your Policies
-              </p>
-              <div className="h-[240px] flex flex-col overflow-hidden">
+              <div className="shrink-0 mb-3">
+                <p className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+                  Your Policies
+                </p>
+                <p className="text-[10px] text-muted/50 mt-0.5">Policy documents extracted</p>
+              </div>
+              <div className="h-[260px] flex flex-col overflow-hidden">
                 <PolicyBucketContent extractedPolicies={extractedPolicies} />
               </div>
             </FadeIn>
@@ -518,7 +501,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
             <FadeIn
               when={showSteps}
               delay={0.8}
-              className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[320px] shrink-0 ${
+              className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[340px] shrink-0 ${
                 phase === "analyzing" || phase === "ready"
                   ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
                   : "border-foreground/6 bg-white/30"
@@ -527,7 +510,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
               <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3 shrink-0">
                 Claire
               </p>
-              <div className="h-[240px] flex flex-col overflow-hidden">
+              <div className="h-[260px] flex flex-col overflow-hidden">
                 <ClaireBucketContent phase={phase} claireStatus={claireStatus} />
               </div>
             </FadeIn>
@@ -571,7 +554,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[300px] flex flex-col shrink-0"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[320px] flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={1} label="Your Email" />
                   <EmailBucketContent
@@ -591,7 +574,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[300px] flex flex-col shrink-0"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[320px] flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={2} label="Your Policies" />
                   <PolicyBucketContent extractedPolicies={extractedPolicies} />
@@ -608,7 +591,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[300px] flex flex-col shrink-0"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[320px] flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={3} label="Claire" />
                   <div className="w-full flex flex-1 justify-center items-center">

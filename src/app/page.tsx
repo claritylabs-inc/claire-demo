@@ -107,7 +107,7 @@ export default function Home() {
               transition={{ delay: 0.15, duration: 0.3 }}
               type="button"
               onClick={closeChat}
-              className="absolute top-5 right-4 sm:right-6 z-50 w-8 h-8 rounded-full bg-foreground/8 hover:bg-foreground/15 flex items-center justify-center transition-colors cursor-pointer"
+              className="absolute top-5 right-4 sm:right-6 z-50 w-4 h-6 rounded-full bg-foreground/8 hover:bg-foreground/15 flex items-center justify-center transition-colors cursor-pointer"
             >
               <svg
                 width="14"

@@ -1,5 +1,6 @@
 "use client";
 
+import { FaArrowRight } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { BrandName } from "@/components/BrandName";
@@ -44,22 +45,6 @@ export function TryClaireHeading() {
   );
 }
 
-function ArrowIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  );
-}
 
 export function ChatStepCTA() {
   return (
@@ -112,7 +97,7 @@ export function ChatStepCTA() {
         className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors mt-2"
       >
         Book a Demo
-        <ArrowIcon />
+        <FaArrowRight className="w-3.5 h-3.5" />
       </a>
     </motion.div>
   );

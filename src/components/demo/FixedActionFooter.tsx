@@ -1,25 +1,9 @@
 "use client";
 
+import { FaArrowRight } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-
-function ArrowIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  );
-}
 
 interface FixedActionFooterProps {
   label: string;
@@ -45,7 +29,7 @@ export function FixedActionFooter({
       }`}
     >
       {label}
-      <ArrowIcon />
+      <FaArrowRight className="w-3.5 h-3.5" />
     </button>
   );
 
