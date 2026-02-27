@@ -31,8 +31,8 @@ export default function Home() {
 
           <FadeIn staggerIndex={2}>
             <p>
-              That makes commercial insurance both critically important, and a
-              pain in the ass.
+              This makes insurance both critically important, and a
+              pain in the ass for businesses.
             </p>
           </FadeIn>
 
