@@ -29,9 +29,9 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Clarity — AI-powered insurance management for businesses",
+  title: "Clarity Labs",
   description:
-    "Clarity makes commercial insurance simple and autonomous for businesses. Our AI agent Clair manages your policies, answers due diligence questions, sends COIs, flags coverage gaps, and helps you buy or renew insurance — all on autopilot.",
+    "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
   keywords: [
     "commercial insurance",
     "AI insurance",
@@ -50,18 +50,18 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Clarity — AI-powered insurance management for businesses",
+    title: "AI that makes insurance simple and autonomous for businesses",
     description:
-      "Clarity makes commercial insurance simple and autonomous for businesses. Our AI agent Clair manages your policies, answers questions, and helps you buy or renew insurance on autopilot.",
+      "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
     type: "website",
     siteName: "Clarity Labs",
     url: "https://claritylabs.inc",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Clarity — AI-powered insurance management for businesses",
+    title: "AI that makes insurance simple and autonomous for businesses",
     description:
-      "Clarity makes commercial insurance simple and autonomous for businesses. Our AI agent Clair manages your policies and helps you buy or renew insurance on autopilot.",
+      "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
   },
   robots: {
     index: true,
@@ -91,10 +91,10 @@ export default function RootLayout({
               url: "https://claritylabs.inc",
               email: "hello@claritylabs.inc",
               description:
-                "Clarity makes commercial insurance simple and autonomous for businesses using AI. Our agent Clair manages policies, sends COIs, flags coverage gaps, and helps buy or renew insurance on autopilot.",
+                "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
               founder: [
                 { "@type": "Person", name: "Adyan Tanver" },
-                { "@type": "Person", name: "Terry" },
+                { "@type": "Person", name: "Terry Wang" },
               ],
               sameAs: [],
             }),
