@@ -5,12 +5,7 @@ import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { BrandName } from "@/components/BrandName";
 import { LogoIcon } from "@/components/LogoIcon";
-import {
-  CTA_PHONE,
-  CTA_PHONE_HREF,
-  CTA_EMAIL,
-  CTA_EMAIL_HREF,
-} from "@/data/demoData";
+import { CTA_PHONE, CTA_PHONE_HREF } from "@/data/demoData";
 
 const BOOK_DEMO_URL = "https://cal.com/team/claritylabs/demo";
 const QR_VALUE = "sms:+16476930328?body=My landlord needs proof of insurance for our lease renewal.";
@@ -21,7 +16,7 @@ export function TryClaireHeading() {
       <p className="text-2xl sm:text-3xl font-normal text-foreground-highlight mb-6">
         <BrandName className="inline-flex items-center gap-1.5 text-2xl sm:text-3xl">
           Text{"  "}
-          <LogoIcon size={24} className="shrink-0 ml-2" />
+          <LogoIcon size={24} className="shrink-0 ml-1.5" />
           Claire
         </BrandName>
       </p>
@@ -33,13 +28,7 @@ export function TryClaireHeading() {
         >
           {CTA_PHONE}
         </a>{" "}
-        or email{" "}
-        <a
-          href={CTA_EMAIL_HREF}
-          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
-        >
-          {CTA_EMAIL}
-        </a> to try Claire for yourself.
+        and try Claire for yourself.
       </p>
     </>
   );
@@ -71,13 +60,7 @@ export function ChatStepCTA() {
         >
           {CTA_PHONE}
         </a>{" "}
-        or email{" "}
-        <a
-          href={CTA_EMAIL_HREF}
-          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
-        >
-          {CTA_EMAIL}
-        </a> to try Claire for yourself.
+        and try Claire for yourself.
       </p>
 
       <div className="hidden md:block p-4 rounded-2xl border border-foreground/6 bg-white/50">
@@ -97,7 +80,7 @@ export function ChatStepCTA() {
         className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors mt-2"
       >
         Book a Demo
-        <FaArrowRight className="w-3.5 h-3.5" />
+        <FaArrowRight className="w-3 h-3" />
       </a>
     </motion.div>
   );

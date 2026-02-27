@@ -39,7 +39,7 @@ function FlowArrow({ active }: { active: boolean }) {
             : { duration: 0.5 }
         }
       >
-        <FaArrowRight className="w-5 h-4" />
+        <FaArrowRight className="w-4 h-3" />
       </motion.span>
     </div>
   );
@@ -57,7 +57,7 @@ function FlowArrowVertical({ active }: { active: boolean }) {
             : { duration: 0.5 }
         }
       >
-        <FaChevronDown className="w-4 h-5" />
+        <FaChevronDown className="w-3 h-4" />
       </motion.span>
     </div>
   );

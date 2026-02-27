@@ -107,7 +107,8 @@ export default function Home() {
               transition={{ delay: 0.15, duration: 0.3 }}
               type="button"
               onClick={closeChat}
-              className="absolute top-5 right-4 sm:right-6 z-50 w-4 h-6 rounded-full bg-foreground/8 hover:bg-foreground/15 flex items-center justify-center transition-colors cursor-pointer"
+              className="group absolute top-5 right-4 sm:right-6 z-50 h-9 rounded-full bg-background/70 backdrop-blur-md border border-foreground/6 text-foreground/80 hover:bg-background/80 flex flex-row-reverse items-center gap-2 pl-2.5 pr-2.5 hover:pl-4 overflow-hidden w-9 hover:w-22 transition-[width,padding] duration-300 ease-out cursor-pointer text-sm font-medium"
+              aria-label="Close"
             >
               <svg
                 width="14"
@@ -118,9 +119,13 @@ export default function Home() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="shrink-0"
               >
                 <path d="M18 6 6 18M6 6l12 12" />
               </svg>
+              <span className="whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-100">
+                Close
+              </span>
             </motion.button>
 
             {/* Chat content */}
