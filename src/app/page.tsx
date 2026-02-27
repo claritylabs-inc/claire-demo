@@ -20,7 +20,7 @@ export default function Home() {
         <div className="max-w-xl mx-auto">
         <FadeIn>
           <h1
-            className="text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20"
+            className="max-w-md text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             Insurance is broken for the people who need it most.
