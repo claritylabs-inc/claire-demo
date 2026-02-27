@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
+import { BrandName } from "@/components/BrandName";
+import { LogoIcon } from "@/components/LogoIcon";
 import {
   CTA_PHONE,
   CTA_PHONE_HREF,
@@ -11,6 +13,36 @@ import {
 
 const BOOK_DEMO_URL = "https://cal.com/team/claritylabs/demo";
 const QR_VALUE = "sms:+16722036730";
+
+export function TryClaireHeading() {
+  return (
+    <>
+      <p className="text-2xl sm:text-3xl font-normal text-foreground-highlight mb-6">
+        <BrandName className="inline-flex items-center gap-1.5 text-2xl sm:text-3xl">
+          Text{"  "}
+          <LogoIcon size={24} className="shrink-0 ml-2" />
+          Claire
+        </BrandName>
+      </p>
+      <p className="text-base text-muted max-w-sm mx-auto block md:hidden">
+        Text{" "}
+        <a
+          href={CTA_PHONE_HREF}
+          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
+        >
+          {CTA_PHONE}
+        </a>{" "}
+        or email{" "}
+        <a
+          href={CTA_EMAIL_HREF}
+          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
+        >
+          {CTA_EMAIL}
+        </a> to try Claire for yourself.
+      </p>
+    </>
+  );
+}
 
 function ArrowIcon() {
   return (
@@ -41,17 +73,29 @@ export function ChatStepCTA() {
       }}
       className="flex flex-col items-center gap-4 sm:gap-5 text-center"
     >
-      <p
-        className="text-lg sm:text-xl md:text-2xl font-normal text-foreground-highlight"
-        style={{ fontFamily: "var(--font-playfair)" }}
-      >
-        Try Claire yourself
-      </p>
-      <p className="text-[13px] sm:text-sm text-muted max-w-2xs">
-        Scan to text Claire directly. Ask about your policies, file a claim, or get a certificate.
+      {/* Desktop: heading here; mobile: shown above phone in ChatStep */}
+      <div className="hidden md:flex flex-col items-center">
+        <TryClaireHeading />
+      </div>
+
+      <p className="text-base text-muted max-w-xs mx-auto hidden md:block mb-6">
+        Scan the QR code to text{" "}
+        <a
+          href={CTA_PHONE_HREF}
+          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
+        >
+          {CTA_PHONE}
+        </a>{" "}
+        or email{" "}
+        <a
+          href={CTA_EMAIL_HREF}
+          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
+        >
+          {CTA_EMAIL}
+        </a> to try Claire for yourself.
       </p>
 
-      <div className="hidden sm:block p-4 rounded-2xl border border-foreground/6 bg-white/50">
+      <div className="hidden md:block p-4 rounded-2xl border border-foreground/6 bg-white/50">
         <QRCodeSVG
           value={QR_VALUE}
           size={140}
@@ -60,23 +104,6 @@ export function ChatStepCTA() {
           fgColor="#111827"
         />
       </div>
-
-      <p className="text-xs text-muted/60">
-        Text{" "}
-        <a
-          href={CTA_PHONE_HREF}
-          className="text-foreground hover:text-foreground-highlight transition-colors"
-        >
-          {CTA_PHONE}
-        </a>{" "}
-        or email{" "}
-        <a
-          href={CTA_EMAIL_HREF}
-          className="text-foreground hover:text-foreground-highlight transition-colors"
-        >
-          {CTA_EMAIL}
-        </a>
-      </p>
 
       <a
         href={BOOK_DEMO_URL}

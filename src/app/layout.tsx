@@ -28,10 +28,12 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
+const claireDescription =
+  "Claire is a system of record for your business's insurance that understands not just where your policies are, but what they mean. What you're covered for, where you have gaps, when you need to act, and what it'll cost you if you don't.";
+
 export const metadata: Metadata = {
-  title: "Clarity Labs",
-  description:
-    "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
+  title: "Claire from Clarity Labs",
+  description: claireDescription,
   keywords: [
     "commercial insurance",
     "AI insurance",
@@ -50,18 +52,16 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "AI that makes insurance simple and autonomous for businesses",
-    description:
-      "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
+    title: "Claire from Clarity Labs",
+    description: claireDescription,
     type: "website",
     siteName: "Clarity Labs",
     url: "https://claritylabs.inc",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI that makes insurance simple and autonomous for businesses",
-    description:
-      "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
+    title: "Claire from Clarity Labs",
+    description: claireDescription,
   },
   robots: {
     index: true,
@@ -90,8 +90,7 @@ export default function RootLayout({
               name: "Clarity Labs",
               url: "https://claritylabs.inc",
               email: "hello@claritylabs.inc",
-              description:
-                "Clarity Labs is an Applied AI Research Lab working to make insurance simple and autonomous for businesses. Our mission is to build tools that make it easy for businesses to manage their insurance, trust each other when completing transactions, and for insurance companies to better understand the businesses they serve.",
+              description: claireDescription,
               founder: [
                 { "@type": "Person", name: "Adyan Tanver" },
                 { "@type": "Person", name: "Terry Wang" },
