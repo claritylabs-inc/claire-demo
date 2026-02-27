@@ -189,7 +189,7 @@ function EmailBucketContent({
                 <FaEnvelope className="w-4 h-3" />
               </motion.span>
             ) : (
-              <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]/60">
+              <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]">
                 <FaEnvelope className="w-4 h-3" />
               </span>
             )}
@@ -240,7 +240,7 @@ function PolicyBucketContent({
             staggerIndex={i}
             className="flex items-start gap-2.5 px-2 py-3"
           >
-            <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]/70">
+            <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]">
               <FaFile className="w-3.5 h-3.5" />
             </span>
             <div className="min-w-0 flex-1">
