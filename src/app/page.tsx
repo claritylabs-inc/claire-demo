@@ -14,9 +14,7 @@ export default function Home() {
       <main className="max-w-3xl border-x border-gray-200 mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
         <div className="max-w-xl mx-auto">
         <FadeIn>
-          <h1
-            className="max-w-md text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20 text-foreground-highlight font-serif"
-          >
+          <h1 className="max-w-md">
             Insurance is broken for the people who need it most.
           </h1>
         </FadeIn>

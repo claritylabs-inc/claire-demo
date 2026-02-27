@@ -74,6 +74,54 @@ body {
   color: var(--selection-fg);
 }
 
+/* Headings: serif, highlighted, scaled from h1 — unlayered to override Tailwind preflight */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), Georgia, serif !important;
+  font-weight: 400 !important;
+  color: var(--foreground-highlight) !important;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+h1 {
+  font-size: 1.65rem !important;
+  margin-bottom: 5rem;
+}
+
+h2 {
+  font-size: 1.5rem !important;
+  margin-bottom: 3rem;
+}
+
+h3 {
+  font-size: 1.25rem !important;
+  margin-bottom: 2rem;
+}
+
+h4 {
+  font-size: 1.125rem !important;
+  margin-bottom: 1.5rem;
+}
+
+h5 {
+  font-size: 1rem !important;
+  margin-bottom: 1rem;
+}
+
+h6 {
+  font-size: 0.875rem !important;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.875rem !important; }
+  h3 { font-size: 1.5rem !important; }
+  h4 { font-size: 1.25rem !important; }
+  h5 { font-size: 1.125rem !important; }
+  h6 { font-size: 1rem !important; }
+}
+
 /* Subtle paper grain overlay */
 body::before {
   content: "";
