@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     "insurance automation",
     "COI management",
     "Clarity Labs",
-    "Clair AI",
+    "Claire AI",
     "insurtech",
     "insurance for startups",
     "insurance for contractors",
