@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display, Instrument_Serif } from "next/font/google";
+import { CommandPalette } from "@/components/CommandPalette";
+import { ConsoleMessage } from "@/components/ConsoleMessage";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,12 +29,19 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Clarity",
-  description: "AI-powered insurance management for businesses.",
+  title: "Clarity — AI-powered insurance management",
+  description: "Insurance is broken for the people who need it most. Clarity makes insurance simple and autonomous for businesses.",
+  metadataBase: new URL("https://claritylabs.inc"),
   openGraph: {
-    title: "Clarity",
-    description: "AI-powered insurance management for businesses.",
+    title: "Clarity — AI-powered insurance management",
+    description: "Insurance is broken for the people who need it most. Clarity makes insurance simple and autonomous for businesses.",
     type: "website",
+    siteName: "Clarity Labs",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Clarity — AI-powered insurance management",
+    description: "Insurance is broken for the people who need it most. Clarity makes insurance simple and autonomous for businesses.",
   },
 };
 
@@ -46,6 +55,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${instrumentSerif.variable} antialiased`}
       >
+        <CommandPalette />
+        <ConsoleMessage />
         {children}
       </body>
     </html>
