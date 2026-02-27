@@ -1,6 +1,7 @@
 "use client";
 
 import { FadeIn } from "@/components/FadeIn";
+import { LogoIcon } from "@/components/LogoIcon";
 
 const brandFont = { fontFamily: "var(--font-instrument-serif)" };
 
@@ -26,10 +27,12 @@ export default function Home() {
         <div className="max-w-3xl mx-auto px-6 md:px-10 h-14 flex items-center">
           <a
             href="/"
-            className="text-lg tracking-tight"
+            className="flex items-center gap-2 text-lg tracking-tight"
             style={brandFont}
           >
-            clarity
+            <span>clarity</span>
+            <LogoIcon size={20} className="shrink-0" />
+            <span>labs</span>
           </a>
         </div>
       </nav>
