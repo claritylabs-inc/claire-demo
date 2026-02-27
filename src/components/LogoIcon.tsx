@@ -16,18 +16,31 @@ interface LogoIconProps {
 
 export function LogoIcon({ className = "", size = 20 }: LogoIconProps) {
   const { scrollYProgress } = useScroll();
-  const scrollRotate = useTransform(scrollYProgress, [0, 1], [0, 720]);
+  const scrollRotate = useTransform(scrollYProgress, [0, 1], [0, 1080]);
+  const scrollRotateReverse = useTransform(scrollYProgress, [0, 1], [0, -540]);
   const loadRotate = useMotionValue(360);
+  const loadRotateReverse = useMotionValue(-360);
 
   useEffect(() => {
     animate(loadRotate, 0, {
       duration: 0.8,
       ease: [0.25, 0.46, 0.45, 0.94],
     });
-  }, [loadRotate]);
+    animate(loadRotateReverse, 0, {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    });
+  }, [loadRotate, loadRotateReverse]);
 
   const rotate = useTransform(
     [scrollRotate, loadRotate],
+    ([scroll, load]: number[]) =>
+      (typeof scroll === "number" ? scroll : 0) +
+      (typeof load === "number" ? load : 0)
+  );
+
+  const rotateReverse = useTransform(
+    [scrollRotateReverse, loadRotateReverse],
     ([scroll, load]: number[]) =>
       (typeof scroll === "number" ? scroll : 0) +
       (typeof load === "number" ? load : 0)
@@ -43,16 +56,23 @@ export function LogoIcon({ className = "", size = 20 }: LogoIconProps) {
       className={className}
       aria-hidden
     >
-      {/* Outer circle - static */}
-      <circle
-        cx="32.5"
-        cy="32.5"
-        r="31"
-        fill="none"
-        stroke="#A0D2FA"
-        strokeWidth="1.25"
-        strokeOpacity="0.5"
-      />
+      {/* Outer circle - spins opposite to inner */}
+      <motion.g
+        style={{
+          transformOrigin: "32.5px 32.5px",
+          rotate: rotateReverse,
+        }}
+      >
+        <circle
+          cx="32.5"
+          cy="32.5"
+          r="31"
+          fill="none"
+          stroke="#A0D2FA"
+          strokeWidth="1.25"
+          strokeOpacity="0.5"
+        />
+      </motion.g>
       {/* Inner curves - spin on load + spin with scroll */}
       <motion.g
         style={{
