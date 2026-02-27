@@ -6,6 +6,7 @@ import { MOCK_POLICIES } from "@/data/demoData";
 import { BrandName } from "@/components/BrandName";
 import { LogoIcon } from "../LogoIcon";
 import { FixedActionFooter } from "./FixedActionFooter";
+import { BackToClarityButton } from "./BackToClarityButton";
 
 interface PolicyUploadStepProps {
   onComplete: () => void;
@@ -258,6 +259,19 @@ function PolicyBucketContent({
 }: {
   extractedPolicies: number[];
 }) {
+  if (extractedPolicies.length === 0) {
+    return (
+      <div className="min-h-[120px] flex flex-col items-center justify-center">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[12px] text-muted/30"
+        >
+          Waiting for scan...
+        </motion.p>
+      </div>
+    );
+  }
   return (
     <div className="space-y-0.5">
       <AnimatePresence>
@@ -288,16 +302,6 @@ function PolicyBucketContent({
           </motion.div>
         ))}
       </AnimatePresence>
-
-      {extractedPolicies.length === 0 && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-[12px] text-muted/30 pt-2"
-        >
-          Waiting for scan...
-        </motion.p>
-      )}
     </div>
   );
 }
@@ -310,7 +314,7 @@ function ClairBucketContent({
   clairStatus: string[];
 }) {
   return (
-    <div className="min-h-[120px] pt-8 flex flex-col items-center justify-center">
+    <div className="min-h-[120px] flex flex-col items-center justify-center">
       {phase === "analyzing" || phase === "ready" ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -449,7 +453,8 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col px-4 md:px-8 pb-20 md:pb-24">
+    <div className="flex-1 flex flex-col px-4 md:px-8 pb-20 md:pb-24 relative">
+      <BackToClarityButton />
       {/* ── CONTENT — centered on desktop, top-aligned on mobile ── */}
       <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0">
         {/* HEADER */}

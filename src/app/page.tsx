@@ -6,6 +6,7 @@ type DemoStep = "upload" | "coverage" | "chat";
 import { PolicyUploadStep } from "@/components/demo/PolicyUploadStep";
 import { CoverageStep } from "@/components/demo/CoverageStep";
 import { ChatStep } from "@/components/demo/ChatStep";
+import { BackToClarityButton } from "@/components/demo/BackToClarityButton";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -94,6 +95,8 @@ export default function Home() {
               className="absolute inset-0 bg-background/60"
               onClick={closeChat}
             />
+
+            <BackToClarityButton />
 
             {/* Close button */}
             <motion.button
