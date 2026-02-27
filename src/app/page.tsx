@@ -97,13 +97,13 @@ export default function Home() {
 
           <FadeIn>
             <p>
-              Our first product is called <BrandName>Clair</BrandName>.
+              Our first product is called <BrandName>Claire</BrandName>.
             </p>
           </FadeIn>
 
           <FadeIn>
             <p>
-              <BrandName>Clair</BrandName> is a system of record for your
+              <BrandName>Claire</BrandName> is a system of record for your
               insurance that understands not just where your policies are, but
               what they mean. What you&apos;re covered for, where you have gaps,
               when you need to act, and what it&apos;ll cost you if you
@@ -113,7 +113,7 @@ export default function Home() {
 
           <FadeIn>
             <p>
-              <BrandName>Clair</BrandName> lives in your email inbox and
+              <BrandName>Claire</BrandName> lives in your email inbox and
               SMS&mdash;answering your customers&apos; due diligence questions,
               sending certificates of insurance to your landlord when you sign a new lease, and
               helping you file claims when things go wrong.
@@ -122,7 +122,7 @@ export default function Home() {
 
           <FadeIn>
             <p>
-              Since <BrandName>Clair</BrandName> has the full context of your
+              Since <BrandName>Claire</BrandName> has the full context of your
               business, your coverage, and your insurance needs, it can also
               proactively recommend changes, flag coverage gaps, and help you buy
               or renew policies completely autonomously.
@@ -138,7 +138,7 @@ export default function Home() {
           <FadeIn>
             <p>
               We&apos;re partnering with brokers to bring{" "}
-              <BrandName>Clair</BrandName> to businesses. Brokers are giving
+              <BrandName>Claire</BrandName> to businesses. Brokers are giving
               their clients a dedicated intelligence layer that understands their
               coverage, answers their questions, and acts on their
               behalf&mdash;all without any added work.
@@ -147,7 +147,7 @@ export default function Home() {
 
           <FadeIn>
             <p>
-              Every client on <BrandName>Clair</BrandName> is a client they can
+              Every client on <BrandName>Claire</BrandName> is a client they can
               retain without adding headcount.
             </p>
           </FadeIn>
