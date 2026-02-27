@@ -12,7 +12,7 @@ import {
 } from "@/data/demoData";
 
 const BOOK_DEMO_URL = "https://cal.com/team/claritylabs/demo";
-const QR_VALUE = "sms:+16722036730";
+const QR_VALUE = "sms:+16476930328?body=My landlord needs proof of insurance for our lease renewal.";
 
 export function TryClaireHeading() {
   return (

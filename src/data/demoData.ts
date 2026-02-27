@@ -207,6 +207,6 @@ export const PROCESSING_MESSAGES = [
 /* ---------- CTA contact info ---------- */
 
 export const CTA_PHONE = "(672) 203-6730";
-export const CTA_PHONE_HREF = "sms:+16722036730";
+export const CTA_PHONE_HREF = "sms:+16476930328";
 export const CTA_EMAIL = "claire@claritylabs.inc";
 export const CTA_EMAIL_HREF = "mailto:claire@claritylabs.inc";
