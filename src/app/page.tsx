@@ -11,16 +11,16 @@ export default function Home() {
     <div className="min-h-screen text-foreground">
       <Header logoSize="lg" />
 
-      <main className="max-w-3xl border-x border-gray-200 mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
+      <main className="max-w-3xl border-x border-foreground/6 mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
         <div className="max-w-xl mx-auto">
-        <FadeIn>
+        <FadeIn staggerIndex={0}>
           <h1 className="max-w-md">
             Insurance is broken for the people who need it most.
           </h1>
         </FadeIn>
 
         <div className="space-y-7 text-[15px] md:text-base leading-[1.75] text-foreground">
-          <FadeIn>
+          <FadeIn staggerIndex={1}>
             <p>
               Most businesses don&apos;t go out of their way to buy insurance.
               Instead, it&apos;s something they have to do to win contracts with
@@ -29,14 +29,14 @@ export default function Home() {
             </p>
           </FadeIn>
 
-          <FadeIn>
+          <FadeIn staggerIndex={2}>
             <p>
               That makes commercial insurance both critically important, and a
               pain in the ass.
             </p>
           </FadeIn>
 
-          <FadeIn>
+          <FadeIn staggerIndex={3}>
             <p>
               What&apos;s worse is that the process of buying insurance and
               managing it is terrible. Few, if any companies have an in-house
@@ -48,7 +48,7 @@ export default function Home() {
             </p>
           </FadeIn>
 
-          <FadeIn>
+          <FadeIn staggerIndex={4}>
             <p>
               These people aren&apos;t insurance experts, and they&apos;re not
               supposed to be. Buying an insurance policy feels like an
