@@ -147,7 +147,7 @@ export const CONTEXT_SOURCES: ContextSource[] = [
     label: "Business Profile",
     details:
       "Rosario\u2019s Italian Kitchen \u00b7 Full-service restaurant w/ bar \u00b7 22 employees \u00b7 Est. 2019 \u00b7 Serves alcohol (liquor license active)",
-    integration: "State business registry API",
+    integration: "California Secretary of State Business Search",
   },
   {
     label: "QuickBooks",

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MOCK_POLICIES } from "@/data/demoData";
 import { BrandName } from "@/components/BrandName";
 import { LogoIcon } from "../LogoIcon";
+import { FixedActionFooter } from "./FixedActionFooter";
 
 interface PolicyUploadStepProps {
   onComplete: () => void;
@@ -116,9 +117,7 @@ function ClaireGlobe({
       xmlns="http://www.w3.org/2000/svg"
       animate={spinning ? { rotate: 360 } : {}}
       transition={
-        spinning
-          ? { duration: 3, repeat: Infinity, ease: "linear" }
-          : undefined
+        spinning ? { duration: 3, repeat: Infinity, ease: "linear" } : undefined
       }
     >
       <circle
@@ -311,7 +310,7 @@ function ClairBucketContent({
   clairStatus: string[];
 }) {
   return (
-    <div className="min-h-[120px] flex flex-col items-center justify-center">
+    <div className="min-h-[120px] pt-8 flex flex-col items-center justify-center">
       {phase === "analyzing" || phase === "ready" ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -369,8 +368,25 @@ function getActiveBucket(phase: Phase): number {
 
 /* ---------- Main component ---------- */
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined"
+      ? !window.matchMedia("(min-width: 768px)").matches
+      : true,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    setIsMobile(!mq.matches);
+    const handler = () => setIsMobile(!mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return isMobile;
+}
+
 export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
   const [phase, setPhase] = useState<Phase>("scanning");
+  const isMobile = useIsMobile();
   const [scannedEmails, setScannedEmails] = useState<number[]>([]);
   const [extractedPolicies, setExtractedPolicies] = useState<number[]>([]);
   const [claireStatus, setClaireStatus] = useState<string[]>([]);
@@ -384,9 +400,12 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
     // Phase 1: Scanning — emails appear one by one
     EMAILS.forEach((_, i) => {
       timers.push(
-        setTimeout(() => {
-          setScannedEmails((prev) => [...prev, i]);
-        }, 400 + i * 400)
+        setTimeout(
+          () => {
+            setScannedEmails((prev) => [...prev, i]);
+          },
+          400 + i * 400,
+        ),
       );
     });
 
@@ -395,9 +414,12 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
 
     MOCK_POLICIES.forEach((_, i) => {
       timers.push(
-        setTimeout(() => {
-          setExtractedPolicies((prev) => [...prev, i]);
-        }, 2400 + i * 450)
+        setTimeout(
+          () => {
+            setExtractedPolicies((prev) => [...prev, i]);
+          },
+          2400 + i * 450,
+        ),
       );
     });
 
@@ -411,9 +433,12 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
     ];
     statusItems.forEach((item, i) => {
       timers.push(
-        setTimeout(() => {
-          setClaireStatus((prev) => [...prev, item]);
-        }, 4700 + i * 500)
+        setTimeout(
+          () => {
+            setClaireStatus((prev) => [...prev, item]);
+          },
+          4700 + i * 500,
+        ),
       );
     });
 
@@ -424,31 +449,35 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col px-4 md:px-8">
-      {/* ── HEADER — pinned at top ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.6,
-          ease: [0.16, 1, 0.3, 1] as const,
-        }}
-        className="shrink-0 text-center pt-8 md:pt-12 pb-6 md:pb-8"
-      >
-        <p
-          className="text-2xl md:text-3xl font-normal text-foreground-highlight mb-3"
-          style={{ fontFamily: "var(--font-playfair)" }}
+    <div className="flex-1 flex flex-col px-4 md:px-8 pb-20 md:pb-24">
+      {/* ── CONTENT — centered on desktop, top-aligned on mobile ── */}
+      <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0">
+        {/* HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.6,
+            ease: [0.16, 1, 0.3, 1] as const,
+          }}
+          className="text-center pt-24 md:pt-12 pb-6 md:pb-8 shrink-0 mb-16"
         >
-          Meet <BrandName className="inline-flex items-center gap-1.5 align-baseline"><LogoIcon size={32} className="shrink-0" /> Claire</BrandName>
-        </p>
-        <p className="text-[15px] text-muted max-w-md mx-auto">
-          Claire scans your email, finds your policies, and gets to work.
-        </p>
-      </motion.div>
+          <h1
+            className="text-foreground-highlight"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
+            <BrandName className="inline-flex items-center gap-1.5 text-4xl md:text-5xl">
+              Meet <LogoIcon size={isMobile ? 32 : 40} className="shrink-0" /> Claire
+            </BrandName>
+          </h1>
+          <p className="text-muted max-w-xs md:max-w-md mx-auto -mt-12">
+            Claire scans your email, finds your policies, and gets to work.
+          </p>
+        </motion.div>
 
-      {/* ── MIDDLE — bucket content, vertically centered in remaining space ── */}
-      <div className="flex-1 flex items-center justify-center min-h-0">
-        <div className="w-full max-w-4xl">
+        {/* ── MIDDLE — bucket content ── */}
+        <div className="flex items-start md:items-center justify-center min-h-0">
+          <div className="w-full max-w-4xl">
           {/* ═══════════════════════════════════════════
               DESKTOP: Original 3-column horizontal layout
               ═══════════════════════════════════════════ */}
@@ -464,7 +493,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
               }}
               className={`flex-1 min-w-0 rounded-xl border p-5 transition-all duration-500 ${
                 phase === "scanning"
-                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
+                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
@@ -488,7 +517,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
               }}
               className={`flex-1 min-w-0 rounded-xl border p-5 transition-all duration-500 ${
                 phase === "extracting"
-                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
+                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
@@ -514,14 +543,14 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
               }}
               className={`flex-1 min-w-0 rounded-xl border p-5 transition-all duration-500 ${
                 phase === "analyzing" || phase === "ready"
-                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
+                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
               <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3">
                 Claire
               </p>
-              <div className="min-h-[140px]">
+              <div className="min-h-[140px] h-full">
                 <ClairBucketContent phase={phase} clairStatus={claireStatus} />
               </div>
             </motion.div>
@@ -537,7 +566,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                 <CollapsedBucket
                   stepNumber={1}
                   label="Your Email"
-                  summary={`${scannedEmails.length} emails scanned`}
+                  summary={`5,237 emails scanned`}
                 />
               )}
             </AnimatePresence>
@@ -565,7 +594,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.4,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04] p-4"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4"
                 >
                   <MobileStepLabel stepNumber={1} label="Your Email" />
                   <EmailBucketContent
@@ -585,7 +614,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.4,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04] p-4"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4"
                 >
                   <MobileStepLabel stepNumber={2} label="Your Policies" />
                   <PolicyBucketContent extractedPolicies={extractedPolicies} />
@@ -602,54 +631,29 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.4,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04] p-4"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4"
                 >
                   <MobileStepLabel stepNumber={3} label="Claire" />
-                  <ClairBucketContent phase={phase} clairStatus={claireStatus} />
+                  <div className="w-full flex justify-center items-center">
+                    <ClairBucketContent
+                      phase={phase}
+                      clairStatus={claireStatus}
+                    />
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
+          </div>
         </div>
       </div>
 
-      {/* ── FOOTER — pinned at bottom ── */}
-      <div className="shrink-0 h-20 md:h-24 flex items-center justify-center">
-        <AnimatePresence>
-          {phase === "ready" && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.3,
-                ease: [0.16, 1, 0.3, 1] as const,
-              }}
-            >
-              <button
-                type="button"
-                onClick={onComplete}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors cursor-pointer"
-              >
-                See what Claire can do
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <FixedActionFooter
+        label="See what Claire can do"
+        onClick={onComplete}
+        variant="bar"
+        visible={phase === "ready"}
+      />
     </div>
   );
 }
