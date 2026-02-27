@@ -8,11 +8,14 @@ export interface BrandNameProps {
 
 export function BrandName({ children, className = "" }: BrandNameProps) {
   return (
-    <span
+    <a
+      href="https://claire.claritylabs.inc/"
+      target="_blank"
+      rel="noopener noreferrer"
       style={brandFont}
-      className={`text-lg font-semibold tracking-wide text-foreground-highlight ${className}`.trim()}
+      className={`text-lg font-semibold tracking-wide text-foreground-highlight hover:underline ${className}`.trim()}
     >
       {children}
-    </span>
+    </a>
   );
 }
