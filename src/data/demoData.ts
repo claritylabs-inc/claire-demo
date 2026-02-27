@@ -1,6 +1,6 @@
 /* =============================================================================
    Demo Mock Data
-   Consolidated data for the Clair product demo.
+   Consolidated data for the Claire product demo.
    ============================================================================= */
 
 /* ---------- Policies (upload step) ---------- */
@@ -203,5 +203,5 @@ export const PROCESSING_MESSAGES = [
 
 export const CTA_PHONE = "(512) 555-0199";
 export const CTA_PHONE_HREF = "tel:+15125550199";
-export const CTA_EMAIL = "clair@claritylabs.inc";
-export const CTA_EMAIL_HREF = "mailto:clair@claritylabs.inc";
+export const CTA_EMAIL = "claire@claritylabs.inc";
+export const CTA_EMAIL_HREF = "mailto:claire@claritylabs.inc";

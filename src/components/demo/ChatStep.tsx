@@ -280,7 +280,7 @@ function IPhoneMockup({ children }: { children: React.ReactNode }) {
                 </svg>
               </div>
               <span className="text-[10px] font-medium text-black mt-[1px]">
-                Clair
+                Claire
               </span>
             </div>
 
@@ -414,10 +414,10 @@ export function ChatStep() {
             className="text-xl md:text-2xl font-normal text-foreground-highlight"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Try Clair yourself
+            Try Claire yourself
           </p>
           <p className="text-sm text-muted max-w-xs">
-            Scan to text Clair directly. Ask about your policies,
+            Scan to text Claire directly. Ask about your policies,
             file a claim, or get a certificate — all over iMessage.
           </p>
 
@@ -450,7 +450,7 @@ export function ChatStep() {
           </p>
 
           <a
-            href="https://calendly.com"
+            href="https://cal.com/team/claritylabs/demo"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors mt-2"

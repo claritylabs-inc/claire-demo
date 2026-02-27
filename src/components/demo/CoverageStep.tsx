@@ -167,7 +167,8 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
         className="shrink-0 border-b border-foreground/6 bg-white/60 backdrop-blur-sm"
       >
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 space-y-3">
+          {/* Title row */}
           <div>
             <p
               className="text-lg font-normal text-foreground-highlight"
@@ -179,38 +180,44 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
               Rosario&rsquo;s Italian Kitchen &middot; 4 active policies
             </p>
           </div>
-          {/* Desktop: full badges */}
-          <div className="hidden md:flex items-center gap-2">
-            {CONTEXT_SOURCES.map((source, i) => (
-              <ConnectionBadge
-                key={source.label}
-                source={source}
-                icon={CONNECTION_ICONS[i]}
-                index={i}
-                expanded={expandedConnection === i}
-                onToggle={() =>
-                  setExpandedConnection(expandedConnection === i ? null : i)
-                }
-              />
-            ))}
-          </div>
-          {/* Mobile: compact pills */}
-          <div className="flex md:hidden items-center gap-1.5">
-            {CONTEXT_SOURCES.map((source) => (
-              <span
-                key={source.label}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-foreground/6 bg-white/80 text-[10px] font-medium text-muted"
-              >
-                <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                {source.label}
-              </span>
-            ))}
+          {/* Connectors row */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[11px] font-semibold text-muted uppercase tracking-wider mr-1">
+              Connectors
+            </span>
+            {/* Desktop: full badges */}
+            <div className="hidden md:flex items-center gap-2">
+              {CONTEXT_SOURCES.map((source, i) => (
+                <ConnectionBadge
+                  key={source.label}
+                  source={source}
+                  icon={CONNECTION_ICONS[i]}
+                  index={i}
+                  expanded={expandedConnection === i}
+                  onToggle={() =>
+                    setExpandedConnection(expandedConnection === i ? null : i)
+                  }
+                />
+              ))}
+            </div>
+            {/* Mobile: compact pills */}
+            <div className="flex md:hidden items-center gap-1.5">
+              {CONTEXT_SOURCES.map((source) => (
+                <span
+                  key={source.label}
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-foreground/6 bg-white/80 text-[10px] font-medium text-muted"
+                >
+                  <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                  {source.label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </motion.div>
 
       {/* Content area */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 pb-20">
           {/* Summary stats row */}
           <motion.div
@@ -239,7 +246,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="flex items-center gap-1 mb-4 border-b border-foreground/6 overflow-x-auto"
+            className="flex items-center gap-1 mb-4 border-b border-foreground/6 overflow-x-auto scrollbar-hide"
           >
             {TABS.map((tab) => (
               <button
@@ -264,7 +271,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
             transition={{ duration: 0.4, delay: 0.25, ease: [0.16, 1, 0.3, 1] as const }}
             className="rounded-lg border border-foreground/6 bg-white/60 overflow-hidden"
           >
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto scrollbar-hide">
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-foreground/[0.02]">
@@ -443,7 +450,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
           onClick={onComplete}
           className="pointer-events-auto inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors cursor-pointer shadow-lg shadow-black/10"
         >
-          Talk to Clair
+          Talk to Claire
           <svg
             width="14"
             height="14"

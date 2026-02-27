@@ -134,6 +134,238 @@ function ClairGlobe({
   );
 }
 
+/* ---------- Collapsed summary bar (mobile accordion) ---------- */
+
+function CollapsedBucket({
+  label,
+  summary,
+  stepNumber,
+}: {
+  label: string;
+  summary: string;
+  stepNumber: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }}
+      className="overflow-hidden"
+    >
+      <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-foreground/6 bg-white/30 mb-2">
+        <span className="w-5 h-5 rounded-full bg-[#A0D2FA]/15 text-[#5BA3D9] text-[10px] font-bold flex items-center justify-center shrink-0">
+          {stepNumber}
+        </span>
+        <span className="text-[12px] font-medium text-foreground/70">
+          {label}
+        </span>
+        <span className="text-[11px] text-muted/50 ml-auto">{summary}</span>
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#A0D2FA"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="shrink-0"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ---------- Active bucket indicator (mobile) ---------- */
+
+function MobileStepLabel({
+  stepNumber,
+  label,
+}: {
+  stepNumber: number;
+  label: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex items-center gap-2 mb-2"
+    >
+      <span className="w-5 h-5 rounded-full bg-[#A0D2FA] text-white text-[10px] font-bold flex items-center justify-center shrink-0">
+        {stepNumber}
+      </span>
+      <span className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+        {label}
+      </span>
+    </motion.div>
+  );
+}
+
+/* ---------- Bucket content renderers (shared) ---------- */
+
+function EmailBucketContent({
+  phase,
+  scannedEmails,
+}: {
+  phase: Phase;
+  scannedEmails: number[];
+}) {
+  return (
+    <div className="space-y-0.5">
+      <AnimatePresence>
+        {scannedEmails.map((idx) => (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.3,
+              ease: [0.16, 1, 0.3, 1] as const,
+            }}
+            className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
+          >
+            {phase === "scanning" &&
+            idx === scannedEmails[scannedEmails.length - 1] ? (
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA] shrink-0"
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 0.6, repeat: Infinity }}
+              />
+            ) : (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA]/60 shrink-0" />
+            )}
+            <div className="min-w-0">
+              <p className="text-[13px] text-foreground truncate">
+                {EMAILS[idx].subject}
+              </p>
+              <p className="text-[11px] text-muted/50 truncate">
+                {EMAILS[idx].from}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function PolicyBucketContent({
+  extractedPolicies,
+}: {
+  extractedPolicies: number[];
+}) {
+  return (
+    <div className="space-y-0.5">
+      <AnimatePresence>
+        {extractedPolicies.map((idx) => (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, scale: 0.92, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              duration: 0.35,
+              type: "spring",
+              bounce: 0.25,
+            }}
+            className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA]/60 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-[13px] text-foreground truncate">
+                {MOCK_POLICIES[idx].type}
+              </p>
+              <p className="text-[11px] text-muted/50">
+                {MOCK_POLICIES[idx].carrier} &middot;{" "}
+                <span className="font-mono">
+                  {MOCK_POLICIES[idx].policyNumber}
+                </span>
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+
+      {extractedPolicies.length === 0 && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[12px] text-muted/30 pt-2"
+        >
+          Waiting for scan...
+        </motion.p>
+      )}
+    </div>
+  );
+}
+
+function ClairBucketContent({
+  phase,
+  clairStatus,
+}: {
+  phase: Phase;
+  clairStatus: string[];
+}) {
+  return (
+    <div className="min-h-[120px] flex flex-col items-center justify-center">
+      {phase === "analyzing" || phase === "ready" ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center gap-3"
+        >
+          <ClairGlobe spinning={phase === "analyzing"} />
+
+          <div className="flex flex-col items-center gap-1">
+            <AnimatePresence>
+              {clairStatus.map((text) => (
+                <motion.p
+                  key={text}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`flex items-center gap-1.5 text-[12px] ${
+                    text === "Ready"
+                      ? "text-emerald-600 font-medium"
+                      : "text-muted/70"
+                  }`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                      text === "Ready" ? "bg-emerald-500" : "bg-[#A0D2FA]"
+                    }`}
+                  />
+                  {text}
+                </motion.p>
+              ))}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[12px] text-muted/30"
+        >
+          Waiting for policies...
+        </motion.p>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Which mobile bucket is "active" for accordion ---------- */
+
+function getActiveBucket(phase: Phase): number {
+  if (phase === "scanning") return 0;
+  if (phase === "extracting") return 1;
+  return 2; // analyzing + ready
+}
+
 /* ---------- Main component ---------- */
 
 export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
@@ -141,6 +373,8 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
   const [scannedEmails, setScannedEmails] = useState<number[]>([]);
   const [extractedPolicies, setExtractedPolicies] = useState<number[]>([]);
   const [clairStatus, setClairStatus] = useState<string[]>([]);
+
+  const activeBucket = getActiveBucket(phase);
 
   // Bucket animation timeline
   useEffect(() => {
@@ -189,257 +423,231 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
   }, []);
 
   return (
-    <div className="flex-1 flex items-center justify-center px-4 md:px-8">
-      <div className="w-full max-w-4xl">
-              {/* Welcome text */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  ease: [0.16, 1, 0.3, 1] as const,
-                }}
-                className="text-center mb-10"
-              >
-                <p
-                  className="text-2xl md:text-3xl font-normal text-foreground-highlight mb-3"
-                  style={{ fontFamily: "var(--font-playfair)" }}
-                >
-                  Welcome to <BrandName>Clair</BrandName>
-                </p>
-                <p className="text-[15px] text-muted max-w-md mx-auto">
-                  Clair scans your email, finds your policies, and gets to work.
-                </p>
-              </motion.div>
+    <div className="flex-1 flex flex-col px-4 md:px-8">
+      {/* ── HEADER — pinned at top ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.6,
+          ease: [0.16, 1, 0.3, 1] as const,
+        }}
+        className="shrink-0 text-center pt-8 md:pt-12 pb-6 md:pb-8"
+      >
+        <p
+          className="text-2xl md:text-3xl font-normal text-foreground-highlight mb-3"
+          style={{ fontFamily: "var(--font-playfair)" }}
+        >
+          Welcome to <BrandName>Claire</BrandName>
+        </p>
+        <p className="text-[15px] text-muted max-w-md mx-auto">
+          Claire scans your email, finds your policies, and gets to work.
+        </p>
+      </motion.div>
 
-              {/* Three-bucket flow */}
-              <div className="flex flex-col md:flex-row items-stretch gap-0">
-                {/* ── BUCKET 1 — Your Email ── */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.1,
-                    ease: [0.16, 1, 0.3, 1] as const,
-                  }}
-                  className={`flex-1 min-w-0 rounded-xl border p-3 sm:p-5 transition-all duration-500 ${
-                    phase === "scanning"
-                      ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
-                      : "border-foreground/6 bg-white/30"
-                  }`}
-                >
-                  <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3">
-                    Your Email
-                  </p>
-                  <div className="space-y-0.5">
-                    <AnimatePresence>
-                      {scannedEmails.map((idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{
-                            duration: 0.3,
-                            ease: [0.16, 1, 0.3, 1] as const,
-                          }}
-                          className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
-                        >
-                          {phase === "scanning" &&
-                          idx === scannedEmails[scannedEmails.length - 1] ? (
-                            <motion.span
-                              className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA] shrink-0"
-                              animate={{ opacity: [1, 0.3, 1] }}
-                              transition={{ duration: 0.6, repeat: Infinity }}
-                            />
-                          ) : (
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA]/60 shrink-0" />
-                          )}
-                          <div className="min-w-0">
-                            <p className="text-[13px] text-foreground truncate">
-                              {EMAILS[idx].subject}
-                            </p>
-                            <p className="text-[11px] text-muted/50 truncate">
-                              {EMAILS[idx].from}
-                            </p>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
+      {/* ── MIDDLE — bucket content, vertically centered in remaining space ── */}
+      <div className="flex-1 flex items-center justify-center min-h-0">
+        <div className="w-full max-w-4xl">
+          {/* ═══════════════════════════════════════════
+              DESKTOP: Original 3-column horizontal layout
+              ═══════════════════════════════════════════ */}
+          <div className="hidden md:flex items-stretch gap-0">
+            {/* ── BUCKET 1 — Your Email ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.1,
+                ease: [0.16, 1, 0.3, 1] as const,
+              }}
+              className={`flex-1 min-w-0 rounded-xl border p-5 transition-all duration-500 ${
+                phase === "scanning"
+                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
+                  : "border-foreground/6 bg-white/30"
+              }`}
+            >
+              <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3">
+                Your Email
+              </p>
+              <EmailBucketContent phase={phase} scannedEmails={scannedEmails} />
+            </motion.div>
 
-                {/* Arrow 1 */}
-                <FlowArrow active={phase === "extracting"} />
-                <FlowArrowVertical active={phase === "extracting"} />
+            {/* Arrow 1 */}
+            <FlowArrow active={phase === "extracting"} />
 
-                {/* ── BUCKET 2 — Your Policies ── */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.2,
-                    ease: [0.16, 1, 0.3, 1] as const,
-                  }}
-                  className={`flex-1 min-w-0 rounded-xl border p-3 sm:p-5 transition-all duration-500 ${
-                    phase === "extracting"
-                      ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
-                      : "border-foreground/6 bg-white/30"
-                  }`}
-                >
-                  <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3">
-                    Your Policies
-                  </p>
-                  <div className="space-y-0.5 min-h-[140px]">
-                    <AnimatePresence>
-                      {extractedPolicies.map((idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, scale: 0.92, y: -4 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          transition={{
-                            duration: 0.35,
-                            type: "spring",
-                            bounce: 0.25,
-                          }}
-                          className="flex items-center gap-2.5 px-2 py-2 rounded-lg"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#A0D2FA]/60 shrink-0" />
-                          <div className="min-w-0">
-                            <p className="text-[13px] text-foreground truncate">
-                              {MOCK_POLICIES[idx].type}
-                            </p>
-                            <p className="text-[11px] text-muted/50">
-                              {MOCK_POLICIES[idx].carrier} &middot;{" "}
-                              <span className="font-mono">
-                                {MOCK_POLICIES[idx].policyNumber}
-                              </span>
-                            </p>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </AnimatePresence>
-
-                    {extractedPolicies.length === 0 && (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-[12px] text-muted/30 pt-2"
-                      >
-                        Waiting for scan...
-                      </motion.p>
-                    )}
-                  </div>
-                </motion.div>
-
-                {/* Arrow 2 */}
-                <FlowArrow active={phase === "analyzing"} />
-                <FlowArrowVertical active={phase === "analyzing"} />
-
-                {/* ── BUCKET 3 — Clair ── */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.3,
-                    ease: [0.16, 1, 0.3, 1] as const,
-                  }}
-                  className={`flex-1 min-w-0 rounded-xl border p-3 sm:p-5 transition-all duration-500 ${
-                    phase === "analyzing" || phase === "ready"
-                      ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
-                      : "border-foreground/6 bg-white/30"
-                  }`}
-                >
-                  <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3">
-                    Clair
-                  </p>
-                  <div className="min-h-[140px] flex flex-col items-center justify-center">
-                    {phase === "analyzing" || phase === "ready" ? (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.4 }}
-                        className="flex flex-col items-center gap-3"
-                      >
-                        <ClairGlobe spinning={phase === "analyzing"} />
-
-                        <div className="flex flex-col items-center gap-1">
-                          <AnimatePresence>
-                            {clairStatus.map((text) => (
-                              <motion.p
-                                key={text}
-                                initial={{ opacity: 0, y: 4 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className={`flex items-center gap-1.5 text-[12px] ${
-                                  text === "Ready"
-                                    ? "text-emerald-600 font-medium"
-                                    : "text-muted/70"
-                                }`}
-                              >
-                                <span
-                                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                                    text === "Ready"
-                                      ? "bg-emerald-500"
-                                      : "bg-[#A0D2FA]"
-                                  }`}
-                                />
-                                {text}
-                              </motion.p>
-                            ))}
-                          </AnimatePresence>
-                        </div>
-                      </motion.div>
-                    ) : (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-[12px] text-muted/30"
-                      >
-                        Waiting for policies...
-                      </motion.p>
-                    )}
-                  </div>
-                </motion.div>
+            {/* ── BUCKET 2 — Your Policies ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.2,
+                ease: [0.16, 1, 0.3, 1] as const,
+              }}
+              className={`flex-1 min-w-0 rounded-xl border p-5 transition-all duration-500 ${
+                phase === "extracting"
+                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
+                  : "border-foreground/6 bg-white/30"
+              }`}
+            >
+              <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3">
+                Your Policies
+              </p>
+              <div className="min-h-[140px]">
+                <PolicyBucketContent extractedPolicies={extractedPolicies} />
               </div>
+            </motion.div>
 
-              {/* CTA button — appears when ready */}
-              <AnimatePresence>
-                {phase === "ready" && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.6,
-                      delay: 0.3,
-                      ease: [0.16, 1, 0.3, 1] as const,
-                    }}
-                    className="mt-10 flex justify-center"
-                  >
-                    <button
-                      type="button"
-                      onClick={onComplete}
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors cursor-pointer"
-                    >
-                      See what Clair can do
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+            {/* Arrow 2 */}
+            <FlowArrow active={phase === "analyzing"} />
+
+            {/* ── BUCKET 3 — Claire ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.3,
+                ease: [0.16, 1, 0.3, 1] as const,
+              }}
+              className={`flex-1 min-w-0 rounded-xl border p-5 transition-all duration-500 ${
+                phase === "analyzing" || phase === "ready"
+                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04]"
+                  : "border-foreground/6 bg-white/30"
+              }`}
+            >
+              <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3">
+                Claire
+              </p>
+              <div className="min-h-[140px]">
+                <ClairBucketContent phase={phase} clairStatus={clairStatus} />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* ═══════════════════════════════════════════
+              MOBILE: Accordion — one bucket at a time
+              ═══════════════════════════════════════════ */}
+          <div className="md:hidden flex flex-col">
+            {/* Collapsed: Email (when past scanning) */}
+            <AnimatePresence>
+              {activeBucket > 0 && (
+                <CollapsedBucket
+                  stepNumber={1}
+                  label="Your Email"
+                  summary={`${scannedEmails.length} emails scanned`}
+                />
+              )}
+            </AnimatePresence>
+
+            {/* Collapsed: Policies (when past extracting) */}
+            <AnimatePresence>
+              {activeBucket > 1 && (
+                <CollapsedBucket
+                  stepNumber={2}
+                  label="Your Policies"
+                  summary={`${extractedPolicies.length} policies found`}
+                />
+              )}
+            </AnimatePresence>
+
+            {/* Active bucket */}
+            <AnimatePresence mode="wait">
+              {activeBucket === 0 && (
+                <motion.div
+                  key="mobile-email"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{
+                    duration: 0.4,
+                    ease: [0.16, 1, 0.3, 1] as const,
+                  }}
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04] p-4"
+                >
+                  <MobileStepLabel stepNumber={1} label="Your Email" />
+                  <EmailBucketContent
+                    phase={phase}
+                    scannedEmails={scannedEmails}
+                  />
+                </motion.div>
+              )}
+
+              {activeBucket === 1 && (
+                <motion.div
+                  key="mobile-policies"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{
+                    duration: 0.4,
+                    ease: [0.16, 1, 0.3, 1] as const,
+                  }}
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04] p-4"
+                >
+                  <MobileStepLabel stepNumber={2} label="Your Policies" />
+                  <PolicyBucketContent extractedPolicies={extractedPolicies} />
+                </motion.div>
+              )}
+
+              {activeBucket === 2 && (
+                <motion.div
+                  key="mobile-clair"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{
+                    duration: 0.4,
+                    ease: [0.16, 1, 0.3, 1] as const,
+                  }}
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/[0.04] p-4"
+                >
+                  <MobileStepLabel stepNumber={3} label="Claire" />
+                  <ClairBucketContent phase={phase} clairStatus={clairStatus} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+
+      {/* ── FOOTER — pinned at bottom ── */}
+      <div className="shrink-0 h-20 md:h-24 flex items-center justify-center">
+        <AnimatePresence>
+          {phase === "ready" && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.3,
+                ease: [0.16, 1, 0.3, 1] as const,
+              }}
+            >
+              <button
+                type="button"
+                onClick={onComplete}
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors cursor-pointer"
+              >
+                See what Claire can do
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
