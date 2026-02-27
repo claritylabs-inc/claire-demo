@@ -424,7 +424,7 @@ export function ChatStep() {
           {/* QR Code — hidden on mobile, visible on tablet+ */}
           <div className="hidden sm:block p-4 rounded-2xl border border-foreground/6 bg-white/50">
             <QRCodeSVG
-              value="sms:+16722036730"
+              value="sms:+16476930328?body=My landlord needs proof of insurance for our lease renewal."
               size={140}
               level="M"
               bgColor="transparent"
