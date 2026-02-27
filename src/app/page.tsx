@@ -1,43 +1,23 @@
 "use client";
 
 import { FadeIn } from "@/components/FadeIn";
-import { LogoIcon } from "@/components/LogoIcon";
+import { Header } from "@/components/Header";
 
 const brandFont = { fontFamily: "var(--font-instrument-serif)" };
 
 function BrandName({ children }: { children: React.ReactNode }) {
-  return <span style={brandFont}>{children}</span>;
+  return <span style={brandFont} className="text-lg font-semibold tracking-wide">{children}</span>;
 }
 
 export default function Home() {
   return (
     <div
-      className="min-h-screen"
-      style={{ background: "#FAF8F4", color: "#1a1a1a" }}
+      className="min-h-screen text-[#1a1a1a]"
     >
-      {/* Nav */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{
-          background: "rgba(250, 248, 244, 0.85)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(0,0,0,0.06)",
-        }}
-      >
-        <div className="max-w-3xl mx-auto px-6 md:px-10 h-14 flex items-center">
-          <a
-            href="/"
-            className="flex items-center gap-2 text-lg tracking-tight"
-            style={brandFont}
-          >
-            <span>clarity</span>
-            <LogoIcon size={20} className="shrink-0" />
-            <span>labs</span>
-          </a>
-        </div>
-      </nav>
+      <Header logoSize="lg" />
 
-      <main className="max-w-[540px] mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
+      <main className="max-w-3xl border-x border-gray-200 mx-auto px-6 md:px-10 pt-40 md:pt-52 pb-40 md:pb-56">
+        <div className="max-w-xl mx-auto">
         <FadeIn>
           <h1
             className="text-[1.65rem] md:text-[2rem] font-normal leading-[1.35] tracking-[-0.01em] mb-20"
@@ -159,7 +139,7 @@ export default function Home() {
 
           <FadeIn>
             <p>
-              Because <BrandName>Clair</BrandName> has the full context of your
+              Since <BrandName>Clair</BrandName> has the full context of your
               business, your coverage, and your insurance needs, it can also
               proactively recommend changes, flag coverage gaps, and help you buy
               or renew policies completely autonomously.
@@ -203,12 +183,13 @@ export default function Home() {
 
           <FadeIn>
             <p
-              className="pt-4"
+              className="pt-4 font-semibold tracking-wide"
               style={{ color: "#8a8578", fontFamily: "var(--font-instrument-serif)" }}
             >
               &mdash; Adyan &amp; Terry
             </p>
           </FadeIn>
+        </div>
         </div>
       </main>
 
@@ -218,7 +199,7 @@ export default function Home() {
           className="max-w-3xl mx-auto px-6 md:px-10 py-8 flex items-center justify-between text-[11px]"
           style={{ color: "#8a8578" }}
         >
-          <span>&copy; {new Date().getFullYear()} Clarity</span>
+          <span>&copy; {new Date().getFullYear()} Clarity Labs</span>
           <a
             href="mailto:hello@claritylabs.inc"
             className="hover:opacity-60 transition-opacity"
