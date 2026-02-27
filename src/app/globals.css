@@ -6,6 +6,13 @@
    ============================================================================= */
 
 :root {
+  /* Z-index scale — see docs/Z_INDEX.md */
+  --z-grain: 1;
+  --z-header: 50;
+  --z-modal-backdrop: 100;
+  --z-modal: 110;
+  --z-toast: 120;
+
   /* Surfaces */
   --background: #faf8f4;
   --background-rgb: 250 248 244;
@@ -127,7 +134,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: var(--z-grain);
   pointer-events: none;
   opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
@@ -141,4 +148,23 @@ body::before {
 
 .serif {
   font-family: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+}
+
+/* =============================================================================
+   Z-Index Utilities (see docs/Z_INDEX.md)
+   ============================================================================= */
+@utility z-grain {
+  z-index: var(--z-grain);
+}
+@utility z-header {
+  z-index: var(--z-header);
+}
+@utility z-modal-backdrop {
+  z-index: var(--z-modal-backdrop);
+}
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+@utility z-toast {
+  z-index: var(--z-toast);
 }
