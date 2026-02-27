@@ -1,46 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SiQuickbooks } from "react-icons/si";
+import { LogoIcon } from "@/components/LogoIcon";
 import { POLICY_GROUPS, CONTEXT_SOURCES } from "@/data/demoData";
+import { FixedActionFooter } from "./FixedActionFooter";
+import { BrandName } from "@/components/BrandName";
+
+/* ---------- Greystar logo ---------- */
+function GreystarIcon({ className }: { className?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/greystar-logo.png"
+      alt="Greystar"
+      className={className}
+    />
+  );
+}
+
+/* ---------- California state seal ---------- */
+function CaliforniaSealIcon({ className }: { className?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/california-seal.png"
+      alt="California"
+      className={className}
+    />
+  );
+}
 
 interface CoverageStepProps {
   onComplete: () => void;
 }
 
-/* ---------- MCP-style connection icons ---------- */
+/* ---------- Integration icons (FontAwesome + Simple Icons) ---------- */
 
-function LeaseIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <path d="M14 2v6h6" />
-      <path d="M16 13H8M16 17H8M10 9H8" />
-    </svg>
-  );
-}
-
-function ProfileIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="4" y="2" width="16" height="20" rx="2" />
-      <path d="M9 22v-4h6v4" />
-      <path d="M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01" />
-    </svg>
-  );
-}
-
-function QuickBooksIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="12" width="4" height="9" rx="1" />
-      <rect x="10" y="8" width="4" height="13" rx="1" />
-      <rect x="17" y="3" width="4" height="18" rx="1" />
-    </svg>
-  );
-}
-
-const CONNECTION_ICONS = [LeaseIcon, ProfileIcon, QuickBooksIcon];
+const CONNECTION_ICONS = [
+  () => <GreystarIcon className="w-3.5 h-3.5 shrink-0" />,
+  () => <CaliforniaSealIcon className="w-3.5 h-3.5 shrink-0" />,
+  () => <SiQuickbooks className="w-3.5 h-3.5 text-[#2ca01c] shrink-0" />,
+];
 
 /* ---------- MCP-style connection badge ---------- */
 
@@ -50,12 +52,18 @@ function ConnectionBadge({
   index,
   expanded,
   onToggle,
+  onMouseEnter,
+  onMouseLeave,
+  isLast,
 }: {
   source: (typeof CONTEXT_SOURCES)[0];
   icon: () => React.JSX.Element;
   index: number;
   expanded: boolean;
   onToggle: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  isLast: boolean;
 }) {
   return (
     <motion.div
@@ -63,27 +71,25 @@ function ConnectionBadge({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.3 + index * 0.08 }}
       className="relative"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <button
         type="button"
         onClick={onToggle}
         className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[12px] font-medium transition-all cursor-pointer ${
           expanded
-            ? "border-emerald-500/30 bg-emerald-500/[0.06] text-foreground"
+            ? "border-emerald-500/30 bg-emerald-500/6 text-foreground"
             : "border-foreground/8 bg-white/80 text-muted hover:border-foreground/15 hover:text-foreground/80"
         }`}
       >
-        <span className="relative flex items-center justify-center w-4 h-4">
-          <span className="absolute inset-0 rounded-full bg-emerald-500/20 animate-ping" />
-          <span className="relative w-[6px] h-[6px] rounded-full bg-emerald-500" />
-        </span>
-        <span className="text-foreground/50">
+        <span className="flex items-center">
           <Icon />
         </span>
         {source.label}
       </button>
 
-      {/* Expanded detail dropdown */}
+      {/* Expanded detail dropdown — right-align for last badge to prevent cutoff */}
       <AnimatePresence>
         {expanded && (
           <motion.div
@@ -91,15 +97,19 @@ function ConnectionBadge({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="absolute top-full left-0 mt-2 w-72 rounded-lg border border-foreground/8 bg-white shadow-lg shadow-black/[0.06] p-3 z-50"
+            className={`absolute top-full mt-2 min-w-72 max-w-md rounded-lg border border-foreground/8 bg-white shadow-lg shadow-black/[0.06] p-3 z-50 ${
+              isLast ? "right-0 left-auto" : "left-0"
+            }`}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-[6px] h-[6px] rounded-full bg-emerald-500" />
+            <div className="flex items-center gap-2 mb-1.5">
               <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">
                 Connected
               </span>
             </div>
-            <p className="text-[12px] leading-relaxed text-muted">
+            <p className="text-[10px] text-muted/70 mb-2">
+              via {source.integration}
+            </p>
+            <p className="text-[12px] leading-relaxed text-muted break-words">
               {source.details}
             </p>
           </motion.div>
@@ -137,9 +147,34 @@ const rowVariants = {
 
 /* ---------- Main component ---------- */
 
+const HOVER_LEAVE_DELAY_MS = 150;
+
 export function CoverageStep({ onComplete }: CoverageStepProps) {
   const [activeTab, setActiveTab] = useState("all");
   const [expandedConnection, setExpandedConnection] = useState<number | null>(null);
+  const badgesRef = useRef<HTMLDivElement>(null);
+  const hoverLeaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Close on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (badgesRef.current && !badgesRef.current.contains(e.target as Node)) {
+        setExpandedConnection(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      clearHoverLeaveTimeout();
+    };
+  }, []);
+
+  const clearHoverLeaveTimeout = () => {
+    if (hoverLeaveTimeoutRef.current) {
+      clearTimeout(hoverLeaveTimeoutRef.current);
+      hoverLeaveTimeoutRef.current = null;
+    }
+  };
 
   const visibleGroups =
     activeTab === "all"
@@ -159,59 +194,69 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
   );
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden relative">
+    <div className="flex-1 flex flex-col overflow-hidden">
       {/* Top bar — title + context sources */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-        className="shrink-0 border-b border-foreground/6 bg-white/60 backdrop-blur-sm"
+        className="shrink-0 border-b border-foreground/6 bg-white/60 backdrop-blur-sm overflow-visible"
       >
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 space-y-3">
-          {/* Title row */}
-          <div>
-            <p
-              className="text-lg font-normal text-foreground-highlight"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              Coverage Summary
-            </p>
-            <p className="text-xs text-muted mt-0.5">
-              Rosario&rsquo;s Italian Kitchen &middot; 4 active policies
-            </p>
-          </div>
-          {/* Connectors row */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold text-muted uppercase tracking-wider mr-1">
-              Connectors
-            </span>
-            {/* Desktop: full badges */}
-            <div className="hidden md:flex items-center gap-2">
-              {CONTEXT_SOURCES.map((source, i) => (
-                <ConnectionBadge
-                  key={source.label}
-                  source={source}
-                  icon={CONNECTION_ICONS[i]}
-                  index={i}
-                  expanded={expandedConnection === i}
-                  onToggle={() =>
-                    setExpandedConnection(expandedConnection === i ? null : i)
-                  }
-                />
-              ))}
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-visible">
+          <div className="flex items-center gap-4">            
+            <div>
+              <BrandName className="text-2xl inline-flex items-center gap-1.5">
+                <LogoIcon size={20} className="shrink-0 text-foreground/80" />
+                Claire
+              </BrandName>
+              <p className="text-xs text-muted mt-1">
+                Rosario&rsquo;s Italian Kitchen &middot; 4 active policies
+              </p>
             </div>
-            {/* Mobile: compact pills */}
-            <div className="flex md:hidden items-center gap-1.5">
-              {CONTEXT_SOURCES.map((source) => (
+          </div>
+          {/* Desktop: full badges */}
+          <div
+            ref={badgesRef}
+            className="hidden md:flex items-center gap-2 overflow-visible"
+          >
+            {CONTEXT_SOURCES.map((source, i) => (
+              <ConnectionBadge
+                key={source.label}
+                source={source}
+                icon={CONNECTION_ICONS[i]}
+                index={i}
+                expanded={expandedConnection === i}
+                onToggle={() =>
+                  setExpandedConnection(expandedConnection === i ? null : i)
+                }
+                onMouseEnter={() => {
+                  clearHoverLeaveTimeout();
+                  setExpandedConnection(i);
+                }}
+                onMouseLeave={() => {
+                  hoverLeaveTimeoutRef.current = setTimeout(() => {
+                    setExpandedConnection(null);
+                    hoverLeaveTimeoutRef.current = null;
+                  }, HOVER_LEAVE_DELAY_MS);
+                }}
+                isLast={i === CONTEXT_SOURCES.length - 1}
+              />
+            ))}
+          </div>
+          {/* Mobile: compact pills */}
+          <div className="flex md:hidden items-center gap-1.5">
+            {CONTEXT_SOURCES.map((source, i) => {
+              const Icon = CONNECTION_ICONS[i];
+              return (
                 <span
                   key={source.label}
                   className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-foreground/6 bg-white/80 text-[10px] font-medium text-muted"
                 >
-                  <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                  <Icon />
                   {source.label}
                 </span>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
       </motion.div>
@@ -246,7 +291,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="flex items-center gap-1 mb-4 border-b border-foreground/6 overflow-x-auto scrollbar-hide"
+            className="flex items-center gap-1 mb-4 border-b border-foreground/6 overflow-x-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]"
           >
             {TABS.map((tab) => (
               <button
@@ -271,31 +316,31 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
             transition={{ duration: 0.4, delay: 0.25, ease: [0.16, 1, 0.3, 1] as const }}
             className="rounded-lg border border-foreground/6 bg-white/60 overflow-hidden"
           >
-            <div className="overflow-x-auto scrollbar-hide">
-              <table className="w-full text-left">
+            <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]">
+              <table className="w-full text-left min-w-min">
                 <thead>
-                  <tr className="bg-foreground/[0.02]">
+                  <tr className="bg-foreground/2">
                     {activeTab === "all" && (
-                      <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider">
+                      <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider whitespace-nowrap min-w-28">
                         Policy
                       </th>
                     )}
-                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider">
+                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider whitespace-nowrap min-w-32">
                       Coverage
                     </th>
                     {activeTab === "all" && (
-                      <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider hidden md:table-cell">
+                      <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider hidden md:table-cell whitespace-nowrap min-w-20">
                         Carrier
                       </th>
                     )}
-                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right">
+                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right whitespace-nowrap min-w-20">
                       Limit
                     </th>
-                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right">
+                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right whitespace-nowrap min-w-20">
                       Deductible
                     </th>
                     {activeTab !== "all" && (
-                      <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right hidden md:table-cell">
+                      <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right hidden md:table-cell whitespace-nowrap min-w-28">
                         Period
                       </th>
                     )}
@@ -319,7 +364,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                             animate="visible"
                             className="border-t border-foreground/[0.04] hover:bg-foreground/[0.015] transition-colors"
                           >
-                            <td className="px-4 py-2.5">
+                            <td className="px-4 py-2.5 whitespace-nowrap min-w-28">
                               <p className="text-[13px] text-foreground font-medium">
                                 {row.policy}
                               </p>
@@ -327,16 +372,16 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                                 {row.policyNumber}
                               </p>
                             </td>
-                            <td className="px-4 py-2.5 text-[13px] text-foreground">
+                            <td className="px-4 py-2.5 text-[13px] text-foreground whitespace-nowrap min-w-32">
                               {row.name}
                             </td>
-                            <td className="px-4 py-2.5 text-[13px] text-muted hidden md:table-cell">
+                            <td className="px-4 py-2.5 text-[13px] text-muted hidden md:table-cell whitespace-nowrap min-w-20">
                               {row.carrier}
                             </td>
-                            <td className="px-4 py-2.5 text-[13px] font-mono font-medium text-foreground text-right">
+                            <td className="px-4 py-2.5 text-[13px] font-mono font-medium text-foreground text-right whitespace-nowrap min-w-20">
                               {row.limit}
                             </td>
-                            <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right">
+                            <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right whitespace-nowrap min-w-20">
                               {row.deductible}
                             </td>
                           </motion.tr>
@@ -351,16 +396,16 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                               animate="visible"
                               className="border-t border-foreground/[0.04] hover:bg-foreground/[0.015] transition-colors"
                             >
-                              <td className="px-4 py-2.5 text-[13px] text-foreground">
+                              <td className="px-4 py-2.5 text-[13px] text-foreground whitespace-nowrap min-w-32">
                                 {cov.name}
                               </td>
-                              <td className="px-4 py-2.5 text-[13px] font-mono font-medium text-foreground text-right">
+                              <td className="px-4 py-2.5 text-[13px] font-mono font-medium text-foreground text-right whitespace-nowrap min-w-20">
                                 {cov.limit}
                               </td>
-                              <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right">
+                              <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right whitespace-nowrap min-w-20">
                                 {cov.deductible}
                               </td>
-                              <td className="px-4 py-2.5 text-[13px] text-muted text-right hidden md:table-cell">
+                              <td className="px-4 py-2.5 text-[13px] text-muted text-right hidden md:table-cell whitespace-nowrap min-w-28">
                                 {group.effective} &ndash; {group.expires}
                               </td>
                             </motion.tr>
@@ -434,37 +479,12 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
         </div>
       </div>
 
-      {/* Floating fixed CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.6,
-          delay: 0.5,
-          ease: [0.16, 1, 0.3, 1] as const,
-        }}
-        className="absolute bottom-6 sm:bottom-10 left-0 right-0 flex justify-center z-50 pointer-events-none"
-      >
-        <button
-          type="button"
-          onClick={onComplete}
-          className="pointer-events-auto inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors cursor-pointer shadow-lg shadow-black/10"
-        >
-          Talk to Claire
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </button>
-      </motion.div>
+      <FixedActionFooter
+        label="Talk to Claire"
+        onClick={onComplete}
+        variant="floating"
+        animateIn
+      />
     </div>
   );
 }

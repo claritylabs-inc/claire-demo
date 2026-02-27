@@ -11,6 +11,8 @@ interface FadeInProps {
   /** Index for above-fold stagger (0–4). Omit for elements that load on scroll. */
   staggerIndex?: number;
   direction?: "up" | "none";
+  /** When true, animate immediately. When false, stay at initial. Omit to use whileInView. */
+  when?: boolean;
 }
 
 export function FadeIn({
@@ -19,22 +21,27 @@ export function FadeIn({
   delay,
   staggerIndex,
   direction = "up",
+  when,
 }: FadeInProps) {
   const resolvedDelay =
     delay ?? (staggerIndex !== undefined ? staggerIndex * STAGGER_INTERVAL : 0.05);
+  const initial = {
+    opacity: 0,
+    y: direction === "up" ? 18 : 0,
+    filter: "blur(4px)",
+  };
+  const animate = {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+  };
+
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: direction === "up" ? 18 : 0,
-        filter: "blur(4px)",
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-      }}
-      viewport={{ once: true, margin: "-100px" }}
+      initial={initial}
+      {...(when !== undefined
+        ? { animate: when ? animate : initial }
+        : { whileInView: animate, viewport: { once: true, margin: "-100px" } })}
       transition={{
         duration: 1.5,
         delay: resolvedDelay,

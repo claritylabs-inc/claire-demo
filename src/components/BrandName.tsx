@@ -13,7 +13,7 @@ export function BrandName({ children, className = "" }: BrandNameProps) {
       target="_blank"
       rel="noopener noreferrer"
       style={brandFont}
-      className={`text-lg font-semibold tracking-wide text-foreground-highlight hover:underline ${className}`.trim()}
+      className={`font-medium text-foreground-highlight ${className}`.trim()}
     >
       {children}
     </a>

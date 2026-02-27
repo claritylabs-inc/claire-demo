@@ -132,6 +132,8 @@ export const POLICY_GROUPS: PolicyGroup[] = [
 export interface ContextSource {
   label: string;
   details: string;
+  /** How we obtained this data (integration/MCP source) */
+  integration: string;
 }
 
 export const CONTEXT_SOURCES: ContextSource[] = [
@@ -139,16 +141,19 @@ export const CONTEXT_SOURCES: ContextSource[] = [
     label: "Lease",
     details:
       "Lease with Greystar Properties \u00b7 412 Congress Ave \u00b7 Expires March 2026 \u00b7 Landlord requires AI as certificate holder \u00b7 $8,500/mo rent",
+    integration: "Greystar tenant portal MCP",
   },
   {
     label: "Business Profile",
     details:
       "Rosario\u2019s Italian Kitchen \u00b7 Full-service restaurant w/ bar \u00b7 22 employees \u00b7 Est. 2019 \u00b7 Serves alcohol (liquor license active)",
+    integration: "California Secretary of State Business Search",
   },
   {
     label: "QuickBooks",
     details:
       "$1.8M annual revenue \u00b7 $42K/mo payroll \u00b7 2 delivery vehicles on books",
+    integration: "QuickBooks Online API",
   },
 ];
 
@@ -201,7 +206,7 @@ export const PROCESSING_MESSAGES = [
 
 /* ---------- CTA contact info ---------- */
 
-export const CTA_PHONE = "(647) 693-0328";
-export const CTA_PHONE_HREF = "tel:+16476930328";
+export const CTA_PHONE = "(672) 203-6730";
+export const CTA_PHONE_HREF = "sms:+16722036730";
 export const CTA_EMAIL = "claire@claritylabs.inc";
 export const CTA_EMAIL_HREF = "mailto:claire@claritylabs.inc";
