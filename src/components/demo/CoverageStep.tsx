@@ -113,7 +113,7 @@ function ConnectionBadge({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className={`absolute top-full mt-2 min-w-72 max-w-md rounded-lg border border-foreground/8 bg-white shadow-lg shadow-black/[0.06] p-3 z-50 ${
+            className={`absolute top-full mt-2 min-w-72 max-w-md rounded-lg border border-foreground/8 bg-white shadow-lg shadow-black/[0.06] p-3 z-[60] ${
               isLast ? "right-0 left-auto" : "left-0"
             }`}
           >
@@ -207,7 +207,7 @@ export function CoverageStep({ onOpenChat }: CoverageStepProps) {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-        className="shrink-0 border-b border-foreground/6 bg-white/60 backdrop-blur-sm overflow-visible"
+        className="relative z-10 shrink-0 border-b border-foreground/6 bg-white/60 backdrop-blur-sm overflow-visible"
       >
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-visible">
           <div className="flex items-center gap-4">            
@@ -280,10 +280,8 @@ export function CoverageStep({ onOpenChat }: CoverageStepProps) {
           {/* Summary stats row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6">
             {SUMMARY_STATS.map((stat, i) => (
-              <motion.button
+              <motion.div
                 key={stat.id}
-                type="button"
-                onClick={() => onOpenChat(stat.id)}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -291,10 +289,21 @@ export function CoverageStep({ onOpenChat }: CoverageStepProps) {
                   delay: 0.1 + i * 0.05,
                   ease: [0.16, 1, 0.3, 1] as const,
                 }}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="group rounded-lg border border-foreground/6 bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3 text-left cursor-pointer transition-all duration-200 hover:border-foreground/20 hover:bg-white hover:shadow-md hover:shadow-black/8"
+                className="contents"
               >
+                <motion.button
+                  type="button"
+                  onClick={() => onOpenChat(stat.id)}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -4px rgb(0 0 0 / 0.08)",
+                    borderColor: "rgba(0,0,0,0.2)",
+                    backgroundColor: "white",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
+                  className="group rounded-lg border border-foreground/6 bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3 text-left cursor-pointer"
+                >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
@@ -310,7 +319,8 @@ export function CoverageStep({ onOpenChat }: CoverageStepProps) {
                     </svg>
                   </span>
                 </div>
-              </motion.button>
+                </motion.button>
+              </motion.div>
             ))}
           </div>
 
