@@ -1,10 +1,10 @@
 "use client";
 
-import { FaArrowRight } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 import { BrandName } from "@/components/BrandName";
 import { LogoIcon } from "@/components/LogoIcon";
+import { CTAButton } from "@/components/CTAButton";
 import { CTA_PHONE, CTA_PHONE_HREF } from "@/data/demoData";
 
 const BOOK_DEMO_URL = "https://cal.com/team/claritylabs/demo";
@@ -73,15 +73,13 @@ export function ChatStepCTA() {
         />
       </div>
 
-      <a
+      <CTAButton
+        label="Book a Demo"
         href={BOOK_DEMO_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-medium hover:bg-foreground-highlight transition-colors mt-2"
-      >
-        Book a Demo
-        <FaArrowRight className="w-3 h-3" />
-      </a>
+        className="mt-2"
+      />
     </motion.div>
   );
 }

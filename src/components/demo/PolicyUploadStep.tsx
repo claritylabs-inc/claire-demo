@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, animate } from "framer-motion";
 import { FaEnvelope, FaFile, FaArrowRight, FaChevronDown, FaCheck } from "react-icons/fa";
 import { MOCK_POLICIES } from "@/data/demoData";
 import { BrandName } from "@/components/BrandName";
@@ -170,13 +170,14 @@ function EmailBucketContent({
   scannedEmails: number[];
 }) {
   return (
-    <div className="flex flex-col flex-1 min-h-0 overflow-y-auto divide-y divide-foreground/6">
+    <div className="flex flex-col flex-1 min-h-0 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden divide-y divide-foreground/6">
       <AnimatePresence>
         {scannedEmails.map((idx, i) => (
           <FadeIn
             key={idx}
             when={true}
             staggerIndex={i}
+            duration={0.35}
             className="flex items-start gap-2.5 px-2 py-3"
           >
             {phase === "scanning" &&
@@ -231,13 +232,14 @@ function PolicyBucketContent({
     );
   }
   return (
-    <div className="flex flex-col flex-1 overflow-y-auto divide-y divide-foreground/6">
+    <div className="flex flex-col flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden divide-y divide-foreground/6">
       <AnimatePresence>
         {extractedPolicies.map((idx, i) => (
           <FadeIn
             key={idx}
             when={true}
             staggerIndex={i}
+            duration={0.35}
             className="flex items-start gap-2.5 px-2 py-3"
           >
             <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]">
@@ -281,13 +283,14 @@ function ClaireBucketContent({
         >
           <ClaireGlobe spinning={phase === "analyzing"} />
 
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-1 pb-3">
             <AnimatePresence>
               {claireStatus.map((text, i) => (
                 <FadeIn
                   key={text}
                   when={true}
                   staggerIndex={i}
+                  duration={0.35}
                   className={`flex items-center gap-1.5 text-[12px] ${
                     text === "Ready"
                       ? "text-emerald-600 font-medium"
@@ -348,6 +351,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
   const [scannedEmails, setScannedEmails] = useState<number[]>([]);
   const [extractedPolicies, setExtractedPolicies] = useState<number[]>([]);
   const [claireStatus, setClaireStatus] = useState<string[]>([]);
+  const [scannedEmailCount, setScannedEmailCount] = useState(0);
 
   const activeBucket = getActiveBucket(phase);
 
@@ -356,6 +360,17 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
     const t = setTimeout(() => setShowSteps(true), 900);
     return () => clearTimeout(t);
   }, []);
+
+  // Count-up animation for emails scanned (runs during scanning phase)
+  useEffect(() => {
+    if (!showSteps) return;
+    const controls = animate(0, 5237, {
+      duration: 1.8,
+      ease: "easeOut",
+      onUpdate: (latest) => setScannedEmailCount(Math.round(latest)),
+    });
+    return () => controls.stop();
+  }, [showSteps]);
 
   // Bucket animation timeline (starts after steps are shown)
   useEffect(() => {
@@ -419,7 +434,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
       {/* ── CONTENT — centered on desktop, top-aligned on mobile ── */}
       <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0">
         {/* HEADER — FadeIn with stagger */}
-        <div className="text-center pt-24 md:pt-12 pb-6 md:pb-8 shrink-0 mb-16">
+        <div className="text-center pt-22 md:pt-12 pb-12 md:pb-20 shrink-0">
           <FadeIn staggerIndex={0}>
             <h1
               className="text-foreground-highlight"
@@ -463,7 +478,9 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                 <p className="text-[11px] font-semibold text-muted tracking-wider uppercase">
                   Your Email
                 </p>
-                <p className="text-[10px] text-muted/50 mt-0.5">Inbox · emails scanned</p>
+                <p className="text-[10px] text-muted/50 mt-0.5">
+                  Inbox · {scannedEmailCount.toLocaleString()} emails scanned
+                </p>
               </div>
               <div className="h-[260px] flex flex-col overflow-hidden">
                 <EmailBucketContent phase={phase} scannedEmails={scannedEmails} />
@@ -526,7 +543,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                 <CollapsedBucket
                   stepNumber={1}
                   label="Your Email"
-                  summary={`5,237 emails scanned`}
+                  summary={`${scannedEmailCount.toLocaleString()} emails scanned`}
                 />
               )}
             </AnimatePresence>
@@ -554,7 +571,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[320px] flex flex-col shrink-0"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={1} label="Your Email" />
                   <EmailBucketContent
@@ -574,7 +591,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[320px] flex flex-col shrink-0"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={2} label="Your Policies" />
                   <PolicyBucketContent extractedPolicies={extractedPolicies} />
@@ -591,7 +608,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 h-[320px] flex flex-col shrink-0"
+                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={3} label="Claire" />
                   <div className="w-full flex flex-1 justify-center items-center">
@@ -611,8 +628,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
       <FixedActionFooter
         label="See what Claire can do"
         onClick={onComplete}
-        variant="bar"
-        visible={phase === "ready"}
+        // visible={phase === "ready"}
       />
     </div>
   );

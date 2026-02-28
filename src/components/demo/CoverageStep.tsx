@@ -7,6 +7,7 @@ import { LogoIcon } from "@/components/LogoIcon";
 import { POLICY_GROUPS, CONTEXT_SOURCES } from "@/data/demoData";
 import { FixedActionFooter } from "./FixedActionFooter";
 import { BrandName } from "@/components/BrandName";
+import { FadeIn } from "@/components/FadeIn";
 
 /* ---------- Greystar logo ---------- */
 function GreystarIcon({ className }: { className?: string }) {
@@ -130,20 +131,10 @@ const TABS = [
 
 const SUMMARY_STATS = [
   { label: "Active Policies", value: "4" },
-  { label: "Total Premium", value: "$18,200" },
+  { label: "Annual Premiums", value: "$18,200" },
   { label: "Next Renewal", value: "Jan 15, 2026" },
-  { label: "Sources Connected", value: "3" },
+  { label: "Integrations", value: "3 Connectors" },
 ];
-
-/* ---------- Table row animation ---------- */
-
-const rowVariants = {
-  hidden: { opacity: 0 },
-  visible: (i: number) => ({
-    opacity: 1,
-    transition: { duration: 0.3, delay: i * 0.03 },
-  }),
-};
 
 /* ---------- Main component ---------- */
 
@@ -358,13 +349,14 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                   >
                     {activeTab === "all"
                       ? allRows.map((row, i) => (
-                          <motion.tr
+                          <FadeIn
                             key={`${row.policy}-${row.name}`}
-                            custom={i}
-                            variants={rowVariants}
-                            initial="hidden"
-                            animate="visible"
-                            className="border-t border-foreground/[0.04] hover:bg-foreground/[0.015] transition-colors"
+                            as="tr"
+                            when={true}
+                            delay={i * 0.02}
+                            duration={0.35}
+                            direction="none"
+                            className="border-t border-foreground/4 hover:bg-foreground/1.5 transition-colors"
                           >
                             <td className="px-4 py-2.5 whitespace-nowrap min-w-28">
                               <p className="text-[13px] text-foreground font-medium">
@@ -386,32 +378,38 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                             <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right whitespace-nowrap min-w-20">
                               {row.deductible}
                             </td>
-                          </motion.tr>
+                          </FadeIn>
                         ))
-                      : visibleGroups.flatMap((group) =>
-                          group.coverages.map((cov, i) => (
-                            <motion.tr
-                              key={`${group.id}-${cov.name}`}
-                              custom={i}
-                              variants={rowVariants}
-                              initial="hidden"
-                              animate="visible"
-                              className="border-t border-foreground/[0.04] hover:bg-foreground/[0.015] transition-colors"
-                            >
-                              <td className="px-4 py-2.5 text-[13px] text-foreground whitespace-nowrap min-w-32">
-                                {cov.name}
-                              </td>
-                              <td className="px-4 py-2.5 text-[13px] font-mono font-medium text-foreground text-right whitespace-nowrap min-w-20">
-                                {cov.limit}
-                              </td>
-                              <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right whitespace-nowrap min-w-20">
-                                {cov.deductible}
-                              </td>
-                              <td className="px-4 py-2.5 text-[13px] text-muted text-right hidden md:table-cell whitespace-nowrap min-w-28">
-                                {group.effective} &ndash; {group.expires}
-                              </td>
-                            </motion.tr>
-                          ))
+                      : visibleGroups.flatMap((group, groupIdx) =>
+                          group.coverages.map((cov, covIdx) => {
+                            const rowIndex = visibleGroups
+                              .slice(0, groupIdx)
+                              .reduce((acc, g) => acc + g.coverages.length, 0) + covIdx;
+                            return (
+                              <FadeIn
+                                key={`${group.id}-${cov.name}`}
+                                as="tr"
+                                when={true}
+                                delay={rowIndex * 0.02}
+                                duration={0.35}
+                                direction="none"
+                                className="border-t border-foreground/4 hover:bg-foreground/1.5 transition-colors"
+                              >
+                                <td className="px-4 py-2.5 text-[13px] text-foreground whitespace-nowrap min-w-32">
+                                  {cov.name}
+                                </td>
+                                <td className="px-4 py-2.5 text-[13px] font-mono font-medium text-foreground text-right whitespace-nowrap min-w-20">
+                                  {cov.limit}
+                                </td>
+                                <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right whitespace-nowrap min-w-20">
+                                  {cov.deductible}
+                                </td>
+                                <td className="px-4 py-2.5 text-[13px] text-muted text-right hidden md:table-cell whitespace-nowrap min-w-28">
+                                  {group.effective} &ndash; {group.expires}
+                                </td>
+                              </FadeIn>
+                            );
+                          })
                         )}
                   </motion.tbody>
                 </AnimatePresence>
@@ -430,40 +428,52 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
             </div>
           </motion.div>
 
-          {/* Policy detail cards — shown when a specific tab is selected */}
+          {/* Policy detail cards — shown when a specific tab is selected (animate after table rows) */}
           <AnimatePresence>
             {activeTab !== "all" &&
-              visibleGroups.map((group) => (
-                <motion.div
-                  key={group.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-4 rounded-lg border border-foreground/6 bg-white/60 px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-2"
-                >
-                  {[
-                    { label: "Carrier", value: group.carrier, className: "font-medium" },
-                    { label: "Policy #", value: group.policyNumber, className: "font-mono" },
-                    { label: "Effective", value: group.effective, className: "" },
-                    { label: "Expires", value: group.expires, className: "" },
-                  ].map((item, i) => (
-                    <motion.div
-                      key={item.label}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3, delay: 0.15 + i * 0.05 }}
+              (() => {
+                const rowCount = visibleGroups.reduce(
+                  (acc, g) => acc + g.coverages.length,
+                  0
+                );
+                const carrierCardDelay =
+                  Math.max(0, rowCount - 1) * 0.02 + 0.35;
+                return visibleGroups.map((group) => (
+                  <FadeIn
+                    key={group.id}
+                    when={true}
+                    delay={carrierCardDelay}
+                    direction="up"
+                    className="mt-4"
+                  >
+                  <div className="rounded-lg border border-foreground/6 bg-white/60 px-4 py-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                      {[
+                        { label: "Carrier", value: group.carrier, className: "font-medium" },
+                        { label: "Policy #", value: group.policyNumber, className: "font-mono" },
+                        { label: "Effective", value: group.effective, className: "" },
+                        { label: "Expires", value: group.expires, className: "" },
+                      ].map((item) => (
+                        <div key={item.label}>
+                          <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
+                            {item.label}
+                          </p>
+                          <p className={`text-[13px] text-foreground ${item.className}`}>
+                            {item.value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      className="shrink-0 px-3 py-1.5 rounded-md border border-foreground/12 bg-white/80 text-[12px] font-medium text-foreground hover:border-foreground/20 hover:bg-foreground/3 transition-colors cursor-pointer"
                     >
-                      <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
-                        {item.label}
-                      </p>
-                      <p className={`text-[13px] text-foreground ${item.className}`}>
-                        {item.value}
-                      </p>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              ))}
+                      Contact Agent
+                    </button>
+                  </div>
+                </FadeIn>
+                ));
+              })()}
           </AnimatePresence>
 
         </div>
@@ -472,7 +482,6 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
       <FixedActionFooter
         label="Talk to Claire"
         onClick={onComplete}
-        variant="floating"
         animateIn
       />
     </div>

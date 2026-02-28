@@ -13,6 +13,10 @@ interface FadeInProps {
   direction?: "up" | "none";
   /** When true, animate immediately. When false, stay at initial. Omit to use whileInView. */
   when?: boolean;
+  /** Render as a different element (e.g. "tr" for table rows). */
+  as?: keyof typeof motion;
+  /** Override animation duration (default 1.5). */
+  duration?: number;
 }
 
 export function FadeIn({
@@ -22,6 +26,8 @@ export function FadeIn({
   staggerIndex,
   direction = "up",
   when,
+  as: Component = "div",
+  duration = 1.5,
 }: FadeInProps) {
   const resolvedDelay =
     delay ?? (staggerIndex !== undefined ? staggerIndex * STAGGER_INTERVAL : 0.05);
@@ -36,20 +42,22 @@ export function FadeIn({
     filter: "blur(0px)",
   };
 
+  const MotionComponent = motion[Component] as typeof motion.div;
+
   return (
-    <motion.div
+    <MotionComponent
       initial={initial}
       {...(when !== undefined
         ? { animate: when ? animate : initial }
         : { whileInView: animate, viewport: { once: true, margin: "-100px" } })}
       transition={{
-        duration: 1.5,
+        duration,
         delay: resolvedDelay,
         ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >
       {children}
-    </motion.div>
+    </MotionComponent>
   );
 }
