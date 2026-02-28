@@ -21,10 +21,10 @@ type Phase = "scanning" | "extracting" | "analyzing" | "ready";
 /* ---------- Email data ---------- */
 
 const EMAILS = [
-  { subject: "Policy Renewal – GL", from: "agent@hartford.com", date: "Today, 2:34 PM" },
-  { subject: "Your Auto Policy", from: "noreply@progressive.com", date: "Today, 11:02 AM" },
-  { subject: "Workers Comp Certificate", from: "certs@employers.com", date: "Yesterday" },
-  { subject: "Commercial Property Update", from: "service@travelers.com", date: "Yesterday" },
+  { subject: "Policy Renewal – GL", from: "agent@hartford.com", date: "Jan 15, 2025" },
+  { subject: "Your Auto Policy", from: "noreply@progressive.com", date: "Nov 8, 2023" },
+  { subject: "Workers Comp Certificate", from: "certs@employers.com", date: "Apr 22, 2022" },
+  { subject: "Commercial Property Update", from: "service@travelers.com", date: "Jul 3, 2021" },
 ];
 
 /* ---------- Flow arrows (FontAwesome) ---------- */
