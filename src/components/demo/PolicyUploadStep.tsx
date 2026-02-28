@@ -277,21 +277,31 @@ function ClaireBucketContent({
   claireStatus: string[];
 }) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center">
+    <div className="flex-1 flex flex-col items-center justify-center relative">
       {phase === "analyzing" || phase === "ready" ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-          className="flex flex-col items-center gap-3 md:gap-5"
+          className="flex flex-col items-center gap-4 md:gap-5 relative z-10"
         >
-          {/* Fixed-height wrapper keeps logo in place as status items load */}
-          <div className="h-12 flex items-center justify-center shrink-0">
-            <ClaireGlobe spinning={phase === "analyzing"} />
+          {/* Radial glow behind globe */}
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] w-32 h-32 rounded-full pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, rgba(160,210,250,0.15) 0%, rgba(160,210,250,0.04) 50%, transparent 70%)",
+            }}
+            animate={phase === "analyzing" ? { scale: [1, 1.15, 1], opacity: [0.8, 1, 0.8] } : { scale: 1, opacity: 0.6 }}
+            transition={phase === "analyzing" ? { duration: 2.5, repeat: Infinity, ease: "easeInOut" } : { duration: 0.6 }}
+          />
+
+          {/* Globe */}
+          <div className="h-14 flex items-center justify-center shrink-0">
+            <ClaireGlobe size={44} spinning={phase === "analyzing"} />
           </div>
 
-          {/* Reserve space for 3 status items so layout doesn't shift */}
-          <div className="flex flex-col items-center gap-1 pb-3 min-h-18">
+          {/* Status items */}
+          <div className="flex flex-col items-center gap-1.5 pb-3 min-h-18">
             <AnimatePresence>
               {claireStatus.map((text, i) => (
                 <FadeIn
@@ -299,9 +309,9 @@ function ClaireBucketContent({
                   when={true}
                   staggerIndex={i}
                   duration={0.35}
-                  className={`flex items-center gap-1.5 text-[12px] ${
+                  className={`flex items-center gap-2 text-[12px] ${
                     text === "Ready"
-                      ? "text-emerald-600 font-medium"
+                      ? "text-emerald-600 font-semibold"
                       : "text-muted/70"
                   }`}
                 >
@@ -317,13 +327,19 @@ function ClaireBucketContent({
           </div>
         </motion.div>
       ) : (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-[12px] text-muted/30"
-        >
-          Waiting for policies...
-        </motion.p>
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-14 flex items-center justify-center">
+            <ClaireGlobe size={44} spinning={false} />
+          </div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            className="text-[12px] text-muted/40"
+          >
+            Waiting for policies&hellip;
+          </motion.p>
+        </div>
       )}
     </div>
   );
@@ -450,7 +466,7 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               <BrandName className="inline-flex items-center gap-2 text-4xl md:text-5xl">
-                Meet <LogoIcon size={isMobile ? 32 : 40} className="shrink-0 ml-2" /> Claire
+                Meet <LogoIcon size={isMobile ? 32 : 40} className="shrink-0 ml-2" spinOnHover /> Claire
               </BrandName>
             </h1>
           </FadeIn>
@@ -533,9 +549,12 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
                   : "border-foreground/6 bg-white/30"
               }`}
             >
-              <p className="text-[11px] font-semibold text-muted tracking-wider uppercase mb-3 shrink-0">
-                Claire
-              </p>
+              <div className="shrink-0 mb-3">
+                <p className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+                  Claire
+                </p>
+                <p className="text-[10px] text-muted/50 mt-0.5">Reads, organizes, advises</p>
+              </div>
               <div className="h-[260px] flex flex-col overflow-hidden">
                 <ClaireBucketContent phase={phase} claireStatus={claireStatus} />
               </div>
