@@ -304,8 +304,8 @@ export function CoverageStep({ onOpenChat }: CoverageStepProps) {
                       {stat.value}
                     </p>
                   </div>
-                  <span className="mt-1 shrink-0 rounded-full bg-foreground/6 p-1.5 text-foreground/60 transition-colors group-hover:bg-foreground/12 group-hover:text-foreground">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <span className="mt-1 shrink-0 rounded-full bg-foreground/4 p-1 text-foreground/35 transition-colors group-hover:bg-foreground/8 group-hover:text-foreground/55">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
                   </span>
