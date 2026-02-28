@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 import { FaEnvelope, FaFile, FaArrowRight, FaChevronDown, FaCheck } from "react-icons/fa";
 import { MOCK_POLICIES } from "@/data/demoData";
+import { EMAIL_GL_DATE, EMAIL_CA_DATE, EMAIL_WC_DATE, EMAIL_CP_DATE } from "@/lib/demoDates";
 import { BrandName } from "@/components/BrandName";
 import { FadeIn } from "@/components/FadeIn";
 import { LogoIcon } from "../LogoIcon";
@@ -20,11 +21,12 @@ type Phase = "scanning" | "extracting" | "analyzing" | "ready";
 
 /* ---------- Email data ---------- */
 
+/* Email dates from @/lib/demoDates — span ~4 years relative to current year */
 const EMAILS = [
-  { subject: "Policy Renewal – GL", from: "agent@hartford.com", date: "Jan 15, 2025" },
-  { subject: "Your Auto Policy", from: "noreply@progressive.com", date: "Nov 8, 2023" },
-  { subject: "Workers Comp Certificate", from: "certs@employers.com", date: "Apr 22, 2022" },
-  { subject: "Commercial Property Update", from: "service@travelers.com", date: "Jul 3, 2021" },
+  { subject: "Policy Renewal – GL", from: "agent@hartford.com", date: EMAIL_GL_DATE },
+  { subject: "Your Auto Policy", from: "noreply@progressive.com", date: EMAIL_CA_DATE },
+  { subject: "Workers Comp Certificate", from: "certs@employers.com", date: EMAIL_WC_DATE },
+  { subject: "Commercial Property Update", from: "service@travelers.com", date: EMAIL_CP_DATE },
 ];
 
 /* ---------- Flow arrows (FontAwesome) ---------- */

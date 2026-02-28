@@ -5,6 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SiQuickbooks } from "react-icons/si";
 import { LogoIcon } from "@/components/LogoIcon";
 import { POLICY_GROUPS, CONTEXT_SOURCES } from "@/data/demoData";
+import type { ChatMode } from "./chat";
+import {
+  NEXT_RENEWAL_FORMATTED,
+  parsePolicyDate,
+  isExpiringSoon,
+  now as demoNow,
+} from "@/lib/demoDates";
 import { FixedActionFooter } from "./FixedActionFooter";
 import { BrandName } from "@/components/BrandName";
 import { FadeIn } from "@/components/FadeIn";
@@ -33,8 +40,10 @@ function CaliforniaSealIcon({ className }: { className?: string }) {
   );
 }
 
+type PolicyId = "gl" | "cp" | "wc" | "ca";
+
 interface CoverageStepProps {
-  onComplete: () => void;
+  onOpenChat: (mode: ChatMode, policyId?: PolicyId) => void;
 }
 
 /* ---------- Integration icons (FontAwesome + Simple Icons) ---------- */
@@ -135,18 +144,18 @@ const TABS = [
 
 /* ---------- Summary stat cards ---------- */
 
-const SUMMARY_STATS = [
-  { label: "Active Policies", value: "4" },
-  { label: "Annual Premiums", value: "$18,200" },
-  { label: "Next Renewal", value: "Jan 15, 2026" },
-  { label: "Integrations", value: "3 Connectors" },
+const SUMMARY_STATS: { id: ChatMode; label: string; value: string }[] = [
+  { id: "overview", label: "Active Policies", value: "4" },
+  { id: "premiums", label: "Annual Premiums", value: "$18,200" },
+  { id: "renewal", label: "Next Renewal", value: NEXT_RENEWAL_FORMATTED },
+  { id: "integrations", label: "Integrations", value: "3 Connectors" },
 ];
 
 /* ---------- Main component ---------- */
 
 const HOVER_LEAVE_DELAY_MS = 150;
 
-export function CoverageStep({ onComplete }: CoverageStepProps) {
+export function CoverageStep({ onOpenChat }: CoverageStepProps) {
   const [activeTab, setActiveTab] = useState("all");
   const [expandedConnection, setExpandedConnection] = useState<number | null>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
@@ -182,6 +191,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
   const allRows = visibleGroups.flatMap((group) =>
     group.coverages.map((cov) => ({
       ...cov,
+      policyId: group.id as PolicyId,
       policy: group.type,
       carrier: group.carrier,
       policyNumber: group.policyNumber,
@@ -270,8 +280,10 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
           {/* Summary stats row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6">
             {SUMMARY_STATS.map((stat, i) => (
-              <motion.div
-                key={stat.label}
+              <motion.button
+                key={stat.id}
+                type="button"
+                onClick={() => onOpenChat(stat.id)}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -279,15 +291,26 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                   delay: 0.1 + i * 0.05,
                   ease: [0.16, 1, 0.3, 1] as const,
                 }}
-                className="rounded-lg border border-foreground/6 bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="group rounded-lg border border-foreground/6 bg-white/60 px-3 py-2.5 sm:px-4 sm:py-3 text-left cursor-pointer transition-all duration-200 hover:border-foreground/20 hover:bg-white hover:shadow-md hover:shadow-black/8"
               >
-                <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
-                  {stat.label}
-                </p>
-                <p className="text-lg sm:text-xl font-semibold text-foreground-highlight mt-1 font-mono">
-                  {stat.value}
-                </p>
-              </motion.div>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-[11px] font-medium text-muted uppercase tracking-wider">
+                      {stat.label}
+                    </p>
+                    <p className="text-lg sm:text-xl font-semibold text-foreground-highlight mt-1 font-mono">
+                      {stat.value}
+                    </p>
+                  </div>
+                  <span className="mt-1 shrink-0 rounded-full bg-foreground/6 p-1.5 text-foreground/60 transition-colors group-hover:bg-foreground/12 group-hover:text-foreground">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                  </span>
+                </div>
+              </motion.button>
             ))}
           </div>
 
@@ -344,6 +367,9 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                     <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right whitespace-nowrap min-w-20">
                       Deductible
                     </th>
+                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right whitespace-nowrap min-w-24">
+                      Actions
+                    </th>
                     {activeTab !== "all" && (
                       <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right hidden md:table-cell whitespace-nowrap min-w-28">
                         Period
@@ -390,6 +416,15 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                             <td className="px-4 py-2.5 text-[13px] font-mono text-muted text-right whitespace-nowrap min-w-20">
                               {row.deductible}
                             </td>
+                            <td className="px-4 py-2.5 text-right whitespace-nowrap min-w-24">
+                              <button
+                                type="button"
+                                onClick={() => onOpenChat("contact", row.policyId)}
+                                className="px-2.5 py-1 rounded-md border border-foreground/12 bg-white/80 text-[11px] font-medium text-foreground hover:border-foreground/20 hover:bg-foreground/3 transition-colors cursor-pointer"
+                              >
+                                Contact
+                              </button>
+                            </td>
                           </FadeIn>
                         ))
                       : visibleGroups.flatMap((group, groupIdx) =>
@@ -419,6 +454,15 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                                 <td className="px-4 py-2.5 text-[13px] text-muted text-right hidden md:table-cell whitespace-nowrap min-w-28">
                                   {group.effective} &ndash; {group.expires}
                                 </td>
+                                <td className="px-4 py-2.5 text-right whitespace-nowrap min-w-24">
+                                  <button
+                                    type="button"
+                                    onClick={() => onOpenChat("contact", group.id as PolicyId)}
+                                    className="px-2.5 py-1 rounded-md border border-foreground/12 bg-white/80 text-[11px] font-medium text-foreground hover:border-foreground/20 hover:bg-foreground/3 transition-colors cursor-pointer"
+                                  >
+                                    Contact
+                                  </button>
+                                </td>
                               </FadeIn>
                             );
                           })
@@ -435,7 +479,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                 {visibleGroups.length} {visibleGroups.length === 1 ? "policy" : "policies"}
               </p>
               <p className="text-[11px] text-muted/60">
-                Last updated today
+                Last updated {demoNow.format("MMM D, YYYY")}
               </p>
             </div>
           </motion.div>
@@ -476,12 +520,32 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
                         </div>
                       ))}
                     </div>
-                    <button
-                      type="button"
-                      className="shrink-0 px-3 py-1.5 rounded-md border border-foreground/12 bg-white/80 text-[12px] font-medium text-foreground hover:border-foreground/20 hover:bg-foreground/3 transition-colors cursor-pointer"
-                    >
-                      Contact Agent
-                    </button>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {(() => {
+                        const expiresDate = parsePolicyDate(group.expires);
+                        const expiringSoon = isExpiringSoon(expiresDate);
+                        return (
+                          <>
+                            {expiringSoon && (
+                              <button
+                                type="button"
+                                onClick={() => onOpenChat("renew", group.id as PolicyId)}
+                                className="px-3 py-1.5 rounded-md border border-foreground/12 bg-white/80 text-[12px] font-medium text-amber-700 hover:border-amber-500/30 hover:bg-amber-500/10 transition-colors cursor-pointer"
+                              >
+                                Renew Policy
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => onOpenChat("contact", group.id as PolicyId)}
+                              className="px-3 py-1.5 rounded-md border border-foreground/12 bg-white/80 text-[12px] font-medium text-foreground hover:border-foreground/20 hover:bg-foreground/3 transition-colors cursor-pointer"
+                            >
+                              Contact Agent
+                            </button>
+                          </>
+                        );
+                      })()}
+                    </div>
                   </div>
                 </FadeIn>
                 ));
@@ -493,7 +557,7 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
 
       <FixedActionFooter
         label="Talk to Claire"
-        onClick={onComplete}
+        onClick={() => onOpenChat("contact")}
         animateIn
       />
     </div>

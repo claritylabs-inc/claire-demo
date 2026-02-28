@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   useChatScript,
@@ -8,20 +8,52 @@ import {
   ChatStepCTA,
   MessageRenderer,
   TryClaireHeading,
+  type ChatMode,
+  type PolicyId,
 } from "./chat";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-export function ChatStep() {
+interface ChatStepProps {
+  mode?: ChatMode;
+  policyId?: PolicyId | null;
+}
+
+export function ChatStep({ mode = "contact", policyId = null }: ChatStepProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { messages, cycle, isFadingOut } = useChatScript();
+  const bottomAnchorRef = useRef<HTMLDivElement>(null);
+  const [showTopFade, setShowTopFade] = useState(false);
+  const { messages, cycle, isFadingOut } = useChatScript(mode, policyId);
+
+  useEffect(() => {
+    const scrollToBottom = () => {
+      const el = scrollRef.current;
+      const anchor = bottomAnchorRef.current;
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+      anchor?.scrollIntoView({ behavior: "auto", block: "end" });
+    };
+    scrollToBottom();
+    setShowTopFade(false);
+    const raf = requestAnimationFrame(() => scrollToBottom());
+    const t = setTimeout(scrollToBottom, 150);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(t);
+    };
+  }, [messages]);
 
   useEffect(() => {
     const el = scrollRef.current;
-    if (el) {
-      el.scrollTop = el.scrollHeight;
-    }
-  }, [messages]);
+    if (!el) return;
+    const handleScroll = () => {
+      setShowTopFade(el.scrollTop > 4);
+    };
+    handleScroll();
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="flex-1 flex items-start md:items-center justify-center px-4 md:px-8 py-4 sm:pb-8 overflow-y-auto min-h-0">
@@ -36,11 +68,24 @@ export function ChatStep() {
           transition={{ duration: 0.6, ease: EASE }}
         >
           <IPhoneMockup>
-            <div
-              ref={scrollRef}
-              className="h-full overflow-y-auto overflow-x-hidden px-2.5 py-1 flex flex-col gap-[12px] scrollbar-hide"
-            >
-              <MessageRenderer messages={messages} cycle={cycle} isFadingOut={isFadingOut} />
+            <div className="relative min-h-0 flex-1 flex flex-col">
+              <div
+                ref={scrollRef}
+                className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-2.5 pt-1 pb-2 flex flex-col gap-[12px] scrollbar-hide overscroll-none"
+              >
+                <MessageRenderer messages={messages} cycle={cycle} isFadingOut={isFadingOut} />
+                <div ref={bottomAnchorRef} className="shrink-0 h-px" aria-hidden />
+              </div>
+              {/* Top fade — only visible when scrolled up */}
+              <div
+                className="absolute top-0 left-0 right-0 h-10 pointer-events-none z-10 transition-opacity duration-200"
+                style={{
+                  opacity: showTopFade ? 1 : 0,
+                  background:
+                    "linear-gradient(to bottom, rgb(var(--background-rgb) / 0.98) 0%, rgb(var(--background-rgb) / 0.5) 70%, transparent 100%)",
+                }}
+                aria-hidden
+              />
             </div>
           </IPhoneMockup>
         </motion.div>

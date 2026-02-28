@@ -6,6 +6,7 @@ import { PolicyUploadStep } from "@/components/demo/PolicyUploadStep";
 import { CoverageStep } from "@/components/demo/CoverageStep";
 import { ChatStep } from "@/components/demo/ChatStep";
 import { BackToClarityButton } from "@/components/demo/BackToClarityButton";
+import type { ChatMode, PolicyId } from "@/components/demo/chat";
 
 type DemoStep = "upload" | "coverage" | "chat";
 
@@ -30,9 +31,15 @@ const stepVariants = {
 export default function Home() {
   const [step, setStep] = useState<DemoStep>("upload");
   const [showChat, setShowChat] = useState(false);
+  const [chatMode, setChatMode] = useState<ChatMode>("contact");
+  const [chatPolicyId, setChatPolicyId] = useState<PolicyId | null>(null);
 
   const goToCoverage = useCallback(() => setStep("coverage"), []);
-  const openChat = useCallback(() => setShowChat(true), []);
+  const openChat = useCallback((mode: ChatMode = "contact", policyId?: PolicyId) => {
+    setChatMode(mode);
+    setChatPolicyId(policyId ?? null);
+    setShowChat(true);
+  }, []);
   const closeChat = useCallback(() => setShowChat(false), []);
 
   // Close chat overlay on Escape
@@ -71,7 +78,7 @@ export default function Home() {
             animate="animate"
             exit="exit"
           >
-            <CoverageStep onComplete={openChat} />
+            <CoverageStep onOpenChat={openChat} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -136,7 +143,7 @@ export default function Home() {
               transition={{ duration: 0.4, ease: EASE }}
               className="relative flex-1 flex flex-col min-h-0 pt-14"
             >
-              <ChatStep />
+              <ChatStep mode={chatMode} policyId={chatPolicyId} />
             </motion.div>
           </motion.div>
         )}

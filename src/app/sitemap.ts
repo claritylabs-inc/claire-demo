@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import dayjs from "dayjs";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: "https://claritylabs.inc",
-      lastModified: new Date(),
+      lastModified: dayjs().toDate(),
       changeFrequency: "weekly",
       priority: 1,
     },

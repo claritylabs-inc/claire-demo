@@ -1,8 +1,10 @@
+import dayjs from "dayjs";
+
 export function Footer() {
   return (
     <footer className="border-t border-foreground/6">
       <div className="max-w-3xl mx-auto px-6 md:px-10 py-8 flex items-center justify-between text-[11px] text-footer-muted">
-        <span>&copy; {new Date().getFullYear()} Clarity Labs</span>
+        <span>&copy; {dayjs().year()} Clarity Labs</span>
         <div className="flex items-center gap-4">
           <a
             href="mailto:hello@claritylabs.inc"
