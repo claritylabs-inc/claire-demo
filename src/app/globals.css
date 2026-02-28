@@ -24,6 +24,15 @@
   --divider: #e5e7eb;                  /* Borders, separators (gray-200) */
   --footer-muted: #8a8578;             /* Footer text (warm gray) */
 
+  /* Brand & status colors — use semantic tokens instead of raw hex */
+  --primary: #2a97ff;                  /* Main brand blue */
+  --primary-light: #a0d2fa;            /* Lighter blue for accents, bubbles */
+  --primary-muted: #5ba3d9;            /* Slightly darker blue */
+  --success: #059669;                  /* Emerald-600 for connected/success */
+  --success-muted: #10b981;            /* Emerald-500 for badges */
+  --warning: #b45309;                  /* Amber-700 for warnings */
+  --integration: #2ca01c;              /* QuickBooks green */
+
   /* Selection (highlighted text) */
   --selection-bg: rgba(0 0 0 / 0.1);
   --selection-fg: var(--foreground-highlight);
@@ -42,12 +51,24 @@
   --color-accent: var(--accent);
   --color-divider: var(--divider);
   --color-footer-muted: var(--footer-muted);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-muted: var(--primary-muted);
+  --color-success: var(--success);
+  --color-success-muted: var(--success-muted);
+  --color-warning: var(--warning);
+  --color-integration: var(--integration);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair);
 
-  /* Typography scale */
+  /* Typography scale — use semantic sizes for consistency */
+  --text-micro: 0.4375rem;             /* 7px — tiny badges (policy number) */
+  --text-caption: 0.625rem;            /* 10px — tiny labels, step numbers */
+  --text-label-sm: 0.6875rem;          /* 11px — small labels, uppercase tags */
+  --text-label: 0.75rem;               /* 12px — labels, compact UI */
+  --text-body-sm: 0.8125rem;           /* 13px — compact body, chat bubbles */
   --text-3xl: 1.875rem;
   --text-3xl--line-height: calc(2.25 / 1.875);
   --text-4xl: 2.25rem;

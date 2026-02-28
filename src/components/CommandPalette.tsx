@@ -170,7 +170,7 @@ export function CommandPalette({
             >
               <div className="rounded-xl overflow-hidden shadow-2xl bg-background backdrop-blur-sm border border-black/8">
                 <div className="flex items-center h-12 px-4 border-b border-black/6">
-                  <span className="text-[13px] mr-3 text-gray-400">{shortcut}</span>
+                  <span className="text-body-sm mr-3 text-muted">{shortcut}</span>
                   <input
                     autoFocus
                     value={query}
@@ -180,9 +180,9 @@ export function CommandPalette({
                     }}
                     onKeyDown={handleKey}
                     placeholder={placeholder}
-                    className="flex-1 bg-transparent outline-none text-sm text-foreground placeholder:text-gray-300"
+                    className="flex-1 bg-transparent outline-none text-sm text-foreground placeholder:text-muted/60"
                   />
-                  <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">
+                  <kbd className="text-caption px-1.5 py-0.5 rounded bg-foreground/5 text-muted border border-foreground/10">
                     esc
                   </kbd>
                 </div>
@@ -196,16 +196,16 @@ export function CommandPalette({
                         i === selected ? "bg-black/3" : ""
                       }`}
                     >
-                      <span className="text-[13px] text-foreground">
+                      <span className="text-body-sm text-foreground">
                         {item.label}
                       </span>
-                      <span className="text-[11px] text-gray-400">
+                      <span className="text-label-sm text-muted">
                         {item.hint}
                       </span>
                     </button>
                   ))}
                   {filtered.length === 0 && (
-                    <div className="px-4 py-3 text-[13px] text-gray-400">
+                    <div className="px-4 py-3 text-body-sm text-muted">
                       No results
                     </div>
                   )}
@@ -219,7 +219,7 @@ export function CommandPalette({
       <AnimatePresence>
         {toast && (
           <motion.div
-            className="fixed bottom-8 left-1/2 z-toast -translate-x-1/2 px-4 py-2 rounded-lg text-[13px] bg-foreground text-white shadow-lg"
+            className="fixed bottom-8 left-1/2 z-toast -translate-x-1/2 px-4 py-2 rounded-lg text-body-sm bg-foreground text-white shadow-lg"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}

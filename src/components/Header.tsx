@@ -19,7 +19,7 @@ export function Header({ logoSize = "lg", className = "" }: HeaderProps) {
             href="https://claire.claritylabs.inc/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[13px] text-muted border border-foreground/15 rounded-full px-4 py-1.5 hover:text-foreground-highlight hover:border-foreground/30 transition-colors"
+            className="text-body-sm text-muted border border-foreground/15 rounded-full px-4 py-1.5 hover:text-foreground-highlight hover:border-foreground/30 transition-colors"
           >
             Demo
           </a>

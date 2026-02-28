@@ -16,7 +16,7 @@ export function DemoAppBar({ currentStep: _currentStep }: DemoAppBarProps) {
         <Logo size="sm" />
 
         {/* Right: Business name */}
-        <span className="text-xs text-muted hidden sm:block">
+        <span className="text-label text-muted hidden sm:block">
           Rosario&apos;s Italian Kitchen
         </span>
       </div>

@@ -17,13 +17,27 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 interface ChatStepProps {
   mode?: ChatMode;
   policyId?: PolicyId | null;
+  /** When mode is "prompt", selects which CHAT_PROMPTS entry to use */
+  promptIndex?: number;
+  /** When true (e.g. clicked a prompt bubble), first message is user's question. When false (general CTA), AI greets first. */
+  userFirst?: boolean;
 }
 
-export function ChatStep({ mode = "contact", policyId = null }: ChatStepProps) {
+export function ChatStep({
+  mode = "contact",
+  policyId = null,
+  promptIndex = 0,
+  userFirst = false,
+}: ChatStepProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const bottomAnchorRef = useRef<HTMLDivElement>(null);
   const [showTopFade, setShowTopFade] = useState(false);
-  const { messages, cycle, isFadingOut } = useChatScript(mode, policyId);
+  const { messages, cycle, isFadingOut } = useChatScript(
+    mode,
+    policyId,
+    promptIndex,
+    userFirst
+  );
 
   useEffect(() => {
     const scrollToBottom = () => {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import {
+  CHAT_PROMPTS,
   CHAT_PROMPTS_BY_POLICY,
   CHAT_PROMPTS_RENEW_BY_POLICY,
   CHAT_PROMPTS_BY_CARD,
@@ -15,7 +16,8 @@ export type ChatMode =
   | "overview"
   | "premiums"
   | "renewal"
-  | "integrations";
+  | "integrations"
+  | "prompt";
 export type PolicyId = "gl" | "cp" | "wc" | "ca";
 
 const policyLabels: Record<PolicyId, string> = {
@@ -65,16 +67,25 @@ const FADE_OUT_DURATION = 450;
 
 /* ---------- Script builder ---------- */
 
-function buildScript(mode: ChatMode, policyId: PolicyId | null): ScriptStep[] {
+function buildScript(
+  mode: ChatMode,
+  policyId: PolicyId | null,
+  promptIndex: number = 0,
+  userFirst: boolean = false
+): ScriptStep[] {
   const effectivePolicyId = policyId ?? "gl";
   const isCardMode = ["overview", "premiums", "renewal", "integrations"].includes(mode);
-  const prompts = isCardMode
-    ? CHAT_PROMPTS_BY_CARD[mode as keyof typeof CHAT_PROMPTS_BY_CARD]
-    : mode === "renew"
-      ? CHAT_PROMPTS_RENEW_BY_POLICY[effectivePolicyId]
-      : policyId
-        ? CHAT_PROMPTS_BY_POLICY[policyId]
-        : CHAT_PROMPTS_BY_POLICY.gl;
+  const isPromptMode = mode === "prompt";
+
+  const prompts = isPromptMode
+    ? [CHAT_PROMPTS[Math.min(promptIndex, CHAT_PROMPTS.length - 1)]]
+    : isCardMode
+      ? CHAT_PROMPTS_BY_CARD[mode as keyof typeof CHAT_PROMPTS_BY_CARD]
+      : mode === "renew"
+        ? CHAT_PROMPTS_RENEW_BY_POLICY[effectivePolicyId]
+        : policyId
+          ? CHAT_PROMPTS_BY_POLICY[policyId]
+          : CHAT_PROMPTS_BY_POLICY.gl;
 
   const steps: ScriptStep[] = [];
   let t = 0;
@@ -88,25 +99,39 @@ function buildScript(mode: ChatMode, policyId: PolicyId | null): ScriptStep[] {
         ? `Your ${policyLabels[policyId]} is current, no issues. Here\u2019s the full breakdown.`
         : "All 4 policies current, no gaps. Here\u2019s what I\u2019m tracking for you.";
 
-  const FIRST_MSG_DELAY = 250;
-  steps.push({
-    action: "add",
-    message: { type: "incoming", text: greeting, status: "ready" },
-    delay: FIRST_MSG_DELAY,
-    replace: true,
-  });
-  t = FIRST_MSG_DELAY;
-  msgCount++;
+  const promptModeUserFirst = isPromptMode && userFirst;
+  const promptModeAIFirst = isPromptMode && !userFirst;
+
+  if (!promptModeUserFirst) {
+    const FIRST_MSG_DELAY = 250;
+    const firstMsg = promptModeAIFirst
+      ? "All 4 policies current, no gaps. Here\u2019s what I\u2019m tracking for you."
+      : greeting;
+    steps.push({
+      action: "add",
+      message: { type: "incoming", text: firstMsg, status: "ready" },
+      delay: FIRST_MSG_DELAY,
+      replace: true,
+    });
+    t = FIRST_MSG_DELAY;
+    msgCount++;
+  }
 
   for (let pi = 0; pi < prompts.length; pi++) {
     const prompt = prompts[pi];
-    t += DELAY_AFTER_USER_MSG;
+    const isFirstInUserFirst = promptModeUserFirst && pi === 0;
+
+    if (!isFirstInUserFirst) {
+      t += DELAY_AFTER_USER_MSG;
+    }
     steps.push({
       action: "add",
       message: { type: "outgoing", text: prompt.question },
-      delay: t,
+      delay: isFirstInUserFirst ? 250 : t,
+      ...(isFirstInUserFirst && { replace: true }),
     });
     msgCount++;
+    if (isFirstInUserFirst) t = 250;
 
     t += TYPING_DURATION;
     const responseIdx = msgCount;
@@ -136,8 +161,16 @@ function buildScript(mode: ChatMode, policyId: PolicyId | null): ScriptStep[] {
 
 /* ---------- Hook ---------- */
 
-export function useChatScript(mode: ChatMode = "contact", policyId: PolicyId | null = null) {
-  const script = useMemo(() => buildScript(mode, policyId), [mode, policyId]);
+export function useChatScript(
+  mode: ChatMode = "contact",
+  policyId: PolicyId | null = null,
+  promptIndex: number = 0,
+  userFirst: boolean = false
+) {
+  const script = useMemo(
+    () => buildScript(mode, policyId, promptIndex, userFirst),
+    [mode, policyId, promptIndex, userFirst]
+  );
   const scriptDuration = script[script.length - 1].delay + SCRIPT_END_PAUSE;
   const firstMessage = script.find((s) => s.replace && s.message)!.message!;
 
@@ -203,7 +236,7 @@ export function useChatScript(mode: ChatMode = "contact", policyId: PolicyId | n
     timers.push(setTimeout(() => setCycle((c) => c + 1), scriptDuration));
 
     return () => timers.forEach(clearTimeout);
-  }, [cycle, mode, policyId]);
+  }, [cycle, mode, policyId, promptIndex, userFirst]);
 
   return { messages, cycle, isFadingOut };
 }

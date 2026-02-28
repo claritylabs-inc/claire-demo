@@ -11,7 +11,7 @@ function PhoneLink({ className = "" }: { className?: string }) {
   return (
     <a
       href={CTA_PHONE_HREF}
-      className={`inline-block text-sm font-normal hover:font-medium text-foreground hover:text-white px-2 py-1 -m-1 rounded-[18px] rounded-br-[4px] border border-foreground/8 hover:border-transparent hover:bg-[#A0D2FA] cursor-pointer transition-[color,background-color,border-color,font-weight] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${className}`}
+      className={`inline-block text-sm font-normal hover:font-medium text-foreground hover:text-white px-2 py-1 -m-1 rounded-[18px] rounded-br-[4px] border border-foreground/8 hover:border-transparent hover:bg-primary-light cursor-pointer transition-[color,background-color,border-color,font-weight] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${className}`}
     >
       {CTA_PHONE}
     </a>
@@ -31,7 +31,7 @@ export function TryClaireHeading() {
           Claire
         </BrandName>
       </p>
-      <p className="text-base text-muted max-w-sm mx-auto block md:hidden">
+      <p className="text-sm text-muted max-w-sm mx-auto block md:hidden">
         Text <PhoneLink className="m-1" /> and try Claire for yourself.
       </p>
     </>
@@ -56,7 +56,7 @@ export function ChatStepCTA() {
         <TryClaireHeading />
       </div>
 
-      <p className="text-base text-muted max-w-xs mx-auto hidden md:block mb-6">
+      <p className="text-sm text-muted max-w-xs mx-auto hidden md:block mb-6">
         Scan the QR code to text <PhoneLink className="m-1" /> and try Claire for yourself.
       </p>
 

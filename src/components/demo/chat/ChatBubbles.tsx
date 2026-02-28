@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { CTA_PHONE, CTA_PHONE_HREF, CTA_EMAIL, CTA_EMAIL_HREF } from "@/data/demoData";
 
-const BUBBLE_BLUE = "#2A97FF";
+const BUBBLE_BLUE = "var(--primary)";
 
 /** iMessage-style tapback reaction badge — translucent, with second-bubble effect and bouncy animation */
 function TapbackReaction({ emoji, side }: { emoji: string; side: "left" | "right" }) {
@@ -30,7 +30,7 @@ function TapbackReaction({ emoji, side }: { emoji: string; side: "left" | "right
           `}
           style={{ backgroundColor: `${BUBBLE_BLUE}` }}
         >
-          <span className="text-[13px] leading-none select-none">{emoji}</span>
+          <span className="text-body-sm leading-none select-none">{emoji}</span>
         </motion.div>
 
         {/* Second-bubble dots — iOS thought-bubble style */}
@@ -107,7 +107,7 @@ export function IncomingBubble({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[13px] leading-[17px] text-black whitespace-pre-line"
+            className="text-body-sm leading-[17px] text-foreground-highlight whitespace-pre-line"
           >
             {children}
           </motion.div>
@@ -134,7 +134,7 @@ export function OutgoingBubble({ text, reaction }: { text: string; reaction?: st
       className="flex justify-end"
     >
       <div className="relative max-w-[82%] rounded-[18px] rounded-br-[4px] px-3 py-[7px]" style={{ backgroundColor: BUBBLE_BLUE }}>
-        <p className="text-[13px] leading-[17px] text-white whitespace-pre-line">{text}</p>
+        <p className="text-body-sm leading-[17px] text-white whitespace-pre-line">{text}</p>
         {reaction && <TapbackReaction emoji={reaction} side="right" />}
       </div>
     </motion.div>
@@ -179,13 +179,13 @@ export function CTAIncoming() {
       <div className="flex items-center gap-3 mt-1.5 pt-1.5 border-t border-black/8">
         <a
           href={CTA_PHONE_HREF}
-          className="inline-flex items-center gap-1 text-[12px] text-[#2A97FF]"
+          className="inline-flex items-center gap-1 text-label text-primary"
         >
           {CTA_PHONE}
         </a>
         <a
           href={CTA_EMAIL_HREF}
-          className="inline-flex items-center gap-1 text-[12px] text-[#2A97FF]"
+          className="inline-flex items-center gap-1 text-label text-primary"
         >
           {CTA_EMAIL}
         </a>

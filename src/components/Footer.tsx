@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 export function Footer() {
   return (
     <footer className="border-t border-foreground/6">
-      <div className="max-w-3xl mx-auto px-6 md:px-10 py-8 flex items-center justify-between text-[11px] text-footer-muted">
+      <div className="max-w-3xl mx-auto px-6 md:px-10 py-8 flex items-center justify-between text-label-sm text-footer-muted">
         <span>&copy; {dayjs().year()} Clarity Labs</span>
         <div className="flex items-center gap-4">
           <a
@@ -20,9 +20,9 @@ export function Footer() {
           >
             hello@claritylabs.inc
           </a>
-          <span className="hidden md:inline text-gray-300">·</span>
+          <span className="hidden md:inline text-muted/50">·</span>
           <button
-            className="hidden md:inline transition-opacity hover:opacity-70 text-gray-400"
+            className="hidden md:inline transition-opacity hover:opacity-70 text-muted"
             onClick={() => {
               const e = new KeyboardEvent("keydown", {
                 key: "k",

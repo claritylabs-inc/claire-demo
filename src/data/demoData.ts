@@ -153,6 +153,8 @@ export interface ContextSource {
   integration: string;
 }
 
+export type PolicyId = "gl" | "cp" | "wc" | "ca";
+
 export const CONTEXT_SOURCES: ContextSource[] = [
   {
     label: "Lease",
@@ -175,41 +177,80 @@ export const CONTEXT_SOURCES: ContextSource[] = [
 
 /* ---------- Chat prompts + responses (chat step) ---------- */
 
+export type IntegrationSource = "lease" | "business" | "quickbooks";
+
 export interface ChatPrompt {
   question: string;
   answer: string;
+  /** Optional heading for mobile use case display (e.g. "Lease Signing", "Proof of Insurance") */
+  heading?: string;
+  /** Context sources used for this answer: policies + integrations */
+  sources?: {
+    policies?: PolicyId[];
+    integrations?: IntegrationSource[];
+  };
 }
 
 export const CHAT_PROMPTS: ChatPrompt[] = [
   {
+    heading: "Lease Signing",
     question:
       "My landlord needs proof of insurance for our lease renewal. Can you handle it?",
+    sources: { policies: ["gl"], integrations: ["lease"] },
     answer:
       `I've got this. Your lease with Greystar Properties requires you to list them as an additional insured on your General Liability policy. Your Hartford CGL policy (${POLICY_NUMBERS.gl}) is active through ${GL_ACTIVE_THROUGH} and meets their $1M per-occurrence requirement.\n\nI've generated the Certificate of Insurance with Greystar Properties listed as the certificate holder and sent it to your landlord's email on file. You're all set — no action needed on your end.`,
   },
   {
+    heading: "Proof of Insurance",
     question:
       "We\u2019re catering for Dell and they need proof of food liability coverage. Are we covered?",
+    sources: { policies: ["gl"], integrations: ["quickbooks", "business"] },
     answer:
       "I reviewed the contract requirements. Dell needs proof of Products/Completed Operations coverage and Liquor Liability \u2014 both are included in your Hartford CGL policy.\n\nYour Products/Completed Ops limit is $2,000,000 (their minimum is $1M) and your Liquor Liability limit is $1,000,000. You\u2019re fully covered. I can generate a COI naming Dell Technologies as the certificate holder \u2014 want me to send it over?",
   },
   {
+    heading: "Help with Claims",
     question:
       "A customer slipped on a wet floor and hurt their back. What should I do?",
+    sources: { policies: ["gl"] },
     answer:
       `I'm sorry to hear that. Here's what you need to do right now:\n\n1. Make sure the customer gets medical attention if needed\n2. Document everything — take photos of the area, get witness names and contact info, and write down exactly what happened while it's fresh\n3. Don't admit fault or make promises about covering expenses\n\nThis falls under your General Liability policy with Hartford (${POLICY_NUMBERS.gl}). Your per-occurrence limit is $1,000,000 with a $2,500 deductible. I can start the claims process with Hartford right now if you'd like — I just need the customer's name and a brief description of the incident.`,
   },
   {
+    heading: "Coverage Questions",
     question:
       "Does our property insurance cover the new kitchen equipment we just bought?",
+    sources: { policies: ["cp"], integrations: ["quickbooks"] },
     answer:
       `Yes — your new kitchen equipment is covered under the Business Personal Property (BPP) section of your Travelers Commercial Property policy (${POLICY_NUMBERS.cp}). Your current BPP limit is $250,000.\n\nThat said, if this purchase is significant, you may be getting close to that limit. Do you know the value of the new equipment? I can check whether you need to increase your BPP coverage to make sure everything's fully protected.`,
+  },
+  {
+    heading: "Policy Renewals",
+    question:
+      "When does our GL policy renew? Can you pull some quotes?",
+    sources: { policies: ["gl"], integrations: ["lease"] },
+    answer:
+      `Your Hartford GL (${POLICY_NUMBERS.gl}) expires ${NEXT_RENEWAL_FORMATTED}. I've pulled 3 quotes — best option is Hartford at $4,200/year, same coverage. Want me to send you a comparison? I can also start the renewal process so you're covered before the gap.`,
+  },
+  {
+    heading: "Workers Comp",
+    question:
+      "We need a workers comp certificate for our catering contract with Dell.",
+    sources: { policies: ["wc"], integrations: ["quickbooks"] },
+    answer:
+      `I've generated the certificate for your EMPLOYERS WC policy (${POLICY_NUMBERS.wc}) and sent it to Dell. You're all set for the catering gig — no action needed on your end.`,
+  },
+  {
+    heading: "Commercial Auto",
+    question:
+      "Our delivery driver was in a fender bender — what's our deductible?",
+    sources: { policies: ["ca"] },
+    answer:
+      `Your Progressive policy (${POLICY_NUMBERS.ca}) has a $1,000 collision deductible. I can start the claim — do you have the other driver's info? I'll need the date, time, and a brief description of what happened.`,
   },
 ];
 
 /* ---------- Policy-specific chat prompts (Contact Agent) — restaurant context ---------- */
-
-export type PolicyId = "gl" | "cp" | "wc" | "ca";
 
 export const CHAT_PROMPTS_BY_POLICY: Record<PolicyId, ChatPrompt[]> = {
   gl: [
@@ -357,6 +398,29 @@ export const PROCESSING_MESSAGES = [
   { text: "Extracting coverage details...", delay: 800 },
   { text: "Cross-referencing limits and deductibles...", delay: 1600 },
   { text: "Done.", delay: 2200 },
+];
+
+/* ---------- Use cases for explore page (full list) ---------- */
+
+export interface UseCaseItem {
+  heading: string;
+  description: string;
+}
+
+export const USE_CASES: UseCaseItem[] = [
+  { heading: "Lease Signing", description: "Get COIs for landlords and lease renewals — Claire knows your lease requirements and sends them automatically." },
+  { heading: "Proof of Insurance", description: "Contracts, vendors, and clients need proof — Claire generates and sends certificates in seconds." },
+  { heading: "Help with Claims", description: "Slip-and-falls, accidents, property damage — Claire walks you through what to do and starts the claim." },
+  { heading: "Coverage Questions", description: "New equipment, expansion, or changes — Claire checks your policies and tells you what's covered." },
+  { heading: "Policy Renewals", description: "Claire pulls quotes, compares options, and handles renewals before you have a gap." },
+  { heading: "Workers Comp", description: "Certificates for contracts, new hire reporting, and claims — payroll syncs from QuickBooks." },
+  { heading: "Commercial Auto", description: "Add vehicles, file claims, get certificates — Claire manages your fleet coverage." },
+  /* --- Rest (beyond the 7 on main page) --- */
+  { heading: "Premium Savings", description: "Bundling, discounts, and better rates — Claire finds savings across your policies." },
+  { heading: "Integrations", description: "Lease portals, QuickBooks, business filings — Claire stays in sync so your coverage is always current." },
+  { heading: "Policy Overview", description: "What you're covered for, where you have gaps, and what's coming up — ask Claire anything." },
+  { heading: "New Hire Reporting", description: "Add staff to workers comp — Claire syncs from QuickBooks and updates your policy automatically." },
+  { heading: "Certificate Management", description: "Track who needs COIs, when they expire — Claire keeps certificates current for all your contracts." },
 ];
 
 /* ---------- CTA contact info ---------- */

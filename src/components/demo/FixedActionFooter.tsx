@@ -39,7 +39,7 @@ export function FixedActionFooter({
   );
 
   const footer = (
-    <div className="fixed left-0 right-0 bottom-6 flex justify-center z-50 pointer-events-none">
+    <div className="fixed left-0 right-0 bottom-6 flex justify-center z-40 pointer-events-none">
       <AnimatePresence>{visible && content}</AnimatePresence>
     </div>
   );

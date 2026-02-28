@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence, animate } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence, animate, useMotionValue } from "framer-motion";
 import { FaEnvelope, FaFile, FaArrowRight, FaChevronDown, FaCheck } from "react-icons/fa";
 import { MOCK_POLICIES } from "@/data/demoData";
+import {
+  SourcesStack,
+  SourceCircle,
+  PolicySourceIcon,
+  IntegrationSourcesStack,
+} from "@/components/demo/ContextSources";
 import { EMAIL_GL_DATE, EMAIL_CA_DATE, EMAIL_WC_DATE, EMAIL_CP_DATE } from "@/lib/demoDates";
-import { BrandName } from "@/components/BrandName";
 import { FadeIn } from "@/components/FadeIn";
-import { LogoIcon } from "../LogoIcon";
+import { MeetClaireHeader } from "./MeetClaireHeader";
 import { FixedActionFooter } from "./FixedActionFooter";
 import { BackToClarityButton } from "./BackToClarityButton";
 import { BookDemoButton } from "./BookDemoButton";
@@ -18,6 +24,12 @@ interface PolicyUploadStepProps {
 }
 
 type Phase = "scanning" | "extracting" | "analyzing" | "ready";
+
+type ClaireStatusItem = {
+  id: string;
+  label: string;
+  sources?: "policies" | "integrations";
+};
 
 /* ---------- Email data ---------- */
 
@@ -36,7 +48,7 @@ function FlowArrow({ active }: { active: boolean }) {
     <div className="hidden md:flex items-center justify-center w-12 shrink-0">
       <motion.span
         className="flex items-center justify-center"
-        animate={{ color: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db" }}
+        animate={{ color: active ? ["var(--divider)", "var(--primary-light)", "var(--divider)"] : "var(--divider)" }}
         transition={
           active
             ? { duration: 1.5, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }
@@ -54,7 +66,7 @@ function FlowArrowVertical({ active }: { active: boolean }) {
     <div className="md:hidden flex justify-center h-8">
       <motion.span
         className="flex items-center justify-center"
-        animate={{ color: active ? ["#d1d5db", "#A0D2FA", "#d1d5db"] : "#d1d5db" }}
+        animate={{ color: active ? ["var(--divider)", "var(--primary-light)", "var(--divider)"] : "var(--divider)" }}
         transition={
           active
             ? { duration: 1.5, repeat: Infinity, ease: [0.4, 0, 0.6, 1] }
@@ -64,6 +76,28 @@ function FlowArrowVertical({ active }: { active: boolean }) {
         <FaChevronDown className="w-3 h-4" />
       </motion.span>
     </div>
+  );
+}
+
+/* ---------- Thinking dots (chatbot-style in-progress indicator) ---------- */
+
+function ThinkingDots() {
+  return (
+    <span className="inline-flex gap-0.5 ml-0.5 align-middle">
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          className="w-1 h-1 rounded-full bg-primary-light"
+          animate={{ opacity: [0.35, 1, 0.35] }}
+          transition={{
+            duration: 1.2,
+            repeat: Infinity,
+            delay: i * 0.2,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </span>
   );
 }
 
@@ -79,6 +113,50 @@ function ClaireGlobe({
   size?: number;
   spinning: boolean;
 }) {
+  const rotation = useMotionValue(0);
+  const spinRef = useRef<ReturnType<typeof animate> | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (spinning) {
+      spinRef.current?.stop();
+      const loop = () => {
+        if (cancelled) return;
+        spinRef.current = animate(rotation, 360, {
+          duration: 3,
+          ease: "linear",
+          onComplete: () => {
+            if (cancelled) return;
+            rotation.set(0);
+            loop();
+          },
+        });
+      };
+      loop();
+    } else {
+      spinRef.current?.stop();
+      const current = rotation.get();
+      const normalized = ((current % 360) + 360) % 360;
+      const target = normalized > 180 ? 360 : 0;
+
+      animate(rotation, target, {
+        type: "spring",
+        stiffness: 65,
+        damping: 16,
+        mass: 1.4,
+        onComplete: () => {
+          if (!cancelled) rotation.set(0);
+        },
+      });
+    }
+
+    return () => {
+      cancelled = true;
+      spinRef.current?.stop();
+    };
+  }, [spinning, rotation]);
+
   return (
     <motion.svg
       width={size}
@@ -86,21 +164,18 @@ function ClaireGlobe({
       viewBox="0 0 65 65"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      animate={spinning ? { rotate: 360 } : {}}
-      transition={
-        spinning ? { duration: 3, repeat: Infinity, ease: "linear" } : undefined
-      }
+      style={{ rotate: rotation }}
     >
       <circle
         cx="32.5"
         cy="32.5"
         r="31"
         fill="none"
-        stroke="#A0D2FA"
+        stroke="var(--primary-light)"
         strokeWidth="1.25"
         strokeOpacity="0.4"
       />
-      <path d={GLOBE_PATH} fill="#A0D2FA" />
+      <path d={GLOBE_PATH} fill="var(--primary-light)" />
     </motion.svg>
   );
 }
@@ -125,14 +200,14 @@ function CollapsedBucket({
       className="overflow-hidden"
     >
       <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg border border-foreground/6 bg-white/30 mb-2">
-        <span className="w-5 h-5 rounded-full bg-[#A0D2FA]/15 text-[#5BA3D9] text-[10px] font-bold flex items-center justify-center shrink-0">
+        <span className="w-5 h-5 rounded-full bg-primary-light/15 text-primary-muted text-caption font-bold flex items-center justify-center shrink-0">
           {stepNumber}
         </span>
-        <span className="text-[12px] font-medium text-foreground/70">
+        <span className="text-label font-medium text-foreground/70">
           {label}
         </span>
-        <span className="text-[11px] text-muted/50 ml-auto">{summary}</span>
-        <FaCheck className="w-3 h-3 shrink-0 text-[#A0D2FA]" />
+        <span className="text-label-sm text-muted/50 ml-auto">{summary}</span>
+        <FaCheck className="w-3 h-3 shrink-0 text-primary-light" />
       </div>
     </motion.div>
   );
@@ -154,10 +229,10 @@ function MobileStepLabel({
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
       className="flex items-center gap-2 mb-2 shrink-0"
     >
-      <span className="w-5 h-5 rounded-full bg-[#A0D2FA] text-white text-[10px] font-bold flex items-center justify-center shrink-0">
+      <span className="w-5 h-5 rounded-full bg-primary-light text-white text-caption font-bold flex items-center justify-center shrink-0">
         {stepNumber}
       </span>
-      <span className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+      <span className="text-label-sm font-semibold text-muted tracking-wider uppercase">
         {label}
       </span>
     </motion.div>
@@ -187,23 +262,23 @@ function EmailBucketContent({
             {phase === "scanning" &&
             idx === scannedEmails[scannedEmails.length - 1] ? (
               <motion.span
-                className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]"
+                className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-primary-light"
                 animate={{ opacity: [1, 0.3, 1] }}
                 transition={{ duration: 0.6, repeat: Infinity }}
               >
                 <FaEnvelope className="w-4 h-3" />
               </motion.span>
             ) : (
-              <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]">
+              <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-primary-light">
                 <FaEnvelope className="w-4 h-3" />
               </span>
             )}
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] mb-0.5">
+              <p className="text-label-sm mb-0.5">
                 <span className="font-medium text-muted/70">Subject:</span>{" "}
                 <span className="text-foreground">{EMAILS[idx].subject}</span>
               </p>
-              <p className="text-[10px] text-muted/50">
+              <p className="text-caption text-muted/50">
                 <span className="font-medium text-muted/60">From:</span>{" "}
                 <span className="font-mono">{EMAILS[idx].from}</span>
                 <span className="text-muted/40 mx-1.5">·</span>
@@ -228,7 +303,7 @@ function PolicyBucketContent({
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-[12px] text-muted/30"
+          className="text-label text-muted/30"
         >
           Waiting for scan...
         </motion.p>
@@ -246,17 +321,17 @@ function PolicyBucketContent({
             duration={0.35}
             className="flex items-start gap-2.5 px-2 py-3"
           >
-            <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-[#A0D2FA]">
+            <span className="w-4 h-6 flex items-center justify-center shrink-0 rounded text-primary-light">
               <FaFile className="w-3.5 h-3.5" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] flex flex-wrap items-center gap-1.5 w-full justify-between">
+              <p className="text-label-sm flex flex-wrap items-center gap-1.5 w-full justify-between">
                 <span className="text-foreground">{MOCK_POLICIES[idx].type}</span>
-                <span className="rounded-md bg-foreground/4 px-2 py-0.5 font-mono text-[10px] text-muted/70">
+                <span className="rounded-md bg-foreground/4 px-2 py-0.5 font-mono text-caption text-muted/70">
                   documents/pdf
                 </span>
               </p>
-              <p className="text-[10px] text-muted/50">
+              <p className="text-caption text-muted/50">
                 {MOCK_POLICIES[idx].carrier}
                 <span className="text-muted/40 mx-1.5">·</span>
                 <span className="font-mono">{MOCK_POLICIES[idx].policyNumber}</span>
@@ -274,8 +349,10 @@ function ClaireBucketContent({
   claireStatus,
 }: {
   phase: Phase;
-  claireStatus: string[];
+  claireStatus: ClaireStatusItem[];
 }) {
+  const isReady = phase === "ready";
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center relative">
       {phase === "analyzing" || phase === "ready" ? (
@@ -300,29 +377,52 @@ function ClaireBucketContent({
             <ClaireGlobe size={44} spinning={phase === "analyzing"} />
           </div>
 
-          {/* Status items */}
-          <div className="flex flex-col items-center gap-1.5 pb-3 min-h-18">
+          {/* Status items — consistent layout, Perplexity-style sources */}
+          <div className="flex flex-col items-center gap-3 pb-3 min-h-18 w-[220px]">
             <AnimatePresence>
-              {claireStatus.map((text, i) => (
-                <FadeIn
-                  key={text}
-                  when={true}
-                  staggerIndex={i}
-                  duration={0.35}
-                  className={`flex items-center gap-2 text-[12px] ${
-                    text === "Ready"
-                      ? "text-emerald-600 font-semibold"
-                      : "text-muted/70"
-                  }`}
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                      text === "Ready" ? "bg-emerald-500" : "bg-[#A0D2FA]"
-                    }`}
-                  />
-                  {text}
-                </FadeIn>
-              ))}
+              {claireStatus.map((item, i) => {
+                const isComplete = item.id === "ready";
+                const isLast = i === claireStatus.length - 1;
+                const showThinking = !isComplete && isLast && phase === "analyzing";
+
+                return (
+                  <FadeIn
+                    key={item.id}
+                    when={true}
+                    staggerIndex={i}
+                    duration={0.35}
+                    className="flex items-center gap-2.5 w-[220px]"
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                        isComplete ? "bg-success" : "bg-primary-light"
+                      }`}
+                    />
+                    <div className="flex flex-col items-start gap-1.5 min-w-0 flex-1">
+                      <span
+                        className={`inline-flex flex-wrap items-center gap-2 text-label ${
+                          isComplete
+                            ? "text-success font-semibold"
+                            : "text-muted/70"
+                        }`}
+                      >
+                        {item.label}
+                        {item.sources === "policies" && (
+                          <SourcesStack>
+                            {(["gl", "cp", "wc", "ca"] as const).map((id, j) => (
+                              <PolicySourceIcon key={id} policyId={id} index={j} size="md" />
+                            ))}
+                          </SourcesStack>
+                        )}
+                        {item.sources === "integrations" && (
+                          <IntegrationSourcesStack size="md" />
+                        )}
+                        {showThinking && <ThinkingDots />}
+                      </span>
+                    </div>
+                  </FadeIn>
+                );
+              })}
             </AnimatePresence>
           </div>
         </motion.div>
@@ -335,7 +435,7 @@ function ClaireBucketContent({
             initial={{ opacity: 0 }}
             animate={{ opacity: [0.2, 0.4, 0.2] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            className="text-[12px] text-muted/40"
+            className="text-label text-muted/40"
           >
             Waiting for policies&hellip;
           </motion.p>
@@ -374,19 +474,12 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
   const isMobile = useIsMobile();
   const [scannedEmails, setScannedEmails] = useState<number[]>([]);
   const [extractedPolicies, setExtractedPolicies] = useState<number[]>([]);
-  const [claireStatus, setClaireStatus] = useState<string[]>([]);
+  const [claireStatus, setClaireStatus] = useState<ClaireStatusItem[]>([]);
   const [scannedEmailCount, setScannedEmailCount] = useState(0);
 
   const activeBucket = getActiveBucket(phase);
-
-  // Lock body scroll on this step (no scroll on first page)
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, []);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Show text first, then steps after a short delay
   useEffect(() => {
@@ -439,52 +532,49 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
     // Phase 3: Analyzing — starts at 4.5s
     timers.push(setTimeout(() => setPhase("analyzing"), 4500));
 
-    const statusItems = [
-      "4 policies loaded",
-      "Cross-referencing coverage...",
-      "Ready",
+    const statusItems: ClaireStatusItem[] = [
+      { id: "policies", label: "4 policies loaded", sources: "policies" },
+      { id: "crossref", label: "Cross-referencing coverage" },
+      { id: "integrations", label: "Connecting integrations", sources: "integrations" },
+      { id: "ready", label: "Ready" },
     ];
     statusItems.forEach((item, i) => {
       timers.push(
         setTimeout(
-          () => {
-            setClaireStatus((prev) => [...prev, item]);
-          },
+          () => setClaireStatus((prev) => [...prev, item]),
           4700 + i * 500,
         ),
       );
     });
 
-    // Phase 4: Ready — at 6.2s
-    timers.push(setTimeout(() => setPhase("ready"), 6200));
+    // Phase 4: Ready — at 7.2s (after integrations step)
+    timers.push(setTimeout(() => setPhase("ready"), 7200));
 
     return () => timers.forEach(clearTimeout);
   }, [showSteps]);
 
+  const bottomGradient = (
+    <div
+      className="fixed left-0 right-0 bottom-0 h-24 z-30 pointer-events-none"
+      style={{
+        background: `linear-gradient(to bottom, transparent, var(--background))`,
+      }}
+    />
+  );
+
   return (
-    <div className="flex-1 flex flex-col min-h-0 overflow-hidden px-4 md:px-8 relative">
+    <div className="flex flex-col min-h-0 px-4 md:px-8 relative">
       <BackToClarityButton />
       {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
-      {/* ── CONTENT — centered on desktop, top-aligned on mobile (no scroll) ── */}
-      <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0 overflow-hidden">
-        {/* HEADER — FadeIn with stagger */}
-        <div className="text-center pt-22 md:pt-12 pb-12 md:pb-20 shrink-0">
-          <FadeIn staggerIndex={0}>
-            <h1
-              className="text-foreground-highlight"
-              style={{ fontFamily: "var(--font-playfair)" }}
-            >
-              <BrandName className="inline-flex items-center gap-2 text-4xl md:text-5xl">
-                Meet <LogoIcon size={isMobile ? 32 : 40} className="shrink-0 ml-2" spinOnHover /> Claire
-              </BrandName>
-            </h1>
-          </FadeIn>
-          <FadeIn staggerIndex={1}>
-            <p className="text-muted max-w-xs md:max-w-md mx-auto -mt-12">
-              Claire is a system of record for your businesses' insurance. It scans your email, finds your policies, and gets to work.
-            </p>
-          </FadeIn>
-        </div>
+      {/* Sticky translucent glass header */}
+      <div className="sticky top-0 z-10 -mx-4 md:-mx-8 px-4 md:px-8 pt-16 pb-6 bg-background/70 backdrop-blur-md shrink-0">
+        <MeetClaireHeader
+          subtitle="Claire is a system of record for your businesses' insurance. It scans your email, finds your policies, and gets to work."
+          logoSize={isMobile ? 32 : 40}
+        />
+      </div>
+      {/* ── CONTENT — centered on desktop, top-aligned on mobile (scrollable) ── */}
+      <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0 pt-4 pb-20">
 
         {/* ── MIDDLE — bucket content (always in DOM to reserve space; fades in after header) ── */}
         <motion.div
@@ -504,15 +594,15 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
               delay={0}
               className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[340px] shrink-0 ${
                 phase === "scanning"
-                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
+                  ? "border-primary-light/40 bg-primary-light/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
               <div className="shrink-0 mb-3">
-                <p className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+                <p className="text-label-sm font-semibold text-muted tracking-wider uppercase">
                   Your Email
                 </p>
-                <p className="text-[10px] text-muted/50 mt-0.5">
+                <p className="text-caption text-muted/50 mt-0.5">
                   Inbox · {scannedEmailCount.toLocaleString()} emails scanned
                 </p>
               </div>
@@ -530,15 +620,15 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
               delay={0.4}
               className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[340px] shrink-0 ${
                 phase === "extracting"
-                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
+                  ? "border-primary-light/40 bg-primary-light/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
               <div className="shrink-0 mb-3">
-                <p className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+                <p className="text-label-sm font-semibold text-muted tracking-wider uppercase">
                   Your Policies
                 </p>
-                <p className="text-[10px] text-muted/50 mt-0.5">Policy documents extracted</p>
+                <p className="text-caption text-muted/50 mt-0.5">Policy documents extracted</p>
               </div>
               <div className="h-[260px] flex flex-col overflow-hidden">
                 <PolicyBucketContent extractedPolicies={extractedPolicies} />
@@ -554,15 +644,15 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
               delay={0.8}
               className={`flex-1 min-w-0 rounded-xl border p-5 transition-colors duration-500 flex flex-col h-[340px] shrink-0 ${
                 phase === "analyzing" || phase === "ready"
-                  ? "border-[#A0D2FA]/40 bg-[#A0D2FA]/4"
+                  ? "border-primary-light/40 bg-primary-light/4"
                   : "border-foreground/6 bg-white/30"
               }`}
             >
               <div className="shrink-0 mb-3">
-                <p className="text-[11px] font-semibold text-muted tracking-wider uppercase">
+                <p className="text-label-sm font-semibold text-muted tracking-wider uppercase">
                   Claire
                 </p>
-                <p className="text-[10px] text-muted/50 mt-0.5">Reads, organizes, advises</p>
+                <p className="text-caption text-muted/50 mt-0.5">Reads, organizes, advises</p>
               </div>
               <div className="h-[260px] flex flex-col overflow-hidden">
                 <ClaireBucketContent phase={phase} claireStatus={claireStatus} />
@@ -608,7 +698,7 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 flex flex-col shrink-0"
+                  className="rounded-xl border border-primary-light/40 bg-primary-light/4 p-4 flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={1} label="Your Email" />
                   <EmailBucketContent
@@ -628,7 +718,7 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 flex flex-col shrink-0"
+                  className="rounded-xl border border-primary-light/40 bg-primary-light/4 p-4 flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={2} label="Your Policies" />
                   <PolicyBucketContent extractedPolicies={extractedPolicies} />
@@ -645,7 +735,7 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
                     duration: 0.35,
                     ease: [0.16, 1, 0.3, 1] as const,
                   }}
-                  className="rounded-xl border border-[#A0D2FA]/40 bg-[#A0D2FA]/4 p-4 flex flex-col shrink-0"
+                  className="rounded-xl border border-primary-light/40 bg-primary-light/4 p-4 flex flex-col shrink-0"
                 >
                   <MobileStepLabel stepNumber={3} label="Claire" />
                   <div className="w-full flex flex-1 justify-center items-center">
@@ -661,6 +751,9 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
           </div>
         </motion.div>
       </div>
+
+      {/* Bottom gradient — fixed to viewport via portal, content fades before CTA bar */}
+      {mounted && createPortal(bottomGradient, document.body)}
 
       <FixedActionFooter
         label="See what Claire can do"

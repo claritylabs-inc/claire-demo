@@ -4,8 +4,10 @@ import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { PolicyUploadStep } from "@/components/demo/PolicyUploadStep";
 import { CoverageStep } from "@/components/demo/CoverageStep";
+import { CoverageStepMobile } from "@/components/demo/CoverageStepMobile";
 import { ChatStep } from "@/components/demo/ChatStep";
 import { BackToClarityButton } from "@/components/demo/BackToClarityButton";
+import { BookDemoButton } from "@/components/demo/BookDemoButton";
 import type { ChatMode, PolicyId } from "@/components/demo/chat";
 
 type DemoStep = "upload" | "coverage" | "chat";
@@ -28,18 +30,43 @@ const stepVariants = {
   },
 };
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(true);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    setIsMobile(!mq.matches);
+    const handler = () => setIsMobile(!mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return isMobile;
+}
+
 export default function Home() {
   const [step, setStep] = useState<DemoStep>("upload");
   const [showChat, setShowChat] = useState(false);
   const [chatMode, setChatMode] = useState<ChatMode>("contact");
   const [chatPolicyId, setChatPolicyId] = useState<PolicyId | null>(null);
+  const [chatPromptIndex, setChatPromptIndex] = useState(0);
+  const [chatUserFirst, setChatUserFirst] = useState(false);
+  const isMobile = useIsMobile();
 
   const goToCoverage = useCallback(() => setStep("coverage"), []);
-  const openChat = useCallback((mode: ChatMode = "contact", policyId?: PolicyId) => {
-    setChatMode(mode);
-    setChatPolicyId(policyId ?? null);
-    setShowChat(true);
-  }, []);
+  const openChat = useCallback(
+    (
+      mode: ChatMode = "contact",
+      policyId?: PolicyId,
+      promptIndex?: number,
+      userFirst?: boolean
+    ) => {
+      setChatMode(mode);
+      setChatPolicyId(policyId ?? null);
+      setChatPromptIndex(promptIndex ?? 0);
+      setChatUserFirst(userFirst ?? false);
+      setShowChat(true);
+    },
+    []
+  );
   const closeChat = useCallback(() => setShowChat(false), []);
 
   // Close chat overlay on Escape
@@ -55,11 +82,19 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+      {/* Fixed buttons outside scroll/transform container so they stay viewport-fixed */}
+      {step === "coverage" && isMobile && (
+        <>
+          <BackToClarityButton />
+          <BookDemoButton onClick={openChat} />
+        </>
+      )}
       <AnimatePresence mode="wait">
         {step === "upload" && (
           <motion.div
             key="upload"
-            className="flex-1 flex flex-col min-h-0"
+            className={`flex-1 flex flex-col min-h-0 ${isMobile ? "overflow-y-auto overflow-x-hidden scrollbar-hide" : ""}`}
+            style={isMobile ? { WebkitOverflowScrolling: "touch" } as React.CSSProperties : undefined}
             variants={stepVariants}
             initial="initial"
             animate="animate"
@@ -72,13 +107,20 @@ export default function Home() {
         {step === "coverage" && (
           <motion.div
             key="coverage"
-            className="flex-1 flex flex-col min-h-0"
+            className="flex-1 flex flex-col min-h-0 overflow-hidden"
             variants={stepVariants}
             initial="initial"
             animate="animate"
             exit="exit"
           >
-            <CoverageStep onOpenChat={openChat} />
+            {isMobile ? (
+              <CoverageStepMobile
+                onOpenChat={openChat}
+                onBookDemo={openChat}
+              />
+            ) : (
+              <CoverageStep onOpenChat={openChat} />
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -143,7 +185,12 @@ export default function Home() {
               transition={{ duration: 0.4, ease: EASE }}
               className="relative flex-1 flex flex-col min-h-0 pt-14"
             >
-              <ChatStep mode={chatMode} policyId={chatPolicyId} />
+              <ChatStep
+                mode={chatMode}
+                policyId={chatPolicyId}
+                promptIndex={chatPromptIndex}
+                userFirst={chatUserFirst}
+              />
             </motion.div>
           </motion.div>
         )}
