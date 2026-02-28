@@ -279,11 +279,15 @@ function ClaireBucketContent({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-          className="flex flex-col items-center gap-3"
+          className="flex flex-col items-center gap-3 md:gap-5"
         >
-          <ClaireGlobe spinning={phase === "analyzing"} />
+          {/* Fixed-height wrapper keeps logo in place as status items load */}
+          <div className="h-12 flex items-center justify-center shrink-0">
+            <ClaireGlobe spinning={phase === "analyzing"} />
+          </div>
 
-          <div className="flex flex-col items-center gap-1 pb-3">
+          {/* Reserve space for 3 status items so layout doesn't shift */}
+          <div className="flex flex-col items-center gap-1 pb-3 min-h-18">
             <AnimatePresence>
               {claireStatus.map((text, i) => (
                 <FadeIn
