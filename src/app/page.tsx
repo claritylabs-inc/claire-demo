@@ -58,7 +58,7 @@ export default function Home() {
             animate="animate"
             exit="exit"
           >
-            <PolicyUploadStep onComplete={goToCoverage} />
+            <PolicyUploadStep onComplete={goToCoverage} onBookDemo={openChat} />
           </motion.div>
         )}
 

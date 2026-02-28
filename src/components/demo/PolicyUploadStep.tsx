@@ -9,9 +9,11 @@ import { FadeIn } from "@/components/FadeIn";
 import { LogoIcon } from "../LogoIcon";
 import { FixedActionFooter } from "./FixedActionFooter";
 import { BackToClarityButton } from "./BackToClarityButton";
+import { BookDemoButton } from "./BookDemoButton";
 
 interface PolicyUploadStepProps {
   onComplete: () => void;
+  onBookDemo?: () => void;
 }
 
 type Phase = "scanning" | "extracting" | "analyzing" | "ready";
@@ -348,7 +350,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
+export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepProps) {
   const [phase, setPhase] = useState<Phase>("scanning");
   const [showSteps, setShowSteps] = useState(false);
   const isMobile = useIsMobile();
@@ -435,6 +437,7 @@ export function PolicyUploadStep({ onComplete }: PolicyUploadStepProps) {
   return (
     <div className="flex-1 flex flex-col px-4 md:px-8 pb-20 md:pb-24 relative">
       <BackToClarityButton />
+      {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
       {/* ── CONTENT — centered on desktop, top-aligned on mobile ── */}
       <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0">
         {/* HEADER — FadeIn with stagger */}
