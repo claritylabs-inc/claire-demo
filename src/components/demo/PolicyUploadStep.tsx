@@ -563,18 +563,35 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
   );
 
   return (
-    <div className="flex flex-col min-h-0 px-4 md:px-8 relative">
+    <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
       <BackToClarityButton />
       {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
-      {/* Sticky translucent glass header */}
-      <div className="sticky top-0 z-10 -mx-4 md:-mx-8 px-4 md:px-8 pt-16 pb-6 bg-background/70 backdrop-blur-md shrink-0">
-        <MeetClaireHeader
-          subtitle="Claire is a system of record for your businesses' insurance. It scans your email, finds your policies, and gets to work."
-          logoSize={isMobile ? 32 : 40}
-        />
-      </div>
-      {/* ── CONTENT — centered on desktop, top-aligned on mobile (scrollable) ── */}
-      <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0 pt-4 pb-20">
+      {/* Single scroll container — header sticky inside so content scrolls behind for translucency. Disable scroll until animation completes. */}
+      <div
+        className={`flex-1 min-h-0 overflow-x-hidden scrollbar-hide overscroll-none transition-[overflow] duration-300 ${
+          phase === "ready" ? "overflow-y-auto" : "overflow-hidden touch-none"
+        }`}
+        style={
+          phase === "ready"
+            ? ({ WebkitOverflowScrolling: "touch" } as React.CSSProperties)
+            : undefined
+        }
+      >
+        <div className="sticky top-0 z-10 pt-16 pb-8 bg-background/85 backdrop-blur-md shrink-0">
+          <MeetClaireHeader
+            subtitle="Claire is a system of record for your businesses' insurance. It scans your email, finds your policies, and gets to work."
+            logoSize={isMobile ? 32 : 40}
+          />
+          {/* Gradient softens the bottom edge of the header — multiple stops reduce banding */}
+          <div
+            className="absolute left-0 right-0 -bottom-12 h-12 pointer-events-none backdrop-blur-md"
+            style={{
+              background: `linear-gradient(to bottom, rgb(var(--background-rgb) / 0.85) 0%, rgb(var(--background-rgb) / 0.55) 35%, rgb(var(--background-rgb) / 0.25) 65%, rgb(var(--background-rgb) / 0) 100%)`,
+            }}
+          />
+        </div>
+        {/* ── CONTENT — centered on desktop, top-aligned on mobile (scrollable) ── */}
+        <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0 pt-8 pb-32 px-4 md:px-8">
 
         {/* ── MIDDLE — bucket content (always in DOM to reserve space; fades in after header) ── */}
         <motion.div
@@ -663,7 +680,7 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
           {/* ═══════════════════════════════════════════
               MOBILE: Accordion — one bucket at a time
               ═══════════════════════════════════════════ */}
-          <div className="md:hidden flex flex-col">
+          <div className="md:hidden flex flex-col pb-16">
             {/* Collapsed: Email (when past scanning) */}
             <AnimatePresence>
               {activeBucket > 0 && (
@@ -750,6 +767,7 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
           </div>
           </div>
         </motion.div>
+        </div>
       </div>
 
       {/* Bottom gradient — fixed to viewport via portal, content fades before CTA bar */}

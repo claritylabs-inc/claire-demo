@@ -93,8 +93,7 @@ export default function Home() {
         {step === "upload" && (
           <motion.div
             key="upload"
-            className={`flex-1 flex flex-col min-h-0 ${isMobile ? "overflow-y-auto overflow-x-hidden scrollbar-hide" : ""}`}
-            style={isMobile ? { WebkitOverflowScrolling: "touch" } as React.CSSProperties : undefined}
+            className="flex-1 flex flex-col min-h-0 overflow-hidden"
             variants={stepVariants}
             initial="initial"
             animate="animate"
