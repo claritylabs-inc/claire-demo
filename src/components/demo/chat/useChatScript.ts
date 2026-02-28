@@ -26,17 +26,17 @@ const policyLabels: Record<PolicyId, string> = {
 };
 
 const renewGreetings: Record<PolicyId, string> = {
-  gl: "Your General Liability policy is expiring soon. I've got renewal options ready — what would you like to know?",
-  cp: "Your Commercial Property renewal is coming up. I've got your options — what can I help with?",
-  wc: "Your Workers' Comp renewal is due. I've got the details — what would you like to know?",
-  ca: "Your Commercial Auto policy is up for renewal. I've got quotes ready — what can I help with?",
+  gl: "Your GL expires in 14 days. I\u2019ve already pulled 3 renewal quotes \u2014 best one saves you $340/yr, same limits. Ready when you are.",
+  cp: "Your property policy renewal is coming up. I\u2019ve compared rates and have a recommendation \u2014 want to take a look?",
+  wc: "Your Workers\u2019 Comp is up for renewal. Payroll is synced from QuickBooks so the quotes reflect your actual numbers.",
+  ca: "Your auto policy renews soon. Fleet is verified \u2014 2 vehicles, no gaps. I\u2019ve got updated quotes ready.",
 };
 
 const cardGreetings: Record<string, string> = {
-  overview: "I've got your full policy summary. What would you like to know?",
-  premiums: "I can help with premiums and payment questions. What's on your mind?",
-  renewal: "I'm tracking your renewals. Your GL is up next — what can I help with?",
-  integrations: "I'm connected to your lease, business profile, and QuickBooks. What would you like to know?",
+  overview: "You\u2019re fully covered \u2014 4 policies, no gaps. Your GL renews in 14 days, I\u2019ve already pulled renewal options.",
+  premiums: "You\u2019re at $18,200/yr across 4 carriers. I found a bundling opportunity that saves you ~$2,400.",
+  renewal: "Your Hartford GL expires Mar 14. I\u2019ve pulled 3 renewal options and have a recommendation ready.",
+  integrations: "Your lease, business filings, and QuickBooks are all synced. When you add staff or change ops, your coverage updates automatically.",
 };
 
 export type Message =
@@ -85,8 +85,8 @@ function buildScript(mode: ChatMode, policyId: PolicyId | null): ScriptStep[] {
     : mode === "renew"
       ? renewGreetings[effectivePolicyId]
       : policyId
-        ? `I've got your ${policyLabels[policyId]} details. What can I help with?`
-        : "Hi! I've analyzed your policies. What can I help with?";
+        ? `Your ${policyLabels[policyId]} is current, no issues. Here\u2019s the full breakdown.`
+        : "All 4 policies current, no gaps. Here\u2019s what I\u2019m tracking for you.";
 
   const FIRST_MSG_DELAY = 250;
   steps.push({

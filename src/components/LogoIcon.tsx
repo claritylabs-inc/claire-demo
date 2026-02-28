@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   motion,
   useScroll,
@@ -12,14 +12,18 @@ import {
 interface LogoIconProps {
   className?: string;
   size?: number;
+  spinOnHover?: boolean;
 }
 
-export function LogoIcon({ className = "", size = 20 }: LogoIconProps) {
+export function LogoIcon({ className = "", size = 20, spinOnHover = false }: LogoIconProps) {
+  const [isHovered, setIsHovered] = useState(false);
   const { scrollYProgress } = useScroll();
   const scrollRotate = useTransform(scrollYProgress, [0, 1], [0, 1080]);
   const scrollRotateReverse = useTransform(scrollYProgress, [0, 1], [0, -540]);
   const loadRotate = useMotionValue(360);
   const loadRotateReverse = useMotionValue(-360);
+  const hoverRotate = useMotionValue(0);
+  const hoverRotateReverse = useMotionValue(0);
 
   useEffect(() => {
     animate(loadRotate, 0, {
@@ -32,22 +36,63 @@ export function LogoIcon({ className = "", size = 20 }: LogoIconProps) {
     });
   }, [loadRotate, loadRotateReverse]);
 
+  useEffect(() => {
+    if (!spinOnHover) return;
+    if (isHovered) {
+      // Ease in on first rotation, then steady
+      let cancelled = false;
+      let first = true;
+      const spin = () => {
+        if (cancelled) return;
+        const dur = first ? 1.8 : 2.4;
+        const ease = first ? [0.2, 0.6, 0.4, 1] as const : "linear";
+        first = false;
+        animate(hoverRotate, hoverRotate.get() + 360, {
+          duration: dur,
+          ease,
+          onComplete: () => { if (!cancelled) spin(); },
+        });
+        animate(hoverRotateReverse, hoverRotateReverse.get() - 360, {
+          duration: dur,
+          ease,
+        });
+      };
+      spin();
+      return () => { cancelled = true; };
+    } else {
+      // Decelerate to a stop — coast forward a bit
+      const remaining = 120;
+      animate(hoverRotate, hoverRotate.get() + remaining, {
+        duration: 1.2,
+        ease: [0.16, 1, 0.3, 1],
+      });
+      animate(hoverRotateReverse, hoverRotateReverse.get() - remaining, {
+        duration: 1.2,
+        ease: [0.16, 1, 0.3, 1],
+      });
+    }
+  }, [isHovered, spinOnHover, hoverRotate, hoverRotateReverse]);
+
   const rotate = useTransform(
-    [scrollRotate, loadRotate],
-    ([scroll, load]: number[]) =>
+    [scrollRotate, loadRotate, hoverRotate],
+    ([scroll, load, hover]: number[]) =>
       (typeof scroll === "number" ? scroll : 0) +
-      (typeof load === "number" ? load : 0)
+      (typeof load === "number" ? load : 0) +
+      (typeof hover === "number" ? hover : 0)
   );
 
   const rotateReverse = useTransform(
-    [scrollRotateReverse, loadRotateReverse],
-    ([scroll, load]: number[]) =>
+    [scrollRotateReverse, loadRotateReverse, hoverRotateReverse],
+    ([scroll, load, hover]: number[]) =>
       (typeof scroll === "number" ? scroll : 0) +
-      (typeof load === "number" ? load : 0)
+      (typeof load === "number" ? load : 0) +
+      (typeof hover === "number" ? hover : 0)
   );
 
   return (
     <svg
+      onMouseEnter={() => spinOnHover && setIsHovered(true)}
+      onMouseLeave={() => spinOnHover && setIsHovered(false)}
       width={size}
       height={size}
       viewBox="0 0 65 65"

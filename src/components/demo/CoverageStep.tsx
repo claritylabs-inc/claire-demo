@@ -377,14 +377,14 @@ export function CoverageStep({ onOpenChat }: CoverageStepProps) {
                     <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right whitespace-nowrap min-w-20">
                       Deductible
                     </th>
-                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right whitespace-nowrap min-w-24">
-                      Actions
-                    </th>
                     {activeTab !== "all" && (
                       <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right hidden md:table-cell whitespace-nowrap min-w-28">
                         Period
                       </th>
                     )}
+                    <th className="px-4 py-2.5 text-[11px] font-semibold text-muted uppercase tracking-wider text-right whitespace-nowrap min-w-24">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <AnimatePresence mode="wait">

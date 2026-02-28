@@ -306,42 +306,42 @@ export type SummaryCardId = "overview" | "premiums" | "renewal" | "integrations"
 export const CHAT_PROMPTS_BY_CARD: Record<SummaryCardId, ChatPrompt[]> = {
   overview: [
     {
-      question: "Can you give me a quick summary of our coverage?",
-      answer: "You have 4 active policies: Hartford GL ($1M/occurrence), Travelers Property ($850K building, $250K BPP), EMPLOYERS Workers Comp, and Progressive Auto ($1M CSL for your 2 delivery vehicles). All set for your restaurant and catering ops.",
+      question: "Anything I should know about?",
+      answer: "Your liquor liability deductible went up $2K at last renewal \u2014 I can shop that down. Also, Dell needs updated COIs for your catering work, I\u2019ve got those queued up.",
     },
     {
-      question: "Which policy covers our catering events?",
-      answer: "Your Hartford GL covers catering — Products/Completed Ops ($2M) and Liquor Liability ($1M). Dell and other clients typically need proof of both. I can generate COIs anytime.",
+      question: "Yeah handle both of those",
+      answer: "On it. I\u2019ll pull 3 quotes on the deductible by tomorrow and send you a comparison. COIs are generating now \u2014 I\u2019ll send them to Dell and cc you.",
     },
   ],
   premiums: [
     {
-      question: "Can we lower our annual premiums?",
-      answer: "Your total is $18,200/year across 4 carriers. I can run a bundled quote — Hartford, Travelers, and Progressive don't share a package, but we might find savings. Want me to pull options?",
+      question: "Can we get this any lower?",
+      answer: "You\u2019ve got 4 carriers and no bundling discount \u2014 there\u2019s room. A Hartford bundle would save you about $2,400/yr. I\u2019ve got the quote ready if you want to see it.",
     },
     {
-      question: "When are our premiums due?",
-      answer: "Each policy has its own billing cycle. I can send you a payment calendar — most are annual. Want me to sync the dates with your bookkeeper?",
+      question: "Send it over",
+      answer: "Done \u2014 side-by-side is in your inbox. Savings look solid, I can start the switch before your GL renewal if you want to move on it.",
     },
   ],
   renewal: [
     {
-      question: "What's coming up for renewal?",
-      answer: `Your Hartford GL expires ${NEXT_RENEWAL_FORMATTED} — that's in 2 weeks. I've got renewal quotes ready. Your other policies (Property, WC, Auto) renew later this year. Want me to walk through the GL renewal?`,
+      question: "What\u2019s coming up?",
+      answer: `Your Hartford GL expires ${NEXT_RENEWAL_FORMATTED} \u2014 14 days out. I\u2019ve pulled 3 options, best one saves you $340/yr same limits. Want me to lock it in?`,
     },
     {
-      question: "Can you remind me before each renewal?",
-      answer: "I'll send reminders 60, 30, and 14 days before each expiry. I can also notify your bookkeeper. Want me to set that up?",
+      question: "Lock it in",
+      answer: "Done \u2014 renewal is going to Hartford now, same limits, better rate. You\u2019ll get a confirmation within 24 hrs. I\u2019ll start prepping your property renewal next.",
     },
   ],
   integrations: [
     {
-      question: "What data do you have connected?",
-      answer: "I'm connected to 3 sources: your Greystar lease (landlord COI requirements), California Secretary of State (business profile, liquor license), and QuickBooks (revenue, payroll, vehicles). I use these to keep your coverage aligned.",
+      question: "What are you connected to?",
+      answer: "Your Greystar lease for COI requirements, California SOS for business filings and liquor license, and QuickBooks for revenue, payroll, and fleet. Everything syncs live \u2014 your WC premium adjusts automatically when payroll changes.",
     },
     {
-      question: "Can you pull our payroll from QuickBooks for workers comp?",
-      answer: "Yes — I'm already connected. Your $42K/mo payroll flows into your EMPLOYERS WC policy for accurate premium. I'll update it when you add the new hires.",
+      question: "We\u2019re hiring 2 new staff next month",
+      answer: "Got it. Once they\u2019re in QuickBooks I\u2019ll update your WC policy automatically and let you know if your premium changes. Nothing you need to do.",
     },
   ],
 };
