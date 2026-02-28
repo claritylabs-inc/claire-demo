@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { CTAButton } from "@/components/CTAButton";
 
@@ -18,6 +20,9 @@ export function FixedActionFooter({
   visible = true,
   animateIn = false,
 }: FixedActionFooterProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const button = <CTAButton label={label} onClick={onClick} />;
 
   const content = animateIn ? (
@@ -33,11 +38,15 @@ export function FixedActionFooter({
     <div className="pointer-events-auto">{button}</div>
   );
 
-  return (
-    <div className="fixed bottom-10 left-0 right-0 flex justify-center z-50 pointer-events-none">
-      <AnimatePresence>
-        {visible && content}
-      </AnimatePresence>
+  const footer = (
+    <div className="fixed left-0 right-0 bottom-6 flex justify-center z-50 pointer-events-none">
+      <AnimatePresence>{visible && content}</AnimatePresence>
     </div>
   );
+
+  if (!mounted || typeof document === "undefined") {
+    return <div className="h-0" aria-hidden />;
+  }
+
+  return createPortal(footer, document.body);
 }

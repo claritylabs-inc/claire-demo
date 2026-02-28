@@ -174,7 +174,7 @@ function EmailBucketContent({
   scannedEmails: number[];
 }) {
   return (
-    <div className="flex flex-col flex-1 min-h-0 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden divide-y divide-foreground/6">
+    <div className="flex flex-col flex-1 min-h-0 overflow-hidden divide-y divide-foreground/6">
       <AnimatePresence>
         {scannedEmails.map((idx, i) => (
           <FadeIn
@@ -236,7 +236,7 @@ function PolicyBucketContent({
     );
   }
   return (
-    <div className="flex flex-col flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden divide-y divide-foreground/6">
+    <div className="flex flex-col flex-1 overflow-hidden divide-y divide-foreground/6">
       <AnimatePresence>
         {extractedPolicies.map((idx, i) => (
           <FadeIn
@@ -379,6 +379,15 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
 
   const activeBucket = getActiveBucket(phase);
 
+  // Lock body scroll on this step (no scroll on first page)
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
   // Show text first, then steps after a short delay
   useEffect(() => {
     const t = setTimeout(() => setShowSteps(true), 900);
@@ -453,11 +462,11 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
   }, [showSteps]);
 
   return (
-    <div className="flex-1 flex flex-col px-4 md:px-8 pb-20 md:pb-24 relative">
+    <div className="flex-1 flex flex-col min-h-0 overflow-hidden px-4 md:px-8 relative">
       <BackToClarityButton />
       {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
-      {/* ── CONTENT — centered on desktop, top-aligned on mobile ── */}
-      <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0">
+      {/* ── CONTENT — centered on desktop, top-aligned on mobile (no scroll) ── */}
+      <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0 overflow-hidden">
         {/* HEADER — FadeIn with stagger */}
         <div className="text-center pt-22 md:pt-12 pb-12 md:pb-20 shrink-0">
           <FadeIn staggerIndex={0}>
