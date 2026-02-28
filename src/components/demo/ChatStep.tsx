@@ -14,7 +14,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 export function ChatStep() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { messages, cycle } = useChatScript();
+  const { messages, cycle, isFadingOut } = useChatScript();
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -40,7 +40,7 @@ export function ChatStep() {
               ref={scrollRef}
               className="h-full overflow-y-auto overflow-x-hidden px-2.5 py-1 flex flex-col gap-[12px] scrollbar-hide"
             >
-              <MessageRenderer messages={messages} cycle={cycle} />
+              <MessageRenderer messages={messages} cycle={cycle} isFadingOut={isFadingOut} />
             </div>
           </IPhoneMockup>
         </motion.div>

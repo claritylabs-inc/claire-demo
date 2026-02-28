@@ -56,6 +56,7 @@ function ConnectionBadge({
   onMouseEnter,
   onMouseLeave,
   isLast,
+  compact = false,
 }: {
   source: (typeof CONTEXT_SOURCES)[0];
   icon: () => React.JSX.Element;
@@ -65,6 +66,7 @@ function ConnectionBadge({
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   isLast: boolean;
+  compact?: boolean;
 }) {
   return (
     <motion.div
@@ -78,7 +80,11 @@ function ConnectionBadge({
       <button
         type="button"
         onClick={onToggle}
-        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[12px] font-medium transition-all cursor-pointer ${
+        className={`inline-flex items-center gap-2 rounded-lg border font-medium transition-all cursor-pointer touch-manipulation ${
+          compact
+            ? "min-h-[44px] min-w-[44px] px-2.5 py-2 text-[11px]"
+            : "px-3 py-1.5 text-[12px]"
+        } ${
           expanded
             ? "border-emerald-500/30 bg-emerald-500/6 text-foreground"
             : "border-foreground/8 bg-white/80 text-muted hover:border-foreground/15 hover:text-foreground/80"
@@ -205,49 +211,55 @@ export function CoverageStep({ onComplete }: CoverageStepProps) {
               </p>
             </div>
           </div>
-          {/* Desktop: full badges */}
+          {/* Desktop: full badges with hover expand */}
           <div
             ref={badgesRef}
-            className="hidden md:flex items-center gap-2 overflow-visible"
+            className="flex items-center gap-2 overflow-visible"
           >
-            {CONTEXT_SOURCES.map((source, i) => (
-              <ConnectionBadge
-                key={source.label}
-                source={source}
-                icon={CONNECTION_ICONS[i]}
-                index={i}
-                expanded={expandedConnection === i}
-                onToggle={() =>
-                  setExpandedConnection(expandedConnection === i ? null : i)
-                }
-                onMouseEnter={() => {
-                  clearHoverLeaveTimeout();
-                  setExpandedConnection(i);
-                }}
-                onMouseLeave={() => {
-                  hoverLeaveTimeoutRef.current = setTimeout(() => {
-                    setExpandedConnection(null);
-                    hoverLeaveTimeoutRef.current = null;
-                  }, HOVER_LEAVE_DELAY_MS);
-                }}
-                isLast={i === CONTEXT_SOURCES.length - 1}
-              />
-            ))}
-          </div>
-          {/* Mobile: compact pills */}
-          <div className="flex md:hidden items-center gap-1.5">
-            {CONTEXT_SOURCES.map((source, i) => {
-              const Icon = CONNECTION_ICONS[i];
-              return (
-                <span
-                  key={source.label}
-                  className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-foreground/6 bg-white/80 text-[10px] font-medium text-muted"
-                >
-                  <Icon />
-                  {source.label}
-                </span>
-              );
-            })}
+            <div className="hidden md:flex items-center gap-2 overflow-visible">
+              {CONTEXT_SOURCES.map((source, i) => (
+                <ConnectionBadge
+                  key={`desktop-${source.label}`}
+                  source={source}
+                  icon={CONNECTION_ICONS[i]}
+                  index={i}
+                  expanded={expandedConnection === i}
+                  onToggle={() =>
+                    setExpandedConnection(expandedConnection === i ? null : i)
+                  }
+                  onMouseEnter={() => {
+                    clearHoverLeaveTimeout();
+                    setExpandedConnection(i);
+                  }}
+                  onMouseLeave={() => {
+                    hoverLeaveTimeoutRef.current = setTimeout(() => {
+                      setExpandedConnection(null);
+                      hoverLeaveTimeoutRef.current = null;
+                    }, HOVER_LEAVE_DELAY_MS);
+                  }}
+                  isLast={i === CONTEXT_SOURCES.length - 1}
+                />
+              ))}
+            </div>
+            {/* Mobile: clickable badges (tap to expand, no hover) */}
+            <div className="flex md:hidden items-center gap-1.5 overflow-visible">
+              {CONTEXT_SOURCES.map((source, i) => (
+                <ConnectionBadge
+                  key={`mobile-${source.label}`}
+                  source={source}
+                  icon={CONNECTION_ICONS[i]}
+                  index={i}
+                  expanded={expandedConnection === i}
+                  onToggle={() =>
+                    setExpandedConnection(expandedConnection === i ? null : i)
+                  }
+                  onMouseEnter={() => {}}
+                  onMouseLeave={() => {}}
+                  isLast={i === CONTEXT_SOURCES.length - 1}
+                  compact
+                />
+              ))}
+            </div>
           </div>
         </div>
       </motion.div>

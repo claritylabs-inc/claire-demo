@@ -7,6 +7,17 @@ import { LogoIcon } from "@/components/LogoIcon";
 import { CTAButton } from "@/components/CTAButton";
 import { CTA_PHONE, CTA_PHONE_HREF } from "@/data/demoData";
 
+function PhoneLink({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href={CTA_PHONE_HREF}
+      className={`inline-block text-sm font-normal hover:font-medium text-foreground hover:text-white px-2 py-1 -m-1 rounded-[18px] rounded-br-[4px] border border-foreground/8 hover:border-transparent hover:bg-[#A0D2FA] cursor-pointer transition-[color,background-color,border-color,font-weight] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${className}`}
+    >
+      {CTA_PHONE}
+    </a>
+  );
+}
+
 const BOOK_DEMO_URL = "https://cal.com/team/claritylabs/demo";
 const QR_VALUE = "sms:+16476930328?body=My landlord needs proof of insurance for our lease renewal.";
 
@@ -21,14 +32,7 @@ export function TryClaireHeading() {
         </BrandName>
       </p>
       <p className="text-base text-muted max-w-sm mx-auto block md:hidden">
-        Text{" "}
-        <a
-          href={CTA_PHONE_HREF}
-          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
-        >
-          {CTA_PHONE}
-        </a>{" "}
-        and try Claire for yourself.
+        Text <PhoneLink className="m-1" /> and try Claire for yourself.
       </p>
     </>
   );
@@ -53,14 +57,7 @@ export function ChatStepCTA() {
       </div>
 
       <p className="text-base text-muted max-w-xs mx-auto hidden md:block mb-6">
-        Scan the QR code to text{" "}
-        <a
-          href={CTA_PHONE_HREF}
-          className="text-sm inline-block text-foreground hover:text-foreground-highlight hover:bg-foreground/8 active:bg-foreground/12 transition-colors px-2 py-1 m-1 rounded-md border border-foreground/8 hover:border-foreground/15 cursor-pointer"
-        >
-          {CTA_PHONE}
-        </a>{" "}
-        and try Claire for yourself.
+        Scan the QR code to text <PhoneLink className="m-1" /> and try Claire for yourself.
       </p>
 
       <div className="hidden md:block p-4 rounded-2xl border border-foreground/6 bg-white/50">

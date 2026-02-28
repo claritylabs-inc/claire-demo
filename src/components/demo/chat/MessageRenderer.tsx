@@ -1,25 +1,31 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import type { Message } from "./useChatScript";
-import {
-  IncomingBubble,
-  OutgoingBubble,
-  TypingBubble,
-} from "./ChatBubbles";
+import { IncomingBubble, OutgoingBubble } from "./ChatBubbles";
 
 interface MessageRendererProps {
   messages: Message[];
   cycle: number;
+  isFadingOut?: boolean;
 }
 
-export function MessageRenderer({ messages, cycle }: MessageRendererProps) {
+export function MessageRenderer({ messages, cycle, isFadingOut = false }: MessageRendererProps) {
   return (
-    <AnimatePresence mode="popLayout">
+    <motion.div
+      animate={{ opacity: isFadingOut ? 0 : 1 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col gap-[12px]"
+    >
+      <AnimatePresence mode="popLayout">
       {messages.map((msg, i) => {
         if (msg.type === "incoming") {
           return (
-            <IncomingBubble key={`${cycle}-in-${i}`} reaction={msg.reaction}>
+            <IncomingBubble
+              key={`${cycle}-in-${i}`}
+              reaction={msg.reaction}
+              status={msg.status}
+            >
               {msg.text}
             </IncomingBubble>
           );
@@ -33,11 +39,9 @@ export function MessageRenderer({ messages, cycle }: MessageRendererProps) {
             />
           );
         }
-        if (msg.type === "typing") {
-          return <TypingBubble key={`${cycle}-typing`} />;
-        }
         return null;
       })}
-    </AnimatePresence>
+      </AnimatePresence>
+    </motion.div>
   );
 }
