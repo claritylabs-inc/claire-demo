@@ -6,7 +6,6 @@ This document defines the z-index layering strategy used across the app. Use sem
 
 | Class | Value | Purpose |
 |-------|-------|---------|
-| `z-grain` | 1 | Paper grain overlay (body::before), decorative only |
 | `z-header` | 50 | Fixed header, sticky navigation, site chrome |
 | `z-modal-backdrop` | 100 | Modal/overlay backdrop (dimmer, click-to-close) |
 | `z-modal` | 110 | Modal/dialog content, command palette (above backdrop) |
