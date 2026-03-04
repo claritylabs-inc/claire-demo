@@ -23,7 +23,7 @@ export function MeetClaireHeader({
       <FadeIn when={true} staggerIndex={0} duration={0.5}>
         <h1
           className="text-foreground-highlight"
-          style={{ fontFamily: "var(--font-playfair)" }}
+          style={{ fontFamily: "var(--font-instrument-serif)" }}
         >
           <BrandName className="inline-flex items-center gap-2 text-4xl md:text-5xl">
             Meet <LogoIcon size={logoSize} className="shrink-0 ml-2" spinOnHover /> Claire

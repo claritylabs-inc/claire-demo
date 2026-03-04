@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { CommandPalette } from "@/components/layout/CommandPalette";
 import { ConsoleMessage } from "@/components/layout/ConsoleMessage";
 import { Providers } from "./providers";
@@ -15,13 +15,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-});
-
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
   subsets: ["latin"],
@@ -33,7 +26,7 @@ const claireDescription =
   "Claire is an AI-native system of record for your business's insurance. She understands your coverage and takes action without letting anything slip.";
 
 export const metadata: Metadata = {
-  title: "Meet Claire — AI-Native Insurance Management",
+  title: "Claire — AI-Native Insurance Management",
   description: claireDescription,
   keywords: [
     "commercial insurance",
@@ -53,7 +46,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Meet Claire — AI-Native Insurance Management",
+    title: "Claire — AI-Native Insurance Management",
     description: claireDescription,
     type: "website",
     siteName: "Clarity Labs",
@@ -61,7 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Meet Claire — AI-Native Insurance Management",
+    title: "Claire — AI-Native Insurance Management",
     description: claireDescription,
   },
   robots: {
@@ -103,7 +96,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${instrumentSerif.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
       >
         <CommandPalette />
         <ConsoleMessage />
