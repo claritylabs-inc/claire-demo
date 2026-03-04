@@ -5,7 +5,7 @@ import { BackButton } from "@/components/layout/BackButton";
 import { BookDemoButton } from "@/components/layout/BookDemoButton";
 import { useChatOverlay } from "@/components/views/ChatOverlayContext";
 
-export default function CoveragePage() {
+export default function UseCasesPage() {
   const { openChat } = useChatOverlay();
 
   return (

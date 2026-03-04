@@ -6,6 +6,7 @@ import { LogoIcon } from "@/components/ui/LogoIcon";
 import { CTAButton } from "@/components/ui/CTAButton";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { CTA_PHONE, CTA_PHONE_HREF } from "@/data/demoData";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 function PhoneLink({ className = "" }: { className?: string }) {
   return (
@@ -22,17 +23,18 @@ const BOOK_DEMO_URL = "https://cal.com/team/claritylabs/demo";
 const QR_VALUE = "sms:+16476930328?body=My landlord needs proof of insurance for our lease renewal.";
 
 export function TryClaireHeading() {
+  const isMobile = useIsMobile();
   return (
     <>
       <p className="text-foreground-highlight mb-6">
         <BrandName className="inline-flex items-center gap-2 text-4xl md:text-5xl">
-          Text{"  "}
-          <LogoIcon size={32} className="shrink-0 ml-2" />
+          Try{"  "}
+          <LogoIcon size={isMobile ? 32 : 40} className="shrink-0 ml-2" />
           Claire
         </BrandName>
       </p>
-      <p className="text-sm text-muted max-w-sm mx-auto block md:hidden">
-        Text <PhoneLink className="m-1" /> and try Claire for yourself.
+      <p className="text-md text-muted max-w-sm mx-auto block md:hidden">
+        Claire works over text, email, and chat. Send a message to <PhoneLink className="m-1" /> to try for yourself.
       </p>
     </>
   );
@@ -52,8 +54,8 @@ export function ChatStepCTA() {
         <TryClaireHeading />
       </div>
 
-      <p className="text-sm text-muted max-w-xs mx-auto hidden md:block mb-6">
-        Scan the QR code to text <PhoneLink className="m-1" /> and try Claire for yourself.
+      <p className="text-md text-muted max-w-sm mx-auto hidden md:block mb-6">
+        Claire works over text, email, and chat. Scan the QR code to text <PhoneLink className="m-1" /> and try for yourself.
       </p>
 
       <div className="hidden md:block p-4 rounded-2xl border border-foreground/6 bg-white/50">

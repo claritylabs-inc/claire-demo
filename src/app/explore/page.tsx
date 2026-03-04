@@ -10,7 +10,7 @@ import { GradientFade } from "@/components/ui/GradientFade";
 import { Footer } from "@/components/layout/Footer";
 
 const SUBTITLE =
-  "Explore how Claire can help manage your insurance. Tap an example to see it in action.";
+  "Claire works across email, SMS, and chat. Your whole team shares one agent with full context. Tap an example to see her in action.";
 
 const ANIM_DURATION = 0.4;
 const STAGGER_INTERVAL = 0.1;
@@ -32,7 +32,7 @@ export default function ExplorePage() {
           <div className="relative pt-14 pb-6">
             <GradientFade direction="down" className="absolute inset-0 -bottom-12" />
             <div className="relative text-center">
-              <MeetClaireHeader subtitle={SUBTITLE} logoSize={32} />
+              <MeetClaireHeader subtitle={SUBTITLE} />
             </div>
           </div>
         </div>

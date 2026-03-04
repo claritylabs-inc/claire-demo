@@ -69,7 +69,7 @@ export function ChatStep({
 
   return (
     <div className="flex-1 flex items-start md:items-center justify-center px-4 md:px-8 py-4 sm:pb-8 overflow-y-auto min-h-0">
-      <div className="flex flex-col md:flex-row items-center md:justify-center gap-12 lg:gap-16 w-[320px] md:w-[700px] lg:w-[800px]">
+      <div className="flex flex-col md:flex-row items-center md:justify-center gap-12 lg:gap-16 w-[360px] md:w-[700px] lg:w-[800px]">
         {/* Mobile: heading above phone mockup */}
         <div className="order-first block md:hidden w-full shrink-0 text-center pb-2">
           <TryClaireHeading />

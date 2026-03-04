@@ -12,7 +12,7 @@ import { PromptContextSources } from "@/components/views/ContextSources";
 import type { ChatMode, PolicyId } from "@/components/chat";
 
 const SUBTITLE =
-  "Claire understands your business context and your policies. Just send a text.";
+  "Claire can send certificates, file claims, renew policies, and much more. Just ask via text or email.";
 
 const ANIM_DURATION = 0.4;
 const STAGGER_INTERVAL = 0.1;
@@ -37,11 +37,16 @@ export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
             <GradientFade direction="down" className="absolute inset-0 -bottom-12" />
             {/* Content sits above the blur */}
             <div className="relative">
-              <MeetClaireHeader subtitle={SUBTITLE} logoSize={32} />
+              <MeetClaireHeader subtitle={SUBTITLE} />
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center gap-4 md:gap-8 pt-8 pb-16 mx-4 md:mx-8">
+        <div className="flex flex-col items-center gap-4 md:gap-8 pt-12 pb-16 mx-4 md:mx-8">
+            <FadeIn when={true} delay={0} duration={ANIM_DURATION} className="w-full max-w-sm text-center">
+              <p className="text-body-sm text-muted/60">
+                Tap any prompt to see how Claire handles it:
+              </p>
+            </FadeIn>
             {CHAT_PROMPTS.map((prompt, i) => (
               <FadeIn
                 key={i}
