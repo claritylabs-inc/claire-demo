@@ -414,7 +414,7 @@ export interface UseCaseItem {
 export const USE_CASES: UseCaseItem[] = [
   {
     heading: "Lease Signing",
-    description: "Get COIs for landlords and lease renewals — Claire knows your lease requirements and sends them automatically.",
+    description: "Your landlord needs a COI? Claire finds the right policy, generates the certificate, and sends it. Done in minutes, not days.",
     examples: [
       { question: CHAT_PROMPTS[0].question, mode: "prompt", promptIndex: 0 },
       { question: CHAT_PROMPTS_BY_POLICY.gl[0].question, mode: "contact", policyId: "gl" },
@@ -423,14 +423,14 @@ export const USE_CASES: UseCaseItem[] = [
   },
   {
     heading: "Proof of Insurance",
-    description: "Contracts, vendors, and clients need proof — Claire generates and sends certificates in seconds.",
+    description: "Client needs proof of coverage? Claire generates the certificate and sends it directly. No broker back-and-forth.",
     examples: [
       { question: CHAT_PROMPTS[1].question, mode: "prompt", promptIndex: 1 },
     ],
   },
   {
     heading: "Help with Claims",
-    description: "Slip-and-falls, accidents, property damage — Claire walks you through what to do and starts the claim.",
+    description: "Claire walks you through what to do and files the claim with your carrier. Anyone on your team can text her directly.",
     examples: [
       { question: CHAT_PROMPTS[2].question, mode: "prompt", promptIndex: 2 },
       { question: CHAT_PROMPTS_BY_POLICY.wc[1].question, mode: "contact", policyId: "wc" },
@@ -438,7 +438,7 @@ export const USE_CASES: UseCaseItem[] = [
   },
   {
     heading: "Coverage Questions",
-    description: "New equipment, expansion, or changes — Claire checks your policies and tells you what's covered.",
+    description: "Buying new equipment or expanding? Claire checks your policies against your QuickBooks data and tells you if you need more coverage.",
     examples: [
       { question: CHAT_PROMPTS[3].question, mode: "prompt", promptIndex: 3 },
       { question: CHAT_PROMPTS_BY_POLICY.cp[0].question, mode: "contact", policyId: "cp" },
@@ -448,7 +448,7 @@ export const USE_CASES: UseCaseItem[] = [
   },
   {
     heading: "Policy Renewals",
-    description: "Claire pulls quotes, compares options, and handles renewals before you have a gap.",
+    description: "Claire flags upcoming renewals, pulls quotes, and processes the renewal before you have a gap.",
     examples: [
       { question: CHAT_PROMPTS[4].question, mode: "prompt", promptIndex: 4 },
       { question: CHAT_PROMPTS_RENEW_BY_POLICY.gl[0].question, mode: "renew", policyId: "gl" },
@@ -458,7 +458,7 @@ export const USE_CASES: UseCaseItem[] = [
   },
   {
     heading: "Workers Comp",
-    description: "Certificates for contracts, new hire reporting, and claims — payroll syncs from QuickBooks.",
+    description: "Claire syncs with QuickBooks and auto-adjusts your WC policy as payroll changes. Your HR and ops teams can text her directly.",
     examples: [
       { question: CHAT_PROMPTS[5].question, mode: "prompt", promptIndex: 5 },
       { question: CHAT_PROMPTS_RENEW_BY_POLICY.wc[0].question, mode: "renew", policyId: "wc" },
@@ -467,7 +467,7 @@ export const USE_CASES: UseCaseItem[] = [
   },
   {
     heading: "Commercial Auto",
-    description: "Add vehicles, file claims, get certificates — Claire manages your fleet coverage.",
+    description: "Claire adds vehicles to your policy, starts claims, and sends certificates. Just text her the details.",
     examples: [
       { question: CHAT_PROMPTS[6].question, mode: "prompt", promptIndex: 6 },
       { question: CHAT_PROMPTS_BY_POLICY.ca[1].question, mode: "contact", policyId: "ca" },
@@ -476,14 +476,14 @@ export const USE_CASES: UseCaseItem[] = [
   },
   {
     heading: "Premium Savings",
-    description: "Bundling, discounts, and better rates — Claire finds savings across your policies.",
+    description: "Claire compares carriers, finds bundling discounts, and switches your policies to save money.",
     examples: [
       { question: CHAT_PROMPTS_BY_CARD.premiums[0].question, mode: "premiums" },
     ],
   },
   {
     heading: "Integrations",
-    description: "Lease portals, QuickBooks, business filings — Claire stays in sync so your coverage is always current.",
+    description: "Claire connects to your lease portal, QuickBooks, and business filings. When your data changes, she updates your policies automatically.",
     examples: [
       { question: CHAT_PROMPTS_BY_CARD.integrations[0].question, mode: "integrations" },
       { question: CHAT_PROMPTS_BY_CARD.integrations[1].question, mode: "integrations" },
@@ -491,7 +491,7 @@ export const USE_CASES: UseCaseItem[] = [
   },
   {
     heading: "Policy Overview",
-    description: "What you're covered for, where you have gaps, and what's coming up — ask Claire anything.",
+    description: "What you're covered for, where you have gaps, and what needs attention. Claire holds context across your whole team.",
     examples: [
       { question: CHAT_PROMPTS_BY_CARD.overview[0].question, mode: "overview" },
     ],

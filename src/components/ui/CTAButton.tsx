@@ -62,7 +62,7 @@ export function CTAButton({
       paddingLeft: 28,
       paddingRight: 28,
       scale: 1.02,
-      backgroundColor: BRAND_BLUE,
+      backgroundColor: "#2d3748",
     },
     className: `inline-flex items-center justify-center h-9 rounded-full text-sm font-medium text-background shadow-lg shadow-black/10 cursor-pointer overflow-hidden ${className}`.trim(),
   };

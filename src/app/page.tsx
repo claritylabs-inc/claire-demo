@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PolicyUploadStep } from "@/components/views/PolicyUploadStep";
+import { OnboardingView } from "@/components/views/OnboardingView";
 import { useChatOverlay } from "@/components/views/ChatOverlayContext";
 
 export default function Home() {
@@ -10,8 +10,8 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
-      <PolicyUploadStep
-        onComplete={() => router.push("/coverage")}
+      <OnboardingView
+        onComplete={() => router.push("/use-cases")}
         onBookDemo={openChat}
       />
     </div>

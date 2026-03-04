@@ -24,8 +24,8 @@ Marketing/demo web app for **Claire**, an AI commercial insurance management pro
 
 | Route | File | Description |
 |-------|------|-------------|
-| `/` | `src/app/page.tsx` | Upload animation landing page. Navigates to `/coverage` on completion. |
-| `/coverage` | `src/app/coverage/page.tsx` | Prompt cards view (mobile & desktop). Links to `/dashboard` and `/explore`. |
+| `/` | `src/app/page.tsx` | Upload animation landing page. Navigates to `/use-cases` on completion. |
+| `/use-cases` | `src/app/use-cases/page.tsx` | Prompt cards view (mobile & desktop). Links to `/dashboard` and `/explore`. |
 | `/dashboard` | `src/app/dashboard/page.tsx` | Full insurance dashboard with policy table. Desktop-optimized; shows "best on desktop" notice on mobile. |
 | `/explore` | `src/app/explore/page.tsx` | Static "use cases" gallery page. |
 
@@ -35,8 +35,8 @@ Chat is rendered as a frosted-glass overlay via `ChatOverlayProvider` (`src/comp
 
 ### Key Views
 
-1. **PolicyUploadStep** (`src/components/views/PolicyUploadStep.tsx`): Animated onboarding with 4-phase animation (`scanning → extracting → analyzing → ready`). Scroll locked during animation.
-2. **CoverageOverview** (`src/components/views/CoverageOverview.tsx`): Prompt card grid with chat bubbles. Used on `/coverage` for both mobile and desktop.
+1. **OnboardingView** (`src/components/views/OnboardingView.tsx`): Animated onboarding with 4-phase animation (`scanning → extracting → analyzing → ready`). Sub-components extracted to `src/components/views/onboarding/`. Scroll locked during animation.
+2. **CoverageOverview** (`src/components/views/CoverageOverview.tsx`): Prompt card grid with chat bubbles. Used on `/use-cases` for both mobile and desktop.
 3. **DashboardView** (`src/components/views/DashboardView.tsx`): Full insurance dashboard with policy table, stat cards, tabs, and connection badges. Used on `/dashboard` (desktop only).
 4. **ChatStep** (`src/components/chat/ChatStep.tsx`): Simulated iPhone mockup with scripted, auto-advancing chat driven by `useChatScript`.
 
@@ -124,7 +124,8 @@ Always use semantic utility classes. Do not use arbitrary `z-[N]` values.
 src/components/
   ui/          — Shared primitives (BrandName, CTAButton, FadeIn, Logo, LogoIcon)
   layout/      — Navigation & chrome (BackButton, BookDemoButton, CommandPalette, FixedActionFooter, MeetClaireHeader)
-  views/       — Page-level views & context (ChatOverlayContext, CoverageOverview, DashboardView, PolicyUploadStep, ContextSources)
+  views/       — Page-level views & context (ChatOverlayContext, CoverageOverview, DashboardView, OnboardingView, ContextSources)
+  views/onboarding/ — Extracted sub-components for OnboardingView (FlowArrows, ThinkingDots, ClaireGlobe, BucketContents, CollapsedBucket, MobileStepLabel)
   chat/        — Chat system (ChatStep, ChatBubbles, ChatStepCTA, IPhoneMockup, MessageRenderer, useChatScript)
 ```
 
@@ -146,4 +147,4 @@ src/components/
 - **Path alias**: `@/*` resolves to `src/*` (configured in `tsconfig.json`). Always use `@/` imports.
 - **Client components**: Most interactive components use `"use client"`. Server components are the exception (Logo, BrandName).
 - **Framer Motion easing**: Common curves are `[0.16, 1, 0.3, 1]` and `[0.33, 1, 0.68, 1]`.
-- **Portal rendering**: `FixedActionFooter` and `PolicyUploadStep` use `createPortal()` for fixed-position elements.
+- **Portal rendering**: `FixedActionFooter` uses `createPortal()` for fixed-position elements.
