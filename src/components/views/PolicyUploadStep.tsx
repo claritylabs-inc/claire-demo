@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
 import { motion, AnimatePresence, animate, useMotionValue } from "framer-motion";
 import { FaEnvelope, FaFile, FaArrowRight, FaChevronDown, FaCheck } from "react-icons/fa";
 import { MOCK_POLICIES } from "@/data/demoData";
@@ -15,6 +14,7 @@ import { EMAIL_GL_DATE, EMAIL_CA_DATE, EMAIL_WC_DATE, EMAIL_CP_DATE } from "@/li
 import { FadeIn } from "@/components/ui/FadeIn";
 import { MeetClaireHeader } from "@/components/layout/MeetClaireHeader";
 import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
+import { Footer } from "@/components/layout/Footer";
 import { BackButton } from "@/components/layout/BackButton";
 import { BookDemoButton } from "@/components/layout/BookDemoButton";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -466,8 +466,6 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
   const [scannedEmailCount, setScannedEmailCount] = useState(0);
 
   const activeBucket = getActiveBucket(phase);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   // Show text first, then steps after a short delay
   useEffect(() => {
@@ -541,17 +539,8 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
     return () => timers.forEach(clearTimeout);
   }, [showSteps]);
 
-  const bottomGradient = (
-    <div
-      className="fixed left-0 right-0 bottom-0 h-24 z-30 pointer-events-none"
-      style={{
-        background: `linear-gradient(to bottom, transparent, var(--background))`,
-      }}
-    />
-  );
-
   return (
-    <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+    <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       <BackButton />
       {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
       {/* Single scroll container — header sticky inside so content scrolls behind for translucency. Disable scroll until animation completes. */}
@@ -756,15 +745,13 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
           </div>
         </motion.div>
         </div>
-      </div>
 
-      {/* Bottom gradient — fixed to viewport via portal, content fades before CTA bar */}
-      {mounted && createPortal(bottomGradient, document.body)}
+        <Footer />
+      </div>
 
       <FixedActionFooter
         label="See what Claire can do"
         onClick={onComplete}
-        // visible={phase === "ready"}
       />
     </div>
   );

@@ -9,7 +9,7 @@ export default function CoveragePage() {
   const { openChat } = useChatOverlay();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
       <BackButton href="/" />
       <BookDemoButton onClick={openChat} />
       <CoverageOverview onOpenChat={openChat} />

@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { CTAButton } from "@/components/ui/CTAButton";
 
@@ -20,9 +18,6 @@ export function FixedActionFooter({
   visible = true,
   animateIn = false,
 }: FixedActionFooterProps) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
   const button = <CTAButton label={label} onClick={onClick} />;
 
   const content = animateIn ? (
@@ -30,23 +25,25 @@ export function FixedActionFooter({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-      className="pointer-events-auto"
     >
       {button}
     </motion.div>
   ) : (
-    <div className="pointer-events-auto">{button}</div>
+    <div>{button}</div>
   );
 
-  const footer = (
-    <div className="fixed left-0 right-0 bottom-6 flex justify-center z-40 pointer-events-none">
-      <AnimatePresence>{visible && content}</AnimatePresence>
+  return (
+    <div className="shrink-0 relative z-40">
+      {/* Gradient fade above — softens scroll content into the CTA bar */}
+      <div
+        className="absolute left-0 right-0 -top-16 h-16 pointer-events-none"
+        style={{
+          background: `linear-gradient(to bottom, transparent, var(--background))`,
+        }}
+      />
+      <div className="flex justify-center pb-6 pt-2 bg-background">
+        <AnimatePresence>{visible && content}</AnimatePresence>
+      </div>
     </div>
   );
-
-  if (!mounted || typeof document === "undefined") {
-    return <div className="h-0" aria-hidden />;
-  }
-
-  return createPortal(footer, document.body);
 }

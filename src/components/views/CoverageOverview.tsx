@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import Link from "next/link";
 import { FaPaperPlane } from "react-icons/fa";
 import { CHAT_PROMPTS } from "@/data/demoData";
 import { MeetClaireHeader } from "@/components/layout/MeetClaireHeader";
 import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
+import { Footer } from "@/components/layout/Footer";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { PromptContextSources } from "@/components/views/ContextSources";
 import type { ChatMode, PolicyId } from "@/components/chat";
@@ -27,33 +26,21 @@ interface CoverageOverviewProps {
 }
 
 export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  const bottomGradient = (
-    <div
-      className="fixed left-0 right-0 bottom-0 h-24 z-30 pointer-events-none"
-      style={{
-        background: `linear-gradient(to bottom, transparent, var(--background))`,
-      }}
-    />
-  );
-
   return (
-    <div className="flex-1 flex flex-col min-h-0 relative">
-      {/* Single scroll container — header sticky inside so content scrolls behind for translucency */}
+    <div className="flex-1 flex flex-col min-h-0">
+      {/* Scroll container — header sticky inside so content scrolls behind for translucency */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
         <div className="sticky top-0 z-10 pt-16 pb-8 bg-background/85 backdrop-blur-md shrink-0">
           <MeetClaireHeader subtitle={SUBTITLE} logoSize={32} />
-          {/* Gradient softens the bottom edge of the header — multiple stops reduce banding */}
+          {/* Gradient softens the bottom edge of the header */}
           <div
             className="absolute left-0 right-0 -bottom-12 h-12 pointer-events-none backdrop-blur-md"
             style={{
               background: `linear-gradient(to bottom, rgb(var(--background-rgb) / 0.85) 0%, rgb(var(--background-rgb) / 0.55) 35%, rgb(var(--background-rgb) / 0.25) 65%, rgb(var(--background-rgb) / 0) 100%)`,
             }}
-          />     
+          />
         </div>
-        <div className="flex flex-col items-center gap-4 pt-8 pb-32 mx-4 md:mx-8">
+        <div className="flex flex-col items-center gap-4 pt-8 pb-16 mx-4 md:mx-8">
             {CHAT_PROMPTS.map((prompt, i) => (
               <FadeIn
                 key={i}
@@ -104,15 +91,6 @@ export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
               className="shrink-0 py-3 flex flex-col items-center gap-2"
             >
               <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-1.5 text-body-sm text-muted hover:text-foreground transition-colors font-medium"
-              >
-                <span>View full dashboard</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
-              <Link
                 href="/explore"
                 className="inline-flex items-center gap-1.5 text-body-sm text-muted hover:text-foreground transition-colors font-medium"
               >
@@ -123,10 +101,9 @@ export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
               </Link>
             </FadeIn>
         </div>
-      </div>
 
-      {/* Bottom gradient — fixed to viewport via portal, content fades before CTA bar */}
-      {mounted && createPortal(bottomGradient, document.body)}
+        <Footer />
+      </div>
 
       <FixedActionFooter
         label="Try Claire for Yourself"
