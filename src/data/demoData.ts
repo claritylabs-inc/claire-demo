@@ -398,25 +398,104 @@ export const PROCESSING_MESSAGES = [
 
 /* ---------- Use cases for explore page (full list) ---------- */
 
+export interface UseCaseExample {
+  question: string;
+  mode: "prompt" | "contact" | "renew" | "overview" | "premiums" | "renewal" | "integrations";
+  policyId?: PolicyId;
+  promptIndex?: number;
+}
+
 export interface UseCaseItem {
   heading: string;
   description: string;
+  examples: UseCaseExample[];
 }
 
 export const USE_CASES: UseCaseItem[] = [
-  { heading: "Lease Signing", description: "Get COIs for landlords and lease renewals — Claire knows your lease requirements and sends them automatically." },
-  { heading: "Proof of Insurance", description: "Contracts, vendors, and clients need proof — Claire generates and sends certificates in seconds." },
-  { heading: "Help with Claims", description: "Slip-and-falls, accidents, property damage — Claire walks you through what to do and starts the claim." },
-  { heading: "Coverage Questions", description: "New equipment, expansion, or changes — Claire checks your policies and tells you what's covered." },
-  { heading: "Policy Renewals", description: "Claire pulls quotes, compares options, and handles renewals before you have a gap." },
-  { heading: "Workers Comp", description: "Certificates for contracts, new hire reporting, and claims — payroll syncs from QuickBooks." },
-  { heading: "Commercial Auto", description: "Add vehicles, file claims, get certificates — Claire manages your fleet coverage." },
-  /* --- Rest (beyond the 7 on main page) --- */
-  { heading: "Premium Savings", description: "Bundling, discounts, and better rates — Claire finds savings across your policies." },
-  { heading: "Integrations", description: "Lease portals, QuickBooks, business filings — Claire stays in sync so your coverage is always current." },
-  { heading: "Policy Overview", description: "What you're covered for, where you have gaps, and what's coming up — ask Claire anything." },
-  { heading: "New Hire Reporting", description: "Add staff to workers comp — Claire syncs from QuickBooks and updates your policy automatically." },
-  { heading: "Certificate Management", description: "Track who needs COIs, when they expire — Claire keeps certificates current for all your contracts." },
+  {
+    heading: "Lease Signing",
+    description: "Get COIs for landlords and lease renewals — Claire knows your lease requirements and sends them automatically.",
+    examples: [
+      { question: CHAT_PROMPTS[0].question, mode: "prompt", promptIndex: 0 },
+      { question: CHAT_PROMPTS_BY_POLICY.gl[0].question, mode: "contact", policyId: "gl" },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.gl[1].question, mode: "renew", policyId: "gl" },
+    ],
+  },
+  {
+    heading: "Proof of Insurance",
+    description: "Contracts, vendors, and clients need proof — Claire generates and sends certificates in seconds.",
+    examples: [
+      { question: CHAT_PROMPTS[1].question, mode: "prompt", promptIndex: 1 },
+    ],
+  },
+  {
+    heading: "Help with Claims",
+    description: "Slip-and-falls, accidents, property damage — Claire walks you through what to do and starts the claim.",
+    examples: [
+      { question: CHAT_PROMPTS[2].question, mode: "prompt", promptIndex: 2 },
+      { question: CHAT_PROMPTS_BY_POLICY.wc[1].question, mode: "contact", policyId: "wc" },
+    ],
+  },
+  {
+    heading: "Coverage Questions",
+    description: "New equipment, expansion, or changes — Claire checks your policies and tells you what's covered.",
+    examples: [
+      { question: CHAT_PROMPTS[3].question, mode: "prompt", promptIndex: 3 },
+      { question: CHAT_PROMPTS_BY_POLICY.cp[0].question, mode: "contact", policyId: "cp" },
+      { question: CHAT_PROMPTS_BY_POLICY.cp[1].question, mode: "contact", policyId: "cp" },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.ca[1].question, mode: "renew", policyId: "ca" },
+    ],
+  },
+  {
+    heading: "Policy Renewals",
+    description: "Claire pulls quotes, compares options, and handles renewals before you have a gap.",
+    examples: [
+      { question: CHAT_PROMPTS[4].question, mode: "prompt", promptIndex: 4 },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.gl[0].question, mode: "renew", policyId: "gl" },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.cp[0].question, mode: "renew", policyId: "cp" },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.cp[1].question, mode: "renew", policyId: "cp" },
+    ],
+  },
+  {
+    heading: "Workers Comp",
+    description: "Certificates for contracts, new hire reporting, and claims — payroll syncs from QuickBooks.",
+    examples: [
+      { question: CHAT_PROMPTS[5].question, mode: "prompt", promptIndex: 5 },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.wc[0].question, mode: "renew", policyId: "wc" },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.wc[1].question, mode: "renew", policyId: "wc" },
+    ],
+  },
+  {
+    heading: "Commercial Auto",
+    description: "Add vehicles, file claims, get certificates — Claire manages your fleet coverage.",
+    examples: [
+      { question: CHAT_PROMPTS[6].question, mode: "prompt", promptIndex: 6 },
+      { question: CHAT_PROMPTS_BY_POLICY.ca[1].question, mode: "contact", policyId: "ca" },
+      { question: CHAT_PROMPTS_RENEW_BY_POLICY.ca[0].question, mode: "renew", policyId: "ca" },
+    ],
+  },
+  {
+    heading: "Premium Savings",
+    description: "Bundling, discounts, and better rates — Claire finds savings across your policies.",
+    examples: [
+      { question: CHAT_PROMPTS_BY_CARD.premiums[0].question, mode: "premiums" },
+    ],
+  },
+  {
+    heading: "Integrations",
+    description: "Lease portals, QuickBooks, business filings — Claire stays in sync so your coverage is always current.",
+    examples: [
+      { question: CHAT_PROMPTS_BY_CARD.integrations[0].question, mode: "integrations" },
+      { question: CHAT_PROMPTS_BY_CARD.integrations[1].question, mode: "integrations" },
+    ],
+  },
+  {
+    heading: "Policy Overview",
+    description: "What you're covered for, where you have gaps, and what's coming up — ask Claire anything.",
+    examples: [
+      { question: CHAT_PROMPTS_BY_CARD.overview[0].question, mode: "overview" },
+    ],
+  },
 ];
 
 /* ---------- CTA contact info ---------- */

@@ -24,10 +24,10 @@ const QR_VALUE = "sms:+16476930328?body=My landlord needs proof of insurance for
 export function TryClaireHeading() {
   return (
     <>
-      <p className="text-2xl sm:text-3xl font-normal text-foreground-highlight mb-6">
-        <BrandName className="inline-flex items-center gap-1.5 text-2xl sm:text-3xl">
+      <p className="text-foreground-highlight mb-6">
+        <BrandName className="inline-flex items-center gap-2 text-4xl md:text-5xl">
           Text{"  "}
-          <LogoIcon size={24} className="shrink-0 ml-1.5" />
+          <LogoIcon size={32} className="shrink-0 ml-2" />
           Claire
         </BrandName>
       </p>

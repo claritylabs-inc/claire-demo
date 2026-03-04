@@ -1,17 +1,16 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { MeetClaireHeader } from "@/components/layout/MeetClaireHeader";
 import { BackButton } from "@/components/layout/BackButton";
 import { BookDemoButton } from "@/components/layout/BookDemoButton";
 import { useChatOverlay } from "@/components/views/ChatOverlayContext";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { USE_CASES } from "@/data/demoData";
-import { BrandName } from "@/components/ui/BrandName";
+import { GradientFade } from "@/components/ui/GradientFade";
 import { Footer } from "@/components/layout/Footer";
 
 const SUBTITLE =
-  "All the ways you can use Claire. Just send a text and get things done.";
+  "Explore how Claire can help manage your insurance. Tap an example to see it in action.";
 
 const ANIM_DURATION = 0.4;
 const STAGGER_INTERVAL = 0.1;
@@ -29,20 +28,16 @@ export default function ExplorePage() {
         className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none"
         style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
-        <div className="sticky top-0 z-10 pt-14 pb-6 bg-background/75 backdrop-blur-md shrink-0">
-          <div className="text-center">
-            <MeetClaireHeader subtitle={SUBTITLE} logoSize={32} />
+        <div className="sticky top-0 z-10 shrink-0">
+          <div className="relative pt-14 pb-6">
+            <GradientFade direction="down" className="absolute inset-0 -bottom-12" />
+            <div className="relative text-center">
+              <MeetClaireHeader subtitle={SUBTITLE} logoSize={32} />
+            </div>
           </div>
-          {/* Gradient softens the bottom edge of the header */}
-          <div
-            className="absolute left-0 right-0 -bottom-12 h-12 pointer-events-none"
-            style={{
-              background: `linear-gradient(to bottom, rgb(var(--background-rgb) / 0.75) 0%, rgb(var(--background-rgb) / 0.4) 50%, transparent 100%)`,
-            }}
-          />
         </div>
 
-        <div className="flex flex-col items-center gap-4 pt-8 pb-16 mx-4 md:mx-8">
+        <div className="flex flex-col pt-8 pb-16 max-w-xl mx-auto px-5">
           {USE_CASES.map((item, i) => (
             <FadeIn
               key={item.heading}
@@ -50,20 +45,60 @@ export default function ExplorePage() {
               delay={i * STAGGER_INTERVAL}
               duration={ANIM_DURATION}
               direction="up"
-              className="w-full max-w-sm"
+              className="w-full"
             >
-              <motion.div
-                className="group rounded-xl border border-foreground/6 bg-white/60 px-4 py-3.5 text-left transition-colors duration-200 hover:bg-white/80 hover:border-foreground/10 hover:shadow-md cursor-default"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-              >
-                <h3 className="leading-relaxed text-foreground">
-                  <BrandName>{item.heading}</BrandName>
-                </h3>
-                <p className="text-label text-muted leading-relaxed">
+              {i > 0 && (
+                <div className="border-t border-divider/60 my-4" />
+              )}
+              <div className="py-6">
+                <p className="text-brand text-2xl text-foreground-highlight mb-2.5">
+                  {item.heading}
+                </p>
+                <p className="text-body-sm text-muted leading-relaxed">
                   {item.description}
                 </p>
-              </motion.div>
+                {item.examples.length > 0 && (
+                  <div className="mt-6">
+                    <p className="text-caption uppercase tracking-wider text-accent/60 font-medium mb-2.5">
+                      Examples
+                    </p>
+                    <div className="relative -mx-4">
+                      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 px-4">
+                        {item.examples.map((example) => (
+                          <button
+                            key={example.question}
+                            type="button"
+                            onClick={() =>
+                              openChat(
+                                example.mode,
+                                example.policyId,
+                                example.promptIndex,
+                                true
+                              )
+                            }
+                            className="rounded-full bg-primary/8 text-primary px-3 py-1.5 text-body-sm whitespace-nowrap shrink-0 max-w-[80vw] overflow-hidden text-ellipsis cursor-pointer hover:bg-primary/15 active:scale-[0.97] transition-all duration-150"
+                          >
+                            "{example.question}"
+                          </button>
+                        ))}
+                      </div>
+                      {/* Edge fade overlays */}
+                      <div
+                        className="absolute top-0 left-0 bottom-0 w-8 pointer-events-none"
+                        style={{
+                          background: `linear-gradient(to right, var(--background), transparent)`,
+                        }}
+                      />
+                      <div
+                        className="absolute top-0 right-0 bottom-0 w-8 pointer-events-none"
+                        style={{
+                          background: `linear-gradient(to left, var(--background), transparent)`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </FadeIn>
           ))}
         </div>

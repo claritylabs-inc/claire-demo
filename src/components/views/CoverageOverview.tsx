@@ -7,6 +7,7 @@ import { MeetClaireHeader } from "@/components/layout/MeetClaireHeader";
 import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
 import { Footer } from "@/components/layout/Footer";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { GradientFade } from "@/components/ui/GradientFade";
 import { PromptContextSources } from "@/components/views/ContextSources";
 import type { ChatMode, PolicyId } from "@/components/chat";
 
@@ -30,17 +31,17 @@ export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
     <div className="flex-1 flex flex-col min-h-0">
       {/* Scroll container — header sticky inside so content scrolls behind for translucency */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
-        <div className="sticky top-0 z-10 pt-16 pb-8 bg-background/85 backdrop-blur-md shrink-0">
-          <MeetClaireHeader subtitle={SUBTITLE} logoSize={32} />
-          {/* Gradient softens the bottom edge of the header */}
-          <div
-            className="absolute left-0 right-0 -bottom-12 h-12 pointer-events-none backdrop-blur-md"
-            style={{
-              background: `linear-gradient(to bottom, rgb(var(--background-rgb) / 0.85) 0%, rgb(var(--background-rgb) / 0.55) 35%, rgb(var(--background-rgb) / 0.25) 65%, rgb(var(--background-rgb) / 0) 100%)`,
-            }}
-          />
+        <div className="sticky top-0 z-10 shrink-0">
+          <div className="relative pt-16 pb-8">
+            {/* Progressive blur + color fade — covers bar + fade zone as one element */}
+            <GradientFade direction="down" className="absolute inset-0 -bottom-12" />
+            {/* Content sits above the blur */}
+            <div className="relative">
+              <MeetClaireHeader subtitle={SUBTITLE} logoSize={32} />
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-4 pt-8 pb-16 mx-4 md:mx-8">
+        <div className="flex flex-col items-center gap-4 md:gap-8 pt-8 pb-16 mx-4 md:mx-8">
             {CHAT_PROMPTS.map((prompt, i) => (
               <FadeIn
                 key={i}
@@ -70,7 +71,7 @@ export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
                   <button
                     type="button"
                     onClick={() => onOpenChat("prompt", undefined, i, true)}
-                    className="group w-full rounded-[18px] rounded-br-[4px] bg-primary/90 px-4 py-3 text-left transition-all cursor-pointer hover:bg-primary/14 hover:border-primary/25 hover:shadow-md active:shadow-sm hover:scale-[1.01] active:scale-[0.99]"
+                    className="group w-full rounded-[18px] rounded-br-[4px] bg-primary/90 px-4 py-3 text-left transition-all duration-200 ease-out cursor-pointer hover:bg-primary active:scale-[0.98]"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <p className="flex-1 min-w-0 text-body-sm font-medium text-white leading-snug">

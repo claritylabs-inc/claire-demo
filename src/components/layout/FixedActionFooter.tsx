@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { CTAButton } from "@/components/ui/CTAButton";
+import { GradientFade } from "@/components/ui/GradientFade";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -33,16 +34,14 @@ export function FixedActionFooter({
   );
 
   return (
-    <div className="shrink-0 relative z-40">
-      {/* Gradient fade above — softens scroll content into the CTA bar */}
-      <div
-        className="absolute left-0 right-0 -top-16 h-16 pointer-events-none"
-        style={{
-          background: `linear-gradient(to bottom, transparent, var(--background))`,
-        }}
-      />
-      <div className="flex justify-center pb-6 pt-2 bg-background">
-        <AnimatePresence>{visible && content}</AnimatePresence>
+    <div className="fixed bottom-0 left-0 right-0 z-40">
+      <div className="relative">
+        <GradientFade direction="up" className="absolute inset-0 -top-16" />
+        <div className="relative flex justify-center pb-6 pt-2">
+          <AnimatePresence>
+              {visible && content}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
