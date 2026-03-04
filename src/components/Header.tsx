@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/Logo";
 
 export interface HeaderProps {
@@ -15,14 +16,12 @@ export function Header({ logoSize = "lg", className = "" }: HeaderProps) {
       <div className="max-w-3xl border-x border-foreground/6 mx-auto px-6 md:px-10 h-16 md:h-18 flex items-center ">
         <div className="max-w-xl mx-auto w-full flex items-center justify-between">
           <Logo size={logoSize} />
-          <a
-            href="https://claire.claritylabs.inc/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/"
             className="text-body-sm text-muted border border-foreground/15 rounded-full px-4 py-1.5 hover:text-foreground-highlight hover:border-foreground/30 transition-colors"
           >
             Demo
-          </a>
+          </Link>
         </div>
       </div>
     </header>
