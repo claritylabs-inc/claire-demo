@@ -1,8 +1,8 @@
 "use client";
 
-import { BrandName } from "@/components/BrandName";
-import { LogoIcon } from "@/components/LogoIcon";
-import { FadeIn } from "@/components/FadeIn";
+import { BrandName } from "@/components/ui/BrandName";
+import { LogoIcon } from "@/components/ui/LogoIcon";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 interface MeetClaireHeaderProps {
   /** Subtitle text below the main title */

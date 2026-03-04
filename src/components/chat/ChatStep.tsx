@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import {
   useChatScript,
   IPhoneMockup,
@@ -10,9 +9,8 @@ import {
   TryClaireHeading,
   type ChatMode,
   type PolicyId,
-} from "./chat";
-
-const EASE = [0.16, 1, 0.3, 1] as const;
+} from ".";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 interface ChatStepProps {
   mode?: ChatMode;
@@ -71,16 +69,12 @@ export function ChatStep({
 
   return (
     <div className="flex-1 flex items-start md:items-center justify-center px-4 md:px-8 py-4 sm:pb-8 overflow-y-auto min-h-0">
-      <div className="flex flex-col md:flex-row items-center md:justify-center gap-12 lg:gap-16 w-full max-w-2xl md:max-w-3xl lg:max-w-4xl">
+      <div className="flex flex-col md:flex-row items-center md:justify-center gap-12 lg:gap-16 w-[320px] md:w-[700px] lg:w-[800px]">
         {/* Mobile: heading above phone mockup */}
         <div className="order-first block md:hidden w-full shrink-0 text-center pb-2">
           <TryClaireHeading />
         </div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: EASE }}
-        >
+        <FadeIn when={true} delay={0.15} duration={0.6}>
           <IPhoneMockup>
             <div className="relative min-h-0 flex-1 flex flex-col">
               <div
@@ -102,7 +96,7 @@ export function ChatStep({
               />
             </div>
           </IPhoneMockup>
-        </motion.div>
+        </FadeIn>
 
         <ChatStepCTA />
       </div>

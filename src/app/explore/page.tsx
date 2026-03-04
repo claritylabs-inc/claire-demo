@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { MeetClaireHeader } from "@/components/demo/MeetClaireHeader";
-import { BackToClarityButton } from "@/components/demo/BackToClarityButton";
-import { BookDemoButton } from "@/components/demo/BookDemoButton";
-import { FadeIn } from "@/components/FadeIn";
+import { MeetClaireHeader } from "@/components/layout/MeetClaireHeader";
+import { BackButton } from "@/components/layout/BackButton";
+import { BookDemoButton } from "@/components/layout/BookDemoButton";
+import { useChatOverlay } from "@/components/views/ChatOverlayContext";
+import { FadeIn } from "@/components/ui/FadeIn";
 import { USE_CASES } from "@/data/demoData";
-import { BrandName } from "@/components/BrandName";
+import { BrandName } from "@/components/ui/BrandName";
 
 const SUBTITLE =
   "All the ways you can use Claire. Just send a text and get things done.";
@@ -19,7 +19,7 @@ const STAGGER_INTERVAL = 0.1;
 
 export default function ExplorePage() {
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
+  const { openChat } = useChatOverlay();
 
   useEffect(() => setMounted(true), []);
 
@@ -33,9 +33,9 @@ export default function ExplorePage() {
   );
 
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden relative bg-background text-foreground">
-      <BackToClarityButton href="/" />
-      <BookDemoButton onClick={() => router.push("/")} />
+    <div className="flex flex-col min-h-screen relative bg-background text-foreground">
+      <BackButton href="/" />
+      <BookDemoButton onClick={openChat} />
 
       {/* Fixed translucent header — no border, gradient softens bottom edge */}
       <header className="fixed top-0 left-0 right-0 z-40 pt-14 pb-6 px-4 bg-background/75 backdrop-blur-md">
@@ -53,7 +53,7 @@ export default function ExplorePage() {
 
       {/* Scrollable content — padding-top accounts for fixed header */}
       <div
-        className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none pt-56"
+        className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none pt-48"
         style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
         <div className="flex flex-col items-center gap-4 pb-32 mx-4 md:mx-8">

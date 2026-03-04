@@ -2,23 +2,23 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogoIcon } from "@/components/LogoIcon";
-import { GreystarIcon, CaliforniaSealIcon, QuickBooksIcon } from "@/components/demo/ContextSources";
+import { LogoIcon } from "@/components/ui/LogoIcon";
+import { GreystarIcon, CaliforniaSealIcon, QuickBooksIcon } from "@/components/views/ContextSources";
 import { POLICY_GROUPS, CONTEXT_SOURCES } from "@/data/demoData";
-import type { ChatMode } from "./chat";
+import type { ChatMode } from "@/components/chat";
 import {
   NEXT_RENEWAL_FORMATTED,
   parsePolicyDate,
   isExpiringSoon,
   now as demoNow,
 } from "@/lib/demoDates";
-import { FixedActionFooter } from "./FixedActionFooter";
-import { BrandName } from "@/components/BrandName";
-import { FadeIn } from "@/components/FadeIn";
+import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
+import { BrandName } from "@/components/ui/BrandName";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 type PolicyId = "gl" | "cp" | "wc" | "ca";
 
-interface CoverageStepProps {
+interface DashboardViewProps {
   onOpenChat: (mode: ChatMode, policyId?: PolicyId) => void;
 }
 
@@ -131,7 +131,7 @@ const SUMMARY_STATS: { id: ChatMode; label: string; value: string }[] = [
 
 const HOVER_LEAVE_DELAY_MS = 150;
 
-export function CoverageStep({ onOpenChat }: CoverageStepProps) {
+export function DashboardView({ onOpenChat }: DashboardViewProps) {
   const [activeTab, setActiveTab] = useState("all");
   const [expandedConnection, setExpandedConnection] = useState<number | null>(null);
   const badgesRef = useRef<HTMLDivElement>(null);

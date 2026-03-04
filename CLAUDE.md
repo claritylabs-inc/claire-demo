@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with this repository. See also `AGENTS.md` for a mirror of this guidance (used by Warp and other tools).
+This file provides guidance to AI coding agents (Claude Code, Warp, etc.) when working with this repository.
 
 ## Commands
 
@@ -20,16 +20,25 @@ Marketing/demo web app for **Claire**, an AI commercial insurance management pro
 
 ## Architecture
 
-### Pages
+### Routes
 
-- `src/app/page.tsx` — Main demo. Three-step state machine (`upload → coverage → chat`). Chat overlay renders on top of coverage step via frosted glass backdrop, not a separate route.
-- `src/app/explore/page.tsx` — Static "use cases" gallery page linked from the main demo.
+| Route | File | Description |
+|-------|------|-------------|
+| `/` | `src/app/page.tsx` | Upload animation landing page. Navigates to `/coverage` on completion. |
+| `/coverage` | `src/app/coverage/page.tsx` | Prompt cards view (mobile & desktop). Links to `/dashboard` and `/explore`. |
+| `/dashboard` | `src/app/dashboard/page.tsx` | Full insurance dashboard with policy table. Desktop-optimized; shows "best on desktop" notice on mobile. |
+| `/explore` | `src/app/explore/page.tsx` | Static "use cases" gallery page. |
 
-### Demo Step Flow
+### Chat Overlay
 
-1. **PolicyUploadStep** (`src/components/demo/PolicyUploadStep.tsx`): Animated onboarding with 4-phase animation (`scanning → extracting → analyzing → ready`). Scroll locked during animation.
-2. **CoverageStep** / **CoverageStepMobile**: Insurance dashboard with policy groups, coverage lines, context source badges. Desktop and mobile are separate components due to different layouts. Clicking stat cards or policy rows opens chat overlay.
-3. **ChatStep** (`src/components/demo/ChatStep.tsx`): Simulated iPhone mockup with scripted, auto-advancing chat driven by `useChatScript`.
+Chat is rendered as a frosted-glass overlay via `ChatOverlayProvider` (`src/components/views/ChatOverlayContext.tsx`), wrapped around all pages in `src/app/providers.tsx`. Any page can invoke the overlay via `useChatOverlay()` hook which exposes `openChat()` and `closeChat()`. Closes on Escape key or backdrop click.
+
+### Key Views
+
+1. **PolicyUploadStep** (`src/components/views/PolicyUploadStep.tsx`): Animated onboarding with 4-phase animation (`scanning → extracting → analyzing → ready`). Scroll locked during animation.
+2. **CoverageOverview** (`src/components/views/CoverageOverview.tsx`): Prompt card grid with chat bubbles. Used on `/coverage` for both mobile and desktop.
+3. **DashboardView** (`src/components/views/DashboardView.tsx`): Full insurance dashboard with policy table, stat cards, tabs, and connection badges. Used on `/dashboard` (desktop only).
+4. **ChatStep** (`src/components/chat/ChatStep.tsx`): Simulated iPhone mockup with scripted, auto-advancing chat driven by `useChatScript`.
 
 ### Data Layer
 
@@ -38,7 +47,7 @@ Marketing/demo web app for **Claire**, an AI commercial insurance management pro
 
 ### Chat Scripting (`useChatScript`)
 
-`src/components/demo/chat/useChatScript.ts` — core chat animation logic:
+`src/components/chat/useChatScript.ts` — core chat animation logic:
 - Accepts `mode: ChatMode`, `policyId: PolicyId | null`, `promptIndex`, `userFirst`
 - Builds `ScriptStep[]` timeline with absolute delays
 - Auto-loops after `SCRIPT_END_PAUSE = 5500ms`
@@ -109,22 +118,32 @@ Always use semantic utility classes. Do not use arbitrary `z-[N]` values.
 - **Programmatic navigation**: Use `useRouter()` from `next/navigation` and call `router.push()`.
 - **External links**: Plain `<a>` tags (with `target="_blank"` and `rel="noopener noreferrer"`) are fine for truly external URLs (mailto, phone, third-party sites).
 
+### Component Structure
+
+```
+src/components/
+  ui/          — Shared primitives (BrandName, CTAButton, FadeIn, Logo, LogoIcon)
+  layout/      — Navigation & chrome (BackButton, BookDemoButton, CommandPalette, FixedActionFooter, MeetClaireHeader)
+  views/       — Page-level views & context (ChatOverlayContext, CoverageOverview, DashboardView, PolicyUploadStep, ContextSources)
+  chat/        — Chat system (ChatStep, ChatBubbles, ChatStepCTA, IPhoneMockup, MessageRenderer, useChatScript)
+```
+
 ## Key Components
 
 | Component | File | Description |
 |-----------|------|-------------|
-| `Logo` | `src/components/Logo.tsx` | Brand logo with size variants (sm/md/lg). Renders as `<Link href="/">` or `<span>` via `asSpan` prop. |
-| `BrandName` | `src/components/BrandName.tsx` | Renders brand text in Instrument Serif as `<Link href="/">`. Use wherever the product name appears. |
-| `Header` | `src/components/Header.tsx` | Fixed top nav with `Logo` and `<Link href="/">` Demo button. |
-| `FadeIn` | `src/components/FadeIn.tsx` | Framer Motion entrance animation wrapper. Props: `when`, `staggerIndex`, `direction`, `as`, `duration`. |
-| `CTAButton` | `src/components/CTAButton.tsx` | Animated CTA with Framer Motion hover effects. Uses `<motion.a>` for external `href`, `<motion.button>` otherwise. |
-| `CommandPalette` | `src/components/CommandPalette.tsx` | Global `⌘K` command palette rendered in root layout. |
-| `BackToClarityButton` | `src/components/demo/BackToClarityButton.tsx` | Expandable back button. Uses `router.push()` for internal paths, `window.location.href` for external. |
-| `FixedActionFooter` | `src/components/demo/FixedActionFooter.tsx` | Animated CTA fixed to viewport bottom via React Portal. |
+| `Logo` | `src/components/ui/Logo.tsx` | Brand logo with size variants (sm/md/lg). Renders as `<Link href="/">` or `<span>` via `asSpan` prop. |
+| `BrandName` | `src/components/ui/BrandName.tsx` | Renders brand text in Instrument Serif as `<Link href="/">`. Use wherever the product name appears. |
+| `FadeIn` | `src/components/ui/FadeIn.tsx` | Framer Motion entrance animation wrapper. Props: `when`, `staggerIndex`, `direction`, `as`, `duration`. |
+| `CTAButton` | `src/components/ui/CTAButton.tsx` | Animated CTA with Framer Motion hover effects. Uses `<motion.a>` for external `href`, `<motion.button>` otherwise. |
+| `CommandPalette` | `src/components/layout/CommandPalette.tsx` | Global `⌘K` command palette rendered in root layout. |
+| `BackButton` | `src/components/layout/BackButton.tsx` | Expandable back button. Uses `router.back()` when history exists, falls back to `href` prop (default: `claritylabs.inc`). |
+| `FixedActionFooter` | `src/components/layout/FixedActionFooter.tsx` | Animated CTA fixed to viewport bottom via React Portal. |
+| `ChatOverlayProvider` | `src/components/views/ChatOverlayContext.tsx` | Context provider for chat overlay. Wraps all pages via `Providers`. Use `useChatOverlay()` to open/close chat. |
 
 ## Conventions
 
 - **Path alias**: `@/*` resolves to `src/*` (configured in `tsconfig.json`). Always use `@/` imports.
-- **Client components**: Most interactive components use `"use client"`. Server components are the exception (Logo, Header, BrandName).
+- **Client components**: Most interactive components use `"use client"`. Server components are the exception (Logo, BrandName).
 - **Framer Motion easing**: Common curves are `[0.16, 1, 0.3, 1]` and `[0.33, 1, 0.68, 1]`.
 - **Portal rendering**: `FixedActionFooter` and `PolicyUploadStep` use `createPortal()` for fixed-position elements.

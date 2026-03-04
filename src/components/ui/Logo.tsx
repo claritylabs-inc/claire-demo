@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LogoIcon } from "@/components/LogoIcon";
+import { LogoIcon } from "@/components/ui/LogoIcon";
 
 const brandFont = { fontFamily: "var(--font-instrument-serif)" };
 

@@ -10,13 +10,14 @@ import {
   SourceCircle,
   PolicySourceIcon,
   IntegrationSourcesStack,
-} from "@/components/demo/ContextSources";
+} from "@/components/views/ContextSources";
 import { EMAIL_GL_DATE, EMAIL_CA_DATE, EMAIL_WC_DATE, EMAIL_CP_DATE } from "@/lib/demoDates";
-import { FadeIn } from "@/components/FadeIn";
-import { MeetClaireHeader } from "./MeetClaireHeader";
-import { FixedActionFooter } from "./FixedActionFooter";
-import { BackToClarityButton } from "./BackToClarityButton";
-import { BookDemoButton } from "./BookDemoButton";
+import { FadeIn } from "@/components/ui/FadeIn";
+import { MeetClaireHeader } from "@/components/layout/MeetClaireHeader";
+import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
+import { BackButton } from "@/components/layout/BackButton";
+import { BookDemoButton } from "@/components/layout/BookDemoButton";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface PolicyUploadStepProps {
   onComplete: () => void;
@@ -455,19 +456,6 @@ function getActiveBucket(phase: Phase): number {
 
 /* ---------- Main component ---------- */
 
-function useIsMobile() {
-  // Use consistent initial state for SSR hydration - avoid typeof window check
-  const [isMobile, setIsMobile] = useState(true);
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    setIsMobile(!mq.matches);
-    const handler = () => setIsMobile(!mq.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-  return isMobile;
-}
-
 export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepProps) {
   const [phase, setPhase] = useState<Phase>("scanning");
   const [showSteps, setShowSteps] = useState(false);
@@ -564,7 +552,7 @@ export function PolicyUploadStep({ onComplete, onBookDemo }: PolicyUploadStepPro
 
   return (
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
-      <BackToClarityButton />
+      <BackButton />
       {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
       {/* Single scroll container — header sticky inside so content scrolls behind for translucency. Disable scroll until animation completes. */}
       <div

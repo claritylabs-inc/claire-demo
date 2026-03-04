@@ -387,10 +387,6 @@ export const CHAT_PROMPTS_BY_CARD: Record<SummaryCardId, ChatPrompt[]> = {
   ],
 };
 
-/* ---------- Business info ---------- */
-
-export const BUSINESS_NAME = "Rosario\u2019s Italian Kitchen";
-
 /* ---------- Processing step messages ---------- */
 
 export const PROCESSING_MESSAGES = [

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { CTAButton } from "@/components/CTAButton";
+import { CTAButton } from "@/components/ui/CTAButton";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 

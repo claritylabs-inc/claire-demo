@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaArrowLeft } from "react-icons/fa";
@@ -10,22 +10,31 @@ const CLARITY_URL = "https://claritylabs.inc";
 const EASE = [0.33, 1, 0.68, 1] as const;
 const DURATION = 0.32;
 
-interface BackToClarityButtonProps {
-  /** When provided, navigates here instead of Clarity Labs. Use "/" for home page. */
+interface BackButtonProps {
+  /** Fallback URL when there's no browser history. Default: claritylabs.inc */
   href?: string;
-  /** Override the hover label. Default: "Back to Clarity Labs" or "Back to demo" when href="/" */
+  /** Override the hover label. */
   label?: string;
 }
 
-export function BackToClarityButton({ href = CLARITY_URL, label }: BackToClarityButtonProps) {
+export function BackButton({ href = CLARITY_URL, label }: BackButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [hasHistory, setHasHistory] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    // window.history.length > 1 means there's a previous page to go back to
+    setHasHistory(window.history.length > 1);
+  }, []);
+
   const gap = isHovered ? 10 : 0;
-  const displayLabel = label ?? (href === "/" ? "Back to demo" : "Back to Clarity Labs");
+  const displayLabel =
+    label ?? (hasHistory ? "Back" : href === "/" ? "Back to demo" : "Back to Clarity Labs");
 
   const handleClick = () => {
-    if (href.startsWith("/")) {
+    if (hasHistory) {
+      router.back();
+    } else if (href.startsWith("/")) {
       router.push(href);
     } else {
       window.location.href = href;

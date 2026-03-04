@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display, Instrument_Serif } from "next/font/google";
-import { CommandPalette } from "@/components/CommandPalette";
-import { ConsoleMessage } from "@/components/ConsoleMessage";
+import { CommandPalette } from "@/components/layout/CommandPalette";
+import { ConsoleMessage } from "@/components/layout/ConsoleMessage";
+import { Providers } from "./providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -106,7 +107,7 @@ export default function RootLayout({
       >
         <CommandPalette />
         <ConsoleMessage />
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

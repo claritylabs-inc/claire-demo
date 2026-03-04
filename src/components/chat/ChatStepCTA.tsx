@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
-import { BrandName } from "@/components/BrandName";
-import { LogoIcon } from "@/components/LogoIcon";
-import { CTAButton } from "@/components/CTAButton";
+import { BrandName } from "@/components/ui/BrandName";
+import { LogoIcon } from "@/components/ui/LogoIcon";
+import { CTAButton } from "@/components/ui/CTAButton";
+import { FadeIn } from "@/components/ui/FadeIn";
 import { CTA_PHONE, CTA_PHONE_HREF } from "@/data/demoData";
 
 function PhoneLink({ className = "" }: { className?: string }) {
@@ -41,14 +41,10 @@ export function TryClaireHeading() {
 
 export function ChatStepCTA() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.6,
-        delay: 0.3,
-        ease: [0.16, 1, 0.3, 1],
-      }}
+    <FadeIn
+      when={true}
+      delay={0.3}
+      duration={0.6}
       className="flex flex-col items-center gap-4 sm:gap-5 text-center"
     >
       {/* Desktop: heading here; mobile: shown above phone in ChatStep */}
@@ -77,6 +73,6 @@ export function ChatStepCTA() {
         rel="noopener noreferrer"
         className="mt-2"
       />
-    </motion.div>
+    </FadeIn>
   );
 }
