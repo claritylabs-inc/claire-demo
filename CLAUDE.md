@@ -109,8 +109,7 @@ Always use semantic utility classes. Do not use arbitrary `z-[N]` values.
 |--------------------|-------------------------------|------------------------------------------|
 | Geist Sans         | `--font-sans` / `--font-geist-sans` | Body/UI text (default)             |
 | Geist Mono         | `--font-mono` / `--font-geist-mono` | Code, policy numbers               |
-| Playfair Display   | `--font-serif` / `--font-playfair`  | All headings (h1–h6, set in CSS)   |
-| Instrument Serif   | `--font-instrument-serif`           | Brand name (via `BrandName` / `.serif`) |
+| Instrument Serif   | `--font-serif` / `--font-instrument-serif` | Headings (h1–h6), brand name (via `BrandName` / `.serif`) |
 
 ## Navigation
 

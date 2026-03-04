@@ -61,7 +61,7 @@
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-playfair);
+  --font-serif: var(--font-instrument-serif);
 
   /* Typography scale — use semantic sizes for consistency */
   --text-micro: 0.4375rem;             /* 7px — tiny badges (policy number) */
@@ -99,7 +99,7 @@ body {
 
 /* Headings: serif, highlighted, scaled from h1 — unlayered to override Tailwind preflight */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair), Georgia, serif !important;
+  font-family: var(--font-instrument-serif), Georgia, serif !important;
   font-weight: 400 !important;
   color: var(--foreground-highlight) !important;
   letter-spacing: -0.01em;

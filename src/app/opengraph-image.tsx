@@ -51,13 +51,13 @@ export default async function Image() {
                 display: "flex",
                 alignItems: "center",
                 gap: "20px",
-                fontSize: "128px",
+                fontSize: "108px",
                 color: "#1a1a1a",
                 letterSpacing: "-0.01em",
               }}
             >
               <span>Meet</span>
-              <svg width="96" height="96" viewBox="0 0 65 65" fill="none">
+              <svg width="80" height="80" viewBox="0 0 65 65" fill="none">
               <circle
                 cx="32.5"
                 cy="32.5"
@@ -71,25 +71,14 @@ export default async function Image() {
                 fill="#7BA8D4"
               />
             </svg>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "16px",
-                fontSize: "128px",
-                color: "#1a1a1a",
-                letterSpacing: "-0.01em",
-              }}
-            >
               <span>Claire</span>
             </div>
             <div
               style={{
-                fontSize: "36px",
+                fontSize: "32px",
                 color: "#8a8578",
-                letterSpacing: "-0.01em",
-                marginTop: "8px",
+                fontFamily: "sans-serif",
+                marginTop: "12px",
               }}
             >
               from Clarity Labs
