@@ -30,10 +30,10 @@ const instrumentSerif = Instrument_Serif({
 });
 
 const claireDescription =
-  "Claire is a system of record for your business's insurance that understands not just where your policies are, but what they mean. What you're covered for, where you have gaps, when you need to act, and what it'll cost you if you don't.";
+  "Claire is an AI-native system of record for your business's insurance. She understands your coverage and takes action without letting anything slip.";
 
 export const metadata: Metadata = {
-  title: "Claire from Clarity Labs",
+  title: "Meet Claire — AI-Native Insurance Management",
   description: claireDescription,
   keywords: [
     "commercial insurance",
@@ -48,20 +48,20 @@ export const metadata: Metadata = {
     "insurance for startups",
     "insurance for contractors",
   ],
-  metadataBase: new URL("https://claritylabs.inc"),
+  metadataBase: new URL("https://claire.claritylabs.inc"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Claire from Clarity Labs",
+    title: "Meet Claire — AI-Native Insurance Management",
     description: claireDescription,
     type: "website",
     siteName: "Clarity Labs",
-    url: "https://claritylabs.inc",
+    url: "https://claire.claritylabs.inc",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Claire from Clarity Labs",
+    title: "Meet Claire — AI-Native Insurance Management",
     description: claireDescription,
   },
   robots: {
@@ -90,7 +90,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Clarity Labs",
-              url: "https://claritylabs.inc",
+              url: "https://claire.claritylabs.inc",
               email: "hello@claritylabs.inc",
               description: claireDescription,
               founder: [

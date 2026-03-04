@@ -10,7 +10,6 @@ import { Footer } from "@/components/layout/Footer";
 import { BackButton } from "@/components/layout/BackButton";
 import { BookDemoButton } from "@/components/layout/BookDemoButton";
 import { GradientFade } from "@/components/ui/GradientFade";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   FlowArrow,
   EmailBucketContent,
@@ -40,7 +39,6 @@ function getActiveBucket(phase: Phase): number {
 export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) {
   const [phase, setPhase] = useState<Phase>("scanning");
   const [showSteps, setShowSteps] = useState(false);
-  const isMobile = useIsMobile();
   const [scannedEmails, setScannedEmails] = useState<number[]>([]);
   const [extractedPolicies, setExtractedPolicies] = useState<number[]>([]);
   const [claireStatus, setClaireStatus] = useState<ClaireStatusItem[]>([]);
@@ -141,7 +139,6 @@ export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) 
             <div className="relative">
               <MeetClaireHeader
                 subtitle="An AI-native system of record for your business's insurance. Claire understands your coverage and takes action without letting anything slip."
-                logoSize={isMobile ? 32 : 40}
               />
             </div>
           </div>

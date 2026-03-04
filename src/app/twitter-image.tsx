@@ -3,7 +3,7 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 
 export const alt =
-  "Claire from Clarity Labs — A system of record for your insurance that understands not just where your policies are, but what they mean.";
+  "Meet Claire — An AI-native system of record for your business's insurance, from Clarity Labs.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -56,7 +56,7 @@ export default async function Image() {
                 letterSpacing: "-0.01em",
               }}
             >
-              <span>Claire</span>
+              <span>Meet</span>
               <svg width="96" height="96" viewBox="0 0 65 65" fill="none">
               <circle
                 cx="32.5"
@@ -74,9 +74,22 @@ export default async function Image() {
             </div>
             <div
               style={{
+                display: "flex",
+                alignItems: "baseline",
+                gap: "16px",
+                fontSize: "128px",
+                color: "#1a1a1a",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              <span>Claire</span>
+            </div>
+            <div
+              style={{
                 fontSize: "36px",
                 color: "#8a8578",
                 letterSpacing: "-0.01em",
+                marginTop: "8px",
               }}
             >
               from Clarity Labs
@@ -92,7 +105,7 @@ export default async function Image() {
             fontFamily: "Instrument Serif",
           }}
         >
-          claritylabs.inc
+          claire.claritylabs.inc
         </div>
       </div>
     ),
