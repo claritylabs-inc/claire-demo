@@ -184,7 +184,7 @@ export function DashboardView({ onOpenChat }: DashboardViewProps) {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-        className="relative z-10 shrink-0 border-b border-foreground/6 bg-white/60 backdrop-blur-sm overflow-visible"
+        className="relative z-header shrink-0 border-b border-foreground/6 bg-white/60 backdrop-blur-sm overflow-visible"
       >
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 overflow-visible">
           <div className="flex items-center gap-4">            

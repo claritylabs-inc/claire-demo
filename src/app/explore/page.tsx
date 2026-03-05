@@ -28,7 +28,7 @@ export default function ExplorePage() {
         className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none"
         style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
-        <div className="sticky top-0 z-10 shrink-0">
+        <div className="sticky top-0 z-header shrink-0">
           <div className="relative pt-14 pb-6">
             <GradientFade direction="down" className="absolute inset-0 -bottom-12" />
             <div className="relative text-center">

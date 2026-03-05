@@ -101,7 +101,7 @@ Use these instead of `text-xs`/`text-sm` for UI text. Headings (h1–h6) have re
 | `z-modal`          | 110   | Modal content      |
 | `z-toast`          | 120   | Toast notifications|
 
-Always use semantic utility classes. Do not use arbitrary `z-[N]` values.
+Always use semantic z-index classes for fixed/sticky chrome (headers, footers, modals). **Never use `z-10` or other low arbitrary values for fixed/sticky headers** — page content with its own stacking contexts (e.g. animated icons, badges) will render above them on mobile. Use `z-header` (50) for all sticky/fixed headers and navigation bars. Reserve raw `z-10` only for local stacking within a non-fixed container. Do not use arbitrary `z-[N]` values.
 
 ### Fonts
 
