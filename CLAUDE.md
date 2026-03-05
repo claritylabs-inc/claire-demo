@@ -94,12 +94,13 @@ Use these instead of `text-xs`/`text-sm` for UI text. Headings (h1–h6) have re
 
 #### Z-Index
 
-| Class              | Value | Usage              |
-|--------------------|-------|--------------------|
-| `z-header`         | 50    | Fixed header       |
-| `z-modal-backdrop` | 100   | Modal overlays     |
-| `z-modal`          | 110   | Modal content      |
-| `z-toast`          | 120   | Toast notifications|
+| Class              | Value | Usage                                  |
+|--------------------|-------|----------------------------------------|
+| `z-header`         | 50    | Fixed/sticky headers                   |
+| `z-nav`            | 60    | Floating nav buttons (BackButton, etc) |
+| `z-modal-backdrop` | 100   | Modal overlays                         |
+| `z-modal`          | 110   | Modal content                          |
+| `z-toast`          | 120   | Toast notifications                    |
 
 Always use semantic z-index classes for fixed/sticky chrome (headers, footers, modals). **Never use `z-10` or other low arbitrary values for fixed/sticky headers** — page content with its own stacking contexts (e.g. animated icons, badges) will render above them on mobile. Use `z-header` (50) for all sticky/fixed headers and navigation bars. Reserve raw `z-10` only for local stacking within a non-fixed container. Do not use arbitrary `z-[N]` values.
 

@@ -21,7 +21,7 @@ export function BookDemoButton({ onClick }: BookDemoButtonProps) {
       onClick={onClick}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`fixed top-5 right-4 sm:right-6 z-50 h-9 rounded-full bg-background/70 backdrop-blur-md border border-foreground/6 text-foreground/80 hover:bg-background/80 flex flex-row items-center overflow-hidden cursor-pointer text-sm font-medium ${isHovered ? "justify-end" : "justify-center"}`}
+      className={`fixed top-5 right-4 sm:right-6 z-nav h-9 rounded-full bg-background/70 backdrop-blur-md border border-foreground/6 text-foreground/80 hover:bg-background/80 flex flex-row items-center overflow-hidden cursor-pointer text-sm font-medium ${isHovered ? "justify-end" : "justify-center"}`}
       aria-label="Book a Demo"
       animate={{
         width: isHovered ? 152 : 36,

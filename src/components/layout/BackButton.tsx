@@ -53,7 +53,7 @@ export function BackButton({ href = CLARITY_URL, label }: BackButtonProps) {
       onClick={handleClick}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="fixed top-5 left-4 sm:left-6 z-50 h-9 rounded-full bg-background/70 backdrop-blur-md border border-foreground/6 text-foreground/80 hover:bg-background/80 flex items-center overflow-hidden cursor-pointer text-sm font-medium"
+      className="fixed top-5 left-4 sm:left-6 z-nav h-9 rounded-full bg-background/70 backdrop-blur-md border border-foreground/6 text-foreground/80 hover:bg-background/80 flex items-center overflow-hidden cursor-pointer text-sm font-medium"
       aria-label={displayLabel}
       animate={{
         width: isHovered ? expandedWidth : COLLAPSED_WIDTH,
