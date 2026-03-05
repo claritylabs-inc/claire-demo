@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { OnboardingView } from "@/components/views/OnboardingView";
+import { BackButton } from "@/components/layout/BackButton";
+import { BookDemoButton } from "@/components/layout/BookDemoButton";
 import { useChatOverlay } from "@/components/views/ChatOverlayContext";
 
 export default function Home() {
@@ -10,9 +12,10 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+      <BackButton />
+      <BookDemoButton onClick={openChat} />
       <OnboardingView
         onComplete={() => router.push("/use-cases")}
-        onBookDemo={openChat}
       />
     </div>
   );
