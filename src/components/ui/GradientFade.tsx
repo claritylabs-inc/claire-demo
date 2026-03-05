@@ -20,6 +20,8 @@ interface GradientFadeProps {
   direction: "down" | "up";
   /** Tailwind classes for sizing + positioning */
   className?: string;
+  /** Scale factor for color gradient opacity (0–1). Default 1. */
+  intensity?: number;
 }
 
 /** Inline SVG noise — dithers gradient to prevent color banding */
@@ -38,8 +40,12 @@ const BLUR_LAYERS = [
   { blur: 12, solidEnd: 60 },
 ];
 
-export function GradientFade({ direction, className = "" }: GradientFadeProps) {
+const BASE_STOPS = [0.78, 0.78, 0.56, 0.32, 0.12] as const;
+const STOP_POSITIONS = ["0%", "55%", "68%", "80%", "92%"] as const;
+
+export function GradientFade({ direction, className = "", intensity = 1 }: GradientFadeProps) {
   const dir = direction === "down" ? "to bottom" : "to top";
+  const stops = BASE_STOPS.map((a, i) => `rgb(var(--background-rgb) / ${(a * intensity).toFixed(2)}) ${STOP_POSITIONS[i]}`).join(", ");
 
   return (
     <div className={`pointer-events-none ${className}`}>
@@ -60,7 +66,7 @@ export function GradientFade({ direction, className = "" }: GradientFadeProps) {
       <div
         className="absolute inset-0"
         style={{
-          background: `${NOISE_SVG}, linear-gradient(${dir}, rgb(var(--background-rgb) / 0.92) 0%, rgb(var(--background-rgb) / 0.92) 55%, rgb(var(--background-rgb) / 0.78) 68%, rgb(var(--background-rgb) / 0.48) 80%, rgb(var(--background-rgb) / 0.18) 92%, transparent 100%)`,
+          background: `${NOISE_SVG}, linear-gradient(${dir}, ${stops}, transparent 100%)`,
         }}
       />
     </div>
