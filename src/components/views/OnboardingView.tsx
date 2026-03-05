@@ -7,8 +7,6 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { MeetClaireHeader } from "@/components/layout/MeetClaireHeader";
 import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
 import { Footer } from "@/components/layout/Footer";
-import { BackButton } from "@/components/layout/BackButton";
-import { BookDemoButton } from "@/components/layout/BookDemoButton";
 import { GradientFade } from "@/components/ui/GradientFade";
 import { CTAButton } from "@/components/ui/CTAButton";
 import {
@@ -24,7 +22,6 @@ import type { Phase, ClaireStatusItem } from "@/components/views/onboarding";
 
 interface OnboardingViewProps {
   onComplete: () => void;
-  onBookDemo?: () => void;
 }
 
 /* ---------- Which mobile bucket is "active" for accordion ---------- */
@@ -37,7 +34,7 @@ function getActiveBucket(phase: Phase): number {
 
 /* ---------- Main component ---------- */
 
-export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) {
+export function OnboardingView({ onComplete }: OnboardingViewProps) {
   const [phase, setPhase] = useState<Phase>("scanning");
   const [showSteps, setShowSteps] = useState(false);
   const [scannedEmails, setScannedEmails] = useState<number[]>([]);
@@ -121,8 +118,6 @@ export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) 
 
   return (
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-      <BackButton />
-      {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
       <div
         className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto scrollbar-hide overscroll-none"
         style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
