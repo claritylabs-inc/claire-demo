@@ -11,12 +11,14 @@ export default function Home() {
   const { openChat } = useChatOverlay();
 
   return (
-    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+    <>
       <BackButton />
       <BookDemoButton onClick={openChat} />
-      <OnboardingView
-        onComplete={() => router.push("/use-cases")}
-      />
-    </div>
+      <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+        <OnboardingView
+          onComplete={() => router.push("/use-cases")}
+        />
+      </div>
+    </>
   );
 }
