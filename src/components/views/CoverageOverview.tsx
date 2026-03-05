@@ -32,7 +32,7 @@ export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
     <div className="flex-1 flex flex-col min-h-0">
       {/* Scroll container — header sticky inside so content scrolls behind for translucency */}
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-hide overscroll-none" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
-        <div className="sticky top-0 z-10 shrink-0">
+        <div className="sticky top-0 z-header shrink-0">
           <div className="relative pt-16 pb-8">
             {/* Progressive blur + color fade — covers bar + fade zone as one element */}
             <GradientFade direction="down" className="absolute inset-0 -bottom-12" />

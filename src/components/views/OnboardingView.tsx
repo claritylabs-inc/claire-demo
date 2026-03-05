@@ -127,7 +127,7 @@ export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) 
         className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto scrollbar-hide overscroll-none"
         style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
-        <div className="fixed top-0 left-0 right-0 z-10 shrink-0">
+        <div className="fixed top-0 left-0 right-0 z-header shrink-0">
           <div className="relative pt-16 pb-8">
             <GradientFade direction="down" className="absolute inset-0 -bottom-12" />
             <div className="relative">
