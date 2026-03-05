@@ -19,9 +19,10 @@ export default function ExplorePage() {
   const { openChat } = useChatOverlay();
 
   return (
-    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+    <>
       <BackButton href="/" />
       <BookDemoButton onClick={openChat} />
+      <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
 
       {/* Single scroll container — header sticky inside so content scrolls behind for translucency */}
       <div
@@ -107,5 +108,6 @@ export default function ExplorePage() {
       </div>
 
     </div>
+    </>
   );
 }

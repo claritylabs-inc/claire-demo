@@ -35,10 +35,12 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+    <>
       <BackButton href="/use-cases" />
       <BookDemoButton onClick={openChat} />
-      <DashboardView onOpenChat={openChat} />
-    </div>
+      <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+        <DashboardView onOpenChat={openChat} />
+      </div>
+    </>
   );
 }

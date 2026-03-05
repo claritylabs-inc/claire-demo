@@ -9,10 +9,12 @@ export default function UseCasesPage() {
   const { openChat } = useChatOverlay();
 
   return (
-    <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+    <>
       <BackButton href="/" />
       <BookDemoButton onClick={openChat} />
-      <CoverageOverview onOpenChat={openChat} />
-    </div>
+      <div className="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+        <CoverageOverview onOpenChat={openChat} />
+      </div>
+    </>
   );
 }
