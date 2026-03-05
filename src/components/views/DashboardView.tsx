@@ -14,6 +14,7 @@ import {
 } from "@/lib/demoDates";
 import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
 import { BrandName } from "@/components/ui/BrandName";
+import { CTAButton } from "@/components/ui/CTAButton";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 type PolicyId = "gl" | "cp" | "wc" | "ca";
@@ -197,10 +198,10 @@ export function DashboardView({ onOpenChat }: DashboardViewProps) {
               </p>
             </div>
           </div>
-          {/* Desktop: full badges with hover expand */}
+          {/* Desktop: full badges with hover expand + CTA */}
           <div
             ref={badgesRef}
-            className="flex items-center gap-2 overflow-visible"
+            className="flex items-center gap-3 overflow-visible"
           >
             <div className="hidden md:flex items-center gap-2 overflow-visible">
               {CONTEXT_SOURCES.map((source, i) => (
@@ -246,6 +247,7 @@ export function DashboardView({ onOpenChat }: DashboardViewProps) {
                 />
               ))}
             </div>
+            <CTAButton label="Talk to Claire" onClick={() => onOpenChat("contact")} className="hidden md:inline-flex" />
           </div>
         </div>
       </motion.div>

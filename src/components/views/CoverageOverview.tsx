@@ -8,6 +8,7 @@ import { FixedActionFooter } from "@/components/layout/FixedActionFooter";
 import { Footer } from "@/components/layout/Footer";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { GradientFade } from "@/components/ui/GradientFade";
+import { CTAButton } from "@/components/ui/CTAButton";
 import { PromptContextSources } from "@/components/views/ContextSources";
 import type { ChatMode, PolicyId } from "@/components/chat";
 
@@ -38,6 +39,9 @@ export function CoverageOverview({ onOpenChat }: CoverageOverviewProps) {
             {/* Content sits above the blur */}
             <div className="relative">
               <MeetClaireHeader subtitle={SUBTITLE} />
+              <FadeIn when={true} staggerIndex={2} duration={0.5} className="hidden md:flex justify-center mt-8">
+                <CTAButton label="Try Claire for Yourself" onClick={() => onOpenChat("prompt", undefined, 0, false)} />
+              </FadeIn>
             </div>
           </div>
         </div>

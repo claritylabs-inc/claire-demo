@@ -10,6 +10,7 @@ import { Footer } from "@/components/layout/Footer";
 import { BackButton } from "@/components/layout/BackButton";
 import { BookDemoButton } from "@/components/layout/BookDemoButton";
 import { GradientFade } from "@/components/ui/GradientFade";
+import { CTAButton } from "@/components/ui/CTAButton";
 import {
   FlowArrow,
   EmailBucketContent,
@@ -122,16 +123,9 @@ export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) 
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       <BackButton />
       {onBookDemo && <BookDemoButton onClick={onBookDemo} />}
-      {/* Single scroll container — header sticky inside so content scrolls behind for translucency. Disable scroll until animation completes. */}
       <div
-        className={`flex-1 min-h-0 overflow-x-hidden scrollbar-hide overscroll-none transition-[overflow] duration-300 ${
-          phase === "ready" ? "overflow-y-auto" : "overflow-hidden touch-none"
-        }`}
-        style={
-          phase === "ready"
-            ? ({ WebkitOverflowScrolling: "touch" } as React.CSSProperties)
-            : undefined
-        }
+        className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto scrollbar-hide overscroll-none"
+        style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
         <div className="fixed top-0 left-0 right-0 z-10 shrink-0">
           <div className="relative pt-16 pb-8">
@@ -140,6 +134,9 @@ export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) 
               <MeetClaireHeader
                 subtitle="An AI-native system of record for your business's insurance. Claire understands your coverage and takes action without letting anything slip."
               />
+              <FadeIn when={true} staggerIndex={2} duration={0.5} className="hidden md:flex justify-center mt-8">
+                <CTAButton label="See what Claire can do" onClick={onComplete} />
+              </FadeIn>
             </div>
           </div>
         </div>
@@ -157,7 +154,7 @@ export function OnboardingView({ onComplete, onBookDemo }: OnboardingViewProps) 
           {/* ═══════════════════════════════════════════
               DESKTOP: Original 3-column horizontal layout
               ═══════════════════════════════════════════ */}
-          <div className="hidden md:flex items-stretch gap-0">
+          <div className="hidden md:flex items-stretch gap-0 mt-[10%]">
             {/* ── BUCKET 1 — Your Email ── */}
             <FadeIn
               when={showSteps}

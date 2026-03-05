@@ -39,6 +39,7 @@ export function CTAButton({
   const buttonContent = (
     <motion.span
       className="inline-flex items-center"
+      initial={{ gap: "10px" }}
       animate={{ gap: `${gap}px` }}
       transition={{ duration: HOVER_DURATION, ease: EASE_OUT }}
     >
