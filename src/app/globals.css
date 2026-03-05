@@ -8,6 +8,7 @@
 :root {
   /* Z-index scale — see docs/Z_INDEX.md */
   --z-header: 50;
+  --z-nav: 60;
   --z-modal-backdrop: 100;
   --z-modal: 110;
   --z-toast: 120;
@@ -174,6 +175,9 @@ h6 {
    ============================================================================= */
 @utility z-header {
   z-index: var(--z-header);
+}
+@utility z-nav {
+  z-index: var(--z-nav);
 }
 @utility z-modal-backdrop {
   z-index: var(--z-modal-backdrop);
